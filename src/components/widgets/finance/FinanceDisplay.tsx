@@ -14,12 +14,15 @@ export function FinanceDisplay() {
   const financeQP = new URLSearchParams(
     Object.entries(financeQPobj)
   ).toString();
-  const iframeText = `<iframe width="100%" height="400px" src="${`/#${financePath}?${decodeURIComponent(
+  const title = "Finance widget";
+  const width = "100%";
+  const height = "400px";
+  const iframeText = `<iframe width="${width}" height="${height}" src="${`/#${financePath}?${decodeURIComponent(
     financeQP
-  )}`}" title="Finance widget" />`;
+  )}`}" title="${title}" />`;
   return (
     <Widget>
-      <Link to={financePath}>Finance widget</Link>
+      <Link to={financePath}>{title}</Link>
 
       <CodeCopy text={iframeText}>
         <Pre>
@@ -27,10 +30,10 @@ export function FinanceDisplay() {
         </Pre>
       </CodeCopy>
       <iframe
-        width="100%"
-        height="400px"
+        width={width}
+        height={height}
         src={`/#${financePath}?${financeQP}`}
-        title="Finance widget"
+        title={title}
       />
     </Widget>
   );
