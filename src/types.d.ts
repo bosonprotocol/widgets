@@ -1,1 +1,1 @@
-declare module 'react-codecopy';
+declare module "react-codecopy";
