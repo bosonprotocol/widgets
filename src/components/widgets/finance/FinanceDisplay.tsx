@@ -22,7 +22,7 @@ export function FinanceDisplay() {
   )}`}" title="${title}" />`;
   return (
     <Widget>
-      <Link to={financePath}>{title}</Link>
+      <Link to={`${financePath}?${financeQP}`}>{title}</Link>
 
       <CodeCopy text={iframeText}>
         <Pre>
