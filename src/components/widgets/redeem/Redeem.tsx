@@ -1,27 +1,19 @@
-import { EnvironmentType, FinanceWidget } from "@bosonprotocol/react-kit";
+import { EnvironmentType, RedemptionWidget } from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
-export const financePath = "/finance";
-export function Finance() {
+export const redeemPath = "/redeem";
+export function Redeem() {
   const [searchParams] = useSearchParams();
-  const sellerId = searchParams.get("sellerId");
+  const exchangeId = searchParams.get("exchangeId") || undefined;
   const envName = searchParams.get("envName") as EnvironmentType;
-  const defaultTokensList = searchParams.get("defaultTokensList");
-  if (!sellerId) {
-    return <p>Missing 'sellerId' query param</p>;
-  }
   if (!envName) {
     return <p>Missing 'envName' query param</p>;
   }
-  if (!defaultTokensList) {
-    return <p>Missing 'defaultTokensList' query param</p>;
-  }
 
   return (
-    <FinanceWidget
-      sellerId={sellerId}
+    <RedemptionWidget
+      exchangeId={exchangeId}
       envName={envName}
-      defaultTokensList={defaultTokensList}
       dateFormat="YYYY/MM/DD"
       shortDateFormat="MMM DD, YYYY"
       minimumDisputePeriodInDays={30}
@@ -31,7 +23,9 @@ export function Finance() {
       licenseTemplate="ipfs://QmeYsxxy4aDvC5ocMEDrBj5xjSKobnRNw9VDN8DBzqqdmj"
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
+      ipfsProjectId=""
+      ipfsProjectSecret=""
       children={<></>}
-    ></FinanceWidget>
+    ></RedemptionWidget>
   );
 }
