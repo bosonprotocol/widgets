@@ -1,1 +1,0 @@
-set REACT_APP_DELIVERY_ADDRESS_MOCK={"name": "TOTO", "streetNameAndNumber": "1 grand place", "city": "LILLE", "state": "NORD", "zip": "59000", "country": "France", "email": "toto@mail.com", "phone": "0123456789"}
