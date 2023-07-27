@@ -1,6 +1,8 @@
 import { EnvironmentType, RedemptionWidget } from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
+import { CONFIG } from "../../../config";
+
 export const redeemPath = "/redeem";
 export function Redeem() {
   const [searchParams] = useSearchParams();
@@ -23,8 +25,8 @@ export function Redeem() {
       licenseTemplate="ipfs://QmeYsxxy4aDvC5ocMEDrBj5xjSKobnRNw9VDN8DBzqqdmj"
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
-      ipfsProjectId=""
-      ipfsProjectSecret=""
+      ipfsProjectId={CONFIG.ipfsProjectId}
+      ipfsProjectSecret={CONFIG.ipfsProjectSecret}
       children={<></>}
     ></RedemptionWidget>
   );
