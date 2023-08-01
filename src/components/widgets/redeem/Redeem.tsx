@@ -11,6 +11,8 @@ export function Redeem() {
   if (!envName) {
     return <p>Missing 'envName' query param</p>;
   }
+  const walletConnectProjectId = process.env
+    .REACT_APP_WALLET_CONNECT_PROJECT_ID as string;
 
   return (
     <RedemptionWidget
@@ -28,6 +30,7 @@ export function Redeem() {
       ipfsProjectId={CONFIG.ipfsProjectId}
       ipfsProjectSecret={CONFIG.ipfsProjectSecret}
       children={<></>}
+      walletConnectProjectId={walletConnectProjectId}
     ></RedemptionWidget>
   );
 }

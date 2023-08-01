@@ -7,6 +7,8 @@ export function Finance() {
   const sellerId = searchParams.get("sellerId");
   const envName = searchParams.get("envName") as EnvironmentType;
   const defaultTokensList = searchParams.get("defaultTokensList");
+  const walletConnectProjectId = process.env
+    .REACT_APP_WALLET_CONNECT_PROJECT_ID as string;
   if (!sellerId) {
     return <p>Missing 'sellerId' query param</p>;
   }
@@ -32,6 +34,7 @@ export function Finance() {
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
       children={<></>}
+      walletConnectProjectId={walletConnectProjectId}
     ></FinanceWidget>
   );
 }
