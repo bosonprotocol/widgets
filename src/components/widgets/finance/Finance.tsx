@@ -6,9 +6,11 @@ export function Finance() {
   const [searchParams] = useSearchParams();
   const sellerId = searchParams.get("sellerId");
   const envName = searchParams.get("envName") as EnvironmentType;
-  const defaultTokensList = searchParams.get("defaultTokensList");
+  const defaultTokensList = process.env.REACT_APP_DEFAULT_TOKENS_LIST as string;
   const walletConnectProjectId = process.env
     .REACT_APP_WALLET_CONNECT_PROJECT_ID as string;
+  const fairExchangePolicyRules = process.env
+    .REACT_APP_FAIR_EXCHANGE_POLICY_RULES as string;
   if (!sellerId) {
     return <p>Missing 'sellerId' query param</p>;
   }
@@ -16,7 +18,17 @@ export function Finance() {
     return <p>Missing 'envName' query param</p>;
   }
   if (!defaultTokensList) {
-    return <p>Missing 'defaultTokensList' query param</p>;
+    return <p>Missing 'REACT_APP_DEFAULT_TOKENS_LIST' environment variable</p>;
+  }
+  if (!walletConnectProjectId) {
+    return (
+      <p>Missing 'REACT_APP_WALLET_CONNECT_PROJECT_ID' environment variable</p>
+    );
+  }
+  if (!fairExchangePolicyRules) {
+    return (
+      <p>Missing 'REACT_APP_FAIR_EXCHANGE_POLICY_RULES' environment variable</p>
+    );
   }
 
   return (
@@ -35,6 +47,7 @@ export function Finance() {
       defaultCurrencySymbol="$"
       children={<></>}
       walletConnectProjectId={walletConnectProjectId}
+      fairExchangePolicyRules={fairExchangePolicyRules}
     ></FinanceWidget>
   );
 }
