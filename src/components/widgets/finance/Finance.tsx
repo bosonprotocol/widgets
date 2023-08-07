@@ -15,6 +15,11 @@ export function Finance() {
     <FinanceWidget
       sellerId={sellerId}
       envName={CONFIG.envName}
+      metaTx={{
+        apiKey: CONFIG.metaTxApiKey as string,
+        apiIds: CONFIG.metaTxApiIds as string
+      }}
+      tokensList={CONFIG.defaultTokens as string}
       dateFormat="YYYY/MM/DD"
       shortDateFormat="MMM DD, YYYY"
       minimumDisputePeriodInDays={CONFIG.minimumDisputePeriodInDays as number}
@@ -31,7 +36,6 @@ export function Finance() {
       children={<></>}
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
-      defaultTokensList={CONFIG.defaultTokens as string}
     ></FinanceWidget>
   );
 }

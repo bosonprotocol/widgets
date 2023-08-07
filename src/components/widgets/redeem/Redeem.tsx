@@ -12,6 +12,11 @@ export function Redeem() {
     <RedemptionWidget
       exchangeId={exchangeId}
       envName={CONFIG.envName}
+      metaTx={{
+        apiKey: CONFIG.metaTxApiKey as string,
+        apiIds: CONFIG.metaTxApiIds as string
+      }}
+      tokensList={CONFIG.defaultTokens as string}
       dateFormat="YYYY/MM/DD"
       shortDateFormat="MMM DD, YYYY"
       minimumDisputePeriodInDays={CONFIG.minimumDisputePeriodInDays as number}
@@ -31,7 +36,6 @@ export function Redeem() {
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       defaultDisputeResolverId={CONFIG.defaultDisputeResolverId as string}
-      defaultTokensList={CONFIG.defaultTokens as string}
     ></RedemptionWidget>
   );
 }

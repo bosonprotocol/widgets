@@ -16,7 +16,9 @@ type ConfigFields =
   | "buyerSellerAgreementTemplate"
   | "licenseTemplate"
   | "fairExchangePolicyRules"
-  | "walletConnectProjectId";
+  | "walletConnectProjectId"
+  | "metaTxApiKey"
+  | "metaTxApiIds";
 
 const envSuffixes: Record<EnvironmentType, string | undefined> = {
   testing: "_TESTING",
@@ -29,6 +31,7 @@ const EnvVariables: Array<{
   envVar: string;
   envDependent?: boolean;
   isNumber?: boolean;
+  optional?: boolean;
   configField: ConfigFields;
 }> = [
   {
@@ -76,6 +79,16 @@ const EnvVariables: Array<{
   {
     envVar: "REACT_APP_WALLET_CONNECT_PROJECT_ID",
     configField: "walletConnectProjectId"
+  },
+  {
+    envVar: "REACT_APP_META_TX_API_KEY",
+    optional: true,
+    configField: "metaTxApiKey"
+  },
+  {
+    envVar: "REACT_APP_META_TX_API_IDS",
+    optional: true,
+    configField: "metaTxApiIds"
   }
 ];
 
@@ -86,19 +99,20 @@ if (!_CONFIG) {
     const envVarName = variable.envDependent
       ? variable.envVar + envSuffixes[envName]
       : variable.envVar;
-    if (!process.env[envVarName]) {
+    if (process.env[envVarName]) {
+      let envVarValue: string | number = process.env[envVarName] as string;
+      if (variable.isNumber) {
+        try {
+          envVarValue = Number(envVarValue);
+        } catch (e) {
+          throw `Unable to convert env var '${envVarName}=${envVarValue}' into a number: ${e}`;
+        }
+      }
+      (_CONFIG as Record<ConfigFields, string | number>)[variable.configField] =
+        envVarValue;
+    } else if (!variable.optional) {
       throw `Missing env variable '${envVarName}'`;
     }
-    let envVarValue: string | number = process.env[envVarName] as string;
-    if (variable.isNumber) {
-      try {
-        envVarValue = Number(envVarValue);
-      } catch (e) {
-        throw `Unable to convert env var '${envVarName}=${envVarValue}' into a number: ${e}`;
-      }
-    }
-    (_CONFIG as Record<ConfigFields, string | number>)[variable.configField] =
-      envVarValue;
   });
 }
 
