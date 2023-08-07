@@ -5,10 +5,7 @@ import { Pre, Widget } from "../styles";
 import { redeemPath } from "./Redeem";
 
 export function RedeemDisplay() {
-  const redeemQPobj = {
-    // exchangeId: "9",
-    envName: "testing"
-  };
+  const redeemQPobj = {};
   const redeemQP = new URLSearchParams(Object.entries(redeemQPobj)).toString();
   const title = "Redeem widget";
   const width = "100%";

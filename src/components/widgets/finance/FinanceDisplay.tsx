@@ -6,8 +6,7 @@ import { financePath } from "./Finance";
 
 export function FinanceDisplay() {
   const financeQPobj = {
-    sellerId: "25",
-    envName: "testing"
+    sellerId: "25"
   };
   const financeQP = new URLSearchParams(
     Object.entries(financeQPobj)
