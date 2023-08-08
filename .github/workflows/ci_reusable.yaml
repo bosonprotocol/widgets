@@ -1,0 +1,97 @@
+name: Build, Test and Deploy the Hosted Widgets - Reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      ENV_NAME:
+        required: true
+        type: string
+      REACT_APP_ENV_NAME:
+        required: true
+        type: string
+      DEPLOY_TO_FLEEK:
+        required: true
+        type: boolean
+      REACT_APP_RELEASE_TAG:
+        required: false
+        type: string
+      REACT_APP_RELEASE_NAME:
+        required: false
+        type: string
+    secrets:
+      FLEEK_API_KEY:
+        required: false
+      REACT_APP_INFURA_IPFS_PROJECT_ID:
+        required: false
+      REACT_APP_INFURA_IPFS_PROJECT_SECRET:
+        required: false
+      REACT_APP_WALLET_CONNECT_PROJECT_ID:
+        required: true
+      REACT_APP_META_TX_API_KEY:
+        required: true
+      REACT_APP_META_TX_API_IDS:
+        required: true
+    outputs:
+      JOB_LINT:
+        value: ${{ jobs.build-test-deploy.outputs.jobLint }}
+      JOB_BUILD:
+        value: ${{ jobs.build-test-deploy.outputs.jobBuild }}
+      DEPLOY_URL:
+        value: ${{ jobs.build-test-deploy.outputs.deployUrl }}
+
+jobs:
+  build-test-deploy:
+    name: Build, Test and Deploy the Hosted Widgets
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_ENV_NAME: ${{ inputs.REACT_APP_ENV_NAME }}
+      REACT_APP_RELEASE_TAG: ${{ inputs.REACT_APP_RELEASE_TAG }}
+      REACT_APP_RELEASE_NAME: ${{ inputs.REACT_APP_RELEASE_NAME }}
+      REACT_APP_INFURA_IPFS_PROJECT_ID: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}
+      REACT_APP_INFURA_IPFS_PROJECT_SECRET: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}
+      REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID }}
+      REACT_APP_META_TX_API_KEY: ${{ secrets.REACT_APP_META_TX_API_KEY }}
+      REACT_APP_META_TX_API_IDS: ${{ secrets.REACT_APP_META_TX_API_IDS }}
+    outputs:
+      jobLint: ${{ steps.lint.outputs.pass }}
+      jobBuild: ${{ steps.build.outputs.pass }}
+      deployUrl: ${{ steps.deploy.outputs.deployUrl }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - run: npm ci
+      - run: npm run prettier
+      - run: npm run lint
+      - id: lint
+        run: echo "::set-output name=pass::success"
+      - run: npm run build
+      - id: build
+        run: echo "::set-output name=pass::success"
+      - name: (if 'staging' env) Copy contents from .fleek_staging.json to .fleek.json
+        if: ${{ inputs.ENV_NAME == 'staging' }}
+        run: mv .fleek_staging.json .fleek.json
+      - name: (if 'production' env) Copy contents from .fleek_production.json to .fleek.json
+        if: ${{ inputs.ENV_NAME == 'production' }}
+        run: mv .fleek_production.json .fleek.json
+      - name: Deploy via fleek
+        if: ${{ inputs.DEPLOY_TO_FLEEK }}
+        id: deploy
+        uses: fleekhq/action-deploy@v1
+        with:
+          apiKey: ${{ secrets.FLEEK_API_KEY }}
+      - name: Get the output url
+        if: ${{ inputs.DEPLOY_TO_FLEEK }}
+        run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
