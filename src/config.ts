@@ -18,7 +18,8 @@ type ConfigFields =
   | "fairExchangePolicyRules"
   | "walletConnectProjectId"
   | "metaTxApiKey"
-  | "metaTxApiIds";
+  | "metaTxApiIds"
+  | "raiseDisputeForExchange";
 
 const envSuffixes: Record<EnvironmentType, string | undefined> = {
   testing: "_TESTING",
@@ -89,12 +90,16 @@ const EnvVariables: Array<{
     envVar: "REACT_APP_META_TX_API_IDS",
     optional: true,
     configField: "metaTxApiIds"
+  },
+  {
+    envVar: "REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE",
+    envDependent: true,
+    configField: "raiseDisputeForExchange"
   }
 ];
 
 let _CONFIG: Record<ConfigFields, string | number> | undefined;
 if (!_CONFIG) {
-  console.log("Process Environment", process.env);
   _CONFIG = {} as Record<ConfigFields, string | number>;
   EnvVariables.forEach((variable) => {
     const envVarName = variable.envDependent
