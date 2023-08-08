@@ -12,9 +12,6 @@ on:
       DEPLOY_TO_FLEEK:
         required: true
         type: boolean
-      FLEEK_WORKDIR:
-        required: true
-        type: string
       REACT_APP_RELEASE_TAG:
         required: false
         type: string
@@ -95,7 +92,6 @@ jobs:
         uses: fleekhq/action-deploy@v1
         with:
           apiKey: ${{ secrets.FLEEK_API_KEY }}
-          workDir: ${{ inputs.FLEEK_WORKDIR }}
       - name: Get the output url
         if: ${{ inputs.DEPLOY_TO_FLEEK }}
         run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"

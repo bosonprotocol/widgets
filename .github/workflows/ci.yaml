@@ -34,7 +34,6 @@ jobs:
       ENV_NAME: "staging"
       REACT_APP_ENV_NAME: "testing"
       DEPLOY_TO_FLEEK: true
-      FLEEK_WORKDIR: "./.fleek/staging"
       REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
       REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
     secrets:
@@ -53,7 +52,6 @@ jobs:
       ENV_NAME: "staging"
       REACT_APP_ENV_NAME: "staging"
       DEPLOY_TO_FLEEK: true
-      FLEEK_WORKDIR: "./.fleek/staging"
       REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
       REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
     secrets:
@@ -72,7 +70,6 @@ jobs:
       ENV_NAME: "production"
       REACT_APP_ENV_NAME: "production"
       DEPLOY_TO_FLEEK: true
-      FLEEK_WORKDIR: "./.fleek/production"
       REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
       REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
     secrets:
