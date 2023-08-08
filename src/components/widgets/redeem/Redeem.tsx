@@ -36,6 +36,7 @@ export function Redeem() {
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       defaultDisputeResolverId={CONFIG.defaultDisputeResolverId as string}
+      raiseDisputeForExchangeUrl={CONFIG.raiseDisputeForExchange as string}
     ></RedemptionWidget>
   );
 }
