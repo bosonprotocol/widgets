@@ -31,6 +31,7 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: prejob
     with:
+      ENV_NAME: "staging"
       REACT_APP_ENV_NAME: "testing"
       DEPLOY_TO_FLEEK: true
       FLEEK_WORKDIR: "./.fleek/staging"
@@ -49,6 +50,7 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'created'
     needs: prejob
     with:
+      ENV_NAME: "staging"
       REACT_APP_ENV_NAME: "staging"
       DEPLOY_TO_FLEEK: true
       FLEEK_WORKDIR: "./.fleek/staging"
@@ -67,6 +69,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     needs: prejob
     with:
+      ENV_NAME: "production"
       REACT_APP_ENV_NAME: "production"
       DEPLOY_TO_FLEEK: true
       FLEEK_WORKDIR: "./.fleek/production"

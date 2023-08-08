@@ -3,6 +3,9 @@ name: Build, Test and Deploy the Hosted Widgets - Reusable workflow
 on:
   workflow_call:
     inputs:
+      ENV_NAME:
+        required: true
+        type: string
       REACT_APP_ENV_NAME:
         required: true
         type: string
@@ -80,6 +83,12 @@ jobs:
       - run: npm run build
       - id: build
         run: echo "::set-output name=pass::success"
+      - name: (if 'staging' env) Copy contents from .fleek_staging.json to .fleek.json
+        if: ${{ inputs.ENV_NAME == 'staging' }}
+        run: mv .fleek_staging.json .fleek.json
+      - name: (if 'production' env) Copy contents from .fleek_production.json to .fleek.json
+        if: ${{ inputs.ENV_NAME == 'production' }}
+        run: mv .fleek_production.json .fleek.json
       - name: Deploy via fleek
         if: ${{ inputs.DEPLOY_TO_FLEEK }}
         id: deploy
