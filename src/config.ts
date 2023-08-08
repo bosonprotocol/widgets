@@ -94,6 +94,7 @@ const EnvVariables: Array<{
 
 let _CONFIG: Record<ConfigFields, string | number> | undefined;
 if (!_CONFIG) {
+  console.log("Process Environment", process.env);
   _CONFIG = {} as Record<ConfigFields, string | number>;
   EnvVariables.forEach((variable) => {
     const envVarName = variable.envDependent
