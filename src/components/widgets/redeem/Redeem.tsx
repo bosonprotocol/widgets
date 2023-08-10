@@ -37,6 +37,14 @@ export function Redeem() {
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       defaultDisputeResolverId={CONFIG.defaultDisputeResolverId as string}
       raiseDisputeForExchangeUrl={CONFIG.raiseDisputeForExchange as string}
+      closeWidgetClick={() => {
+        try {
+          window.parent.postMessage("boson-close-iframe", "*");
+        } catch (e) {
+          console.error(`Unable to post message ${e}`);
+        }
+      }}
+      modalMargin="2%"
     ></RedemptionWidget>
   );
 }
