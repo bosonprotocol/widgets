@@ -1,0 +1,33 @@
+.bosonButton {
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  padding: 0.75rem 2rem;
+  border-style: solid;
+  border-color: var(--accentNoDefault,#02F3A2);
+  border-width: 2px;
+  color: rgb(9, 24, 44);
+  background-color: var(--accentNoDefault,#02F3A2);
+  font-family: "Plus Jakarta Sans";
+}
+
+.bosonButton:hover {
+  background: #09182C;
+  color: white;
+  border-color: #09182C;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+  .bosonButton {
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .bosonButton {
+    font-size: 16px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .bosonButton {
+    font-size: 12px;
+  }
+}

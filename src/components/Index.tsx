@@ -9,6 +9,7 @@ export function Index() {
       <h1>Boson widgets</h1>
       <FinanceDisplay />
       <RedeemDisplay />
+      <a href="./example.html">Widget Integration Example</a>
     </div>
   );
 }
