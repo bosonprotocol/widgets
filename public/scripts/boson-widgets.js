@@ -1,5 +1,5 @@
 const constants = {
-  scriptName: "boson-widgets.js", // the name of the current file
+  scriptName: "scripts/boson-widgets.js", // the path/name to the current script file
   css: {
     modalClass: "bosonModal",
     loadingClass: "bosonLoading"
