@@ -9,19 +9,23 @@ const constants = {
   showRedeemId: "boson-redeem",
   showFinanceId: "boson-finance",
   exchangeIdTag: "data-exchange-id",
+  bypassModeTag: "data-bypass-mode",
   sellerIdTag: "data-seller-id",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
   financeUrl: (widgetsHost, sellerId) =>
     `${widgetsHost}/#/finance?sellerId=${sellerId}`,
-  redeemUrl: (widgetsHost, exchangeId) =>
-    `${widgetsHost}/#/redeem?exchangeId=${exchangeId}`
+  redeemUrl: (widgetsHost, exchangeId, bypassMode) =>
+    `${widgetsHost}/#/redeem?exchangeId=${exchangeId || ""}&bypassMode=${
+      bypassMode || ""
+    }`
 };
 var scripts = document.getElementsByTagName("script");
 var widgetsHost = null;
 if (scripts) {
   for (var i = 0; i < scripts.length; i++) {
     if (
+      scripts[i].attributes["src"]?.value &&
       scripts[i].attributes["src"].value.endsWith(`/${constants.scriptName}`)
     ) {
       widgetsHost = scripts[i].attributes["src"].value.replace(
@@ -30,6 +34,9 @@ if (scripts) {
       );
       break;
     }
+  }
+  if (!widgetsHost) {
+    console.error("Unable to find widgetsHost from script tags");
   }
 } else {
   console.error("Unable to find <scripts> tag");
@@ -66,32 +73,43 @@ const hideIFrame = () => {
     el.remove();
   }
 };
-const showFinanceId = document.getElementById(constants.showFinanceId);
-if (showFinanceId) {
-  showFinanceId.onclick = function () {
-    showLoading(constants.loadingDurationMSec);
-    hideIFrame();
-    var sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
-    createIFrame(constants.financeUrl(widgetsHost, sellerId));
-  };
-}
-const showRedeemId = document.getElementById(constants.showRedeemId);
-if (showRedeemId) {
-  showRedeemId.onclick = function () {
-    showLoading(constants.loadingDurationMSec);
-    hideIFrame();
-    var exchangeId = showRedeemId.attributes[constants.exchangeIdTag]?.value;
-    createIFrame(constants.redeemUrl(widgetsHost, exchangeId));
-  };
-}
-const hideModalId = document.getElementById(constants.hideModalId);
-if (hideModalId) {
-  hideModalId.onclick = function () {
-    hideIFrame();
-  };
-}
 window.addEventListener("message", (event) => {
   if (event.data === constants.hideModalMessage) {
     hideIFrame();
   }
 });
+function bosonWidgetReload() {
+  const showFinanceId = document.getElementById(constants.showFinanceId);
+  if (showFinanceId) {
+    showFinanceId.onclick = function () {
+      showLoading(constants.loadingDurationMSec);
+      hideIFrame();
+      var sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
+      createIFrame(constants.financeUrl(widgetsHost, sellerId));
+    };
+  }
+  const showRedeemEls = document.querySelectorAll(
+    `[id^="${constants.showRedeemId}"]`
+  );
+  for (let i = 0; i < showRedeemEls.length; i++) {
+    const showRedeemId = showRedeemEls[i];
+    console.log(
+      "Boson Widget - add onClick handle on element",
+      showRedeemId.id
+    );
+    showRedeemId.onclick = function () {
+      showLoading(constants.loadingDurationMSec);
+      hideIFrame();
+      var exchangeId = showRedeemId.attributes[constants.exchangeIdTag]?.value;
+      var bypassMode = showRedeemId.attributes[constants.bypassModeTag]?.value;
+      createIFrame(constants.redeemUrl(widgetsHost, exchangeId, bypassMode));
+    };
+  }
+  const hideModalId = document.getElementById(constants.hideModalId);
+  if (hideModalId) {
+    hideModalId.onclick = function () {
+      hideIFrame();
+    };
+  }
+}
+bosonWidgetReload();

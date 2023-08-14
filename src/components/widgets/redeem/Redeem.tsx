@@ -1,4 +1,7 @@
-import { RedemptionWidget } from "@bosonprotocol/react-kit";
+import {
+  RedemptionBypassMode,
+  RedemptionWidget
+} from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
 import { CONFIG } from "../../../config";
@@ -7,6 +10,9 @@ export const redeemPath = "/redeem";
 export function Redeem() {
   const [searchParams] = useSearchParams();
   const exchangeId = searchParams.get("exchangeId") || undefined;
+  const bypassMode: RedemptionBypassMode = checkBypassMode(
+    searchParams.get("bypassMode") || undefined
+  );
 
   return (
     <RedemptionWidget
@@ -45,6 +51,23 @@ export function Redeem() {
         }
       }}
       modalMargin="2%"
+      bypassMode={bypassMode}
     ></RedemptionWidget>
   );
+}
+
+function checkBypassMode(
+  bypassModeStr: string | undefined
+): RedemptionBypassMode {
+  switch (bypassModeStr) {
+    case RedemptionBypassMode.REDEEM: {
+      return RedemptionBypassMode.REDEEM;
+    }
+    case RedemptionBypassMode.CANCEL: {
+      return RedemptionBypassMode.CANCEL;
+    }
+    default: {
+      return RedemptionBypassMode.NORMAL;
+    }
+  }
 }
