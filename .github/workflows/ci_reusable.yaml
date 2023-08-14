@@ -109,6 +109,3 @@ jobs:
         run: npx @fleekhq/fleek-cli site:deploy
         env:
           FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
-      - name: Get the output url
-        if: ${{ inputs.DEPLOY_TO_FLEEK }}
-        run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
