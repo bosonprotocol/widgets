@@ -13,6 +13,7 @@ export function Redeem() {
   const bypassMode: RedemptionBypassMode = checkBypassMode(
     searchParams.get("bypassMode") || undefined
   );
+  const redeemCallbackUrl = searchParams.get("redeemCallbackUrl") || undefined;
 
   return (
     <RedemptionWidget
@@ -52,6 +53,7 @@ export function Redeem() {
       }}
       modalMargin="2%"
       bypassMode={bypassMode}
+      redeemCallbackUrl={redeemCallbackUrl}
     ></RedemptionWidget>
   );
 }
