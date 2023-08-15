@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { ErrorRequestHandler, Response } from "express";
 import morgan from "morgan";
 
@@ -12,6 +13,22 @@ function handleError(error: Error, res: Response): void {
 
 export function startApp() {
   const app = express();
+
+  // options for cors middleware
+  const options: cors.CorsOptions = {
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "X-Access-Token"
+    ],
+    credentials: true,
+    methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+    origin: true,
+    preflightContinue: false
+  };
+  app.use(cors(options));
 
   app.use(express.json());
 
