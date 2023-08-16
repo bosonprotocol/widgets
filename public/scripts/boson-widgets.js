@@ -4,21 +4,20 @@ const constants = {
     modalClass: "bosonModal",
     loadingClass: "bosonLoading"
   },
-  loadingDurationMSec: 2000,
+  loadingDurationMSec: 200,
   iFrameId: "bosonModal",
+  loadingId: "bosonLoading",
   showRedeemId: "boson-redeem",
   showFinanceId: "boson-finance",
   exchangeIdTag: "data-exchange-id",
   bypassModeTag: "data-bypass-mode",
+  redeemCallbackUrl: "data-redeem-callback-url",
+  redeemCallbackHeaders: "data-redeem-callback-headers",
   sellerIdTag: "data-seller-id",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
-  financeUrl: (widgetsHost, sellerId) =>
-    `${widgetsHost}/#/finance?sellerId=${sellerId}`,
-  redeemUrl: (widgetsHost, exchangeId, bypassMode) =>
-    `${widgetsHost}/#/redeem?exchangeId=${exchangeId || ""}&bypassMode=${
-      bypassMode || ""
-    }`
+  financeUrl: (widgetsHost) => `${widgetsHost}/#/finance`,
+  redeemUrl: (widgetsHost) => `${widgetsHost}/#/redeem`
 };
 var scripts = document.getElementsByTagName("script");
 var widgetsHost = null;
@@ -52,19 +51,24 @@ injectCSS(
   `.${constants.css.modalClass} { position: fixed; z-index: 1; width: 100%; left: 0; height: 100%; top: 0; border-style: none; }` +
     `.${constants.css.loadingClass} { position: fixed; z-index: 1; width: 100%; left: 0; height: 100%; top: 0; border-style: none; opacity: 50%; background: black; cursor: wait; }`
 );
-const showLoading = (delayMsec) => {
+const showLoading = () => {
   var loading = document.createElement("div");
+  loading.id = constants.loadingId;
   loading.className = constants.css.loadingClass;
   document.body.appendChild(loading);
-  setTimeout(() => {
-    loading.remove();
-  }, delayMsec);
 };
-const createIFrame = (src) => {
+const hideLoading = () => {
+  let el = document.getElementById(constants.loadingId);
+  if (el) {
+    el.remove();
+  }
+};
+const createIFrame = (src, onLoad) => {
   var bosonModal = document.createElement("iframe");
   bosonModal.id = constants.iFrameId;
   bosonModal.src = src;
   bosonModal.className = constants.css.modalClass;
+  bosonModal.onload = onLoad;
   document.body.appendChild(bosonModal);
 };
 const hideIFrame = () => {
@@ -73,6 +77,11 @@ const hideIFrame = () => {
     el.remove();
   }
 };
+const buildParams = (paramsTable) =>
+  paramsTable
+    .map((param) => (param.value ? `${param.tag}=${param.value}` : undefined))
+    .filter((p) => !!p)
+    .join("&");
 window.addEventListener("message", (event) => {
   if (event.data === constants.hideModalMessage) {
     hideIFrame();
@@ -82,10 +91,10 @@ function bosonWidgetReload() {
   const showFinanceId = document.getElementById(constants.showFinanceId);
   if (showFinanceId) {
     showFinanceId.onclick = function () {
-      showLoading(constants.loadingDurationMSec);
-      hideIFrame();
       var sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
-      createIFrame(constants.financeUrl(widgetsHost, sellerId));
+      bosonWidgetShowFinance({
+        sellerId
+      });
     };
   }
   const showRedeemEls = document.querySelectorAll(
@@ -98,11 +107,18 @@ function bosonWidgetReload() {
       showRedeemId.id
     );
     showRedeemId.onclick = function () {
-      showLoading(constants.loadingDurationMSec);
-      hideIFrame();
       var exchangeId = showRedeemId.attributes[constants.exchangeIdTag]?.value;
       var bypassMode = showRedeemId.attributes[constants.bypassModeTag]?.value;
-      createIFrame(constants.redeemUrl(widgetsHost, exchangeId, bypassMode));
+      var redeemCallbackUrl =
+        showRedeemId.attributes[constants.redeemCallbackUrl]?.value;
+      var redeemCallbackHeaders =
+        showRedeemId.attributes[constants.redeemCallbackHeaders]?.value;
+      bosonWidgetShowRedeem({
+        exchangeId,
+        bypassMode,
+        redeemCallbackUrl,
+        redeemCallbackHeaders
+      });
     };
   }
   const hideModalId = document.getElementById(constants.hideModalId);
@@ -113,3 +129,28 @@ function bosonWidgetReload() {
   }
 }
 bosonWidgetReload();
+
+function bosonWidgetShowRedeem(args) {
+  const params = buildParams([
+    { tag: "exchangeId", value: args.exchangeId },
+    { tag: "bypassMode", value: args.bypassMode },
+    { tag: "redeemCallbackUrl", value: args.redeemCallbackUrl },
+    { tag: "redeemCallbackHeaders", value: args.redeemCallbackHeaders }
+  ]);
+  showLoading();
+  hideIFrame();
+  createIFrame(
+    `${constants.redeemUrl(widgetsHost)}${params ? "?" + params : ""}`,
+    () => hideLoading()
+  );
+}
+
+function bosonWidgetShowFinance(args) {
+  const params = buildParams([{ tag: "sellerId", value: args.sellerId }]);
+  showLoading(constants.loadingDurationMSec);
+  hideIFrame();
+  createIFrame(
+    `${constants.financeUrl(widgetsHost)}${params ? "?" + params : ""}`,
+    () => hideLoading()
+  );
+}
