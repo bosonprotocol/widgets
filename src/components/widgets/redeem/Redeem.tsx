@@ -13,6 +13,20 @@ export function Redeem() {
   const bypassMode: RedemptionBypassMode = checkBypassMode(
     searchParams.get("bypassMode") || undefined
   );
+  const redeemCallbackUrl = searchParams.get("redeemCallbackUrl") || undefined;
+  const redeemCallbackHeaders =
+    searchParams.get("redeemCallbackHeaders") || undefined;
+  let redeemCallbackHeadersDecoded = undefined;
+  if (redeemCallbackHeaders) {
+    try {
+      redeemCallbackHeadersDecoded = JSON.parse(redeemCallbackHeaders);
+      console.log("redeemCallbackHeadersDecoded", redeemCallbackHeadersDecoded);
+    } catch (e) {
+      console.error(
+        `Unable to parse JSON from redeemCallbackHeaders='${redeemCallbackHeaders}': ${e}`
+      );
+    }
+  }
 
   return (
     <RedemptionWidget
@@ -52,6 +66,8 @@ export function Redeem() {
       }}
       modalMargin="2%"
       bypassMode={bypassMode}
+      redeemCallbackUrl={redeemCallbackUrl}
+      redeemCallbackHeaders={redeemCallbackHeadersDecoded}
     ></RedemptionWidget>
   );
 }
