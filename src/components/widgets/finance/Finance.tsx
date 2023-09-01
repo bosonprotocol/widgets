@@ -1,11 +1,13 @@
-import { FinanceWidget } from "@bosonprotocol/react-kit";
+import { ConfigId, FinanceWidget } from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
 import { CONFIG } from "../../../config";
+import { getDefaultConfigId } from "../../../utils";
 
 export const financePath = "/finance";
 export function Finance() {
   const [searchParams] = useSearchParams();
+  const configId = (searchParams.get("configId") as ConfigId) || undefined;
   const sellerId = searchParams.get("sellerId");
   if (!sellerId) {
     return <p>Missing 'sellerId' query param</p>;
@@ -15,6 +17,7 @@ export function Finance() {
     <FinanceWidget
       sellerId={sellerId}
       envName={CONFIG.envName}
+      configId={configId || getDefaultConfigId(CONFIG.envName)}
       metaTx={{
         apiKey: CONFIG.metaTxApiKey as string,
         apiIds: CONFIG.metaTxApiIds as string

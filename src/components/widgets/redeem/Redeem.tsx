@@ -1,14 +1,17 @@
 import {
+  ConfigId,
   RedemptionBypassMode,
   RedemptionWidget
 } from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
 import { CONFIG } from "../../../config";
+import { getDefaultConfigId } from "../../../utils";
 
 export const redeemPath = "/redeem";
 export function Redeem() {
   const [searchParams] = useSearchParams();
+  const configId = (searchParams.get("configId") as ConfigId) || undefined;
   const exchangeId = searchParams.get("exchangeId") || undefined;
   const bypassMode: RedemptionBypassMode = checkBypassMode(
     searchParams.get("bypassMode") || undefined
@@ -32,6 +35,7 @@ export function Redeem() {
     <RedemptionWidget
       exchangeId={exchangeId}
       envName={CONFIG.envName}
+      configId={configId || getDefaultConfigId(CONFIG.envName)}
       metaTx={{
         apiKey: CONFIG.metaTxApiKey as string,
         apiIds: CONFIG.metaTxApiIds as string
