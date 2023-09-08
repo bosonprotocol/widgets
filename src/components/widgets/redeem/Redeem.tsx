@@ -31,6 +31,7 @@ export function Redeem() {
   return (
     <RedemptionWidget
       exchangeId={exchangeId}
+      configId={CONFIG.configId}
       envName={CONFIG.envName}
       metaTx={{
         apiKey: CONFIG.metaTxApiKey as string,
