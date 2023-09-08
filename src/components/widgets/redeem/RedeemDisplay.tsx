@@ -1,11 +1,15 @@
+import { getEnvConfigs } from "@bosonprotocol/react-kit";
 import CodeCopy from "react-codecopy";
 import { Link } from "react-router-dom";
 
+import { CONFIG } from "../../../config";
 import { Pre, Widget } from "../styles";
 import { redeemPath } from "./Redeem";
 
 export function RedeemDisplay() {
-  const redeemQPobj = {};
+  const redeemQPobj = {
+    configId: getEnvConfigs(CONFIG.envName)[0].configId
+  };
   const redeemQP = new URLSearchParams(Object.entries(redeemQPobj)).toString();
   const title = "Redeem widget";
   const width = "100%";

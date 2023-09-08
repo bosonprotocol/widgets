@@ -1,4 +1,5 @@
 import {
+  ConfigId,
   RedemptionBypassMode,
   RedemptionWidget
 } from "@bosonprotocol/react-kit";
@@ -27,11 +28,15 @@ export function Redeem() {
       );
     }
   }
+  const configId = searchParams.get("configId") as ConfigId;
+  if (!configId) {
+    return <p>Missing 'configId' query param</p>;
+  }
 
   return (
     <RedemptionWidget
       exchangeId={exchangeId}
-      configId={CONFIG.configId}
+      configId={configId}
       envName={CONFIG.envName}
       metaTx={{
         apiKey: CONFIG.metaTxApiKey as string,
