@@ -14,15 +14,16 @@ const constants = {
   redeemCallbackUrl: "data-redeem-callback-url",
   redeemCallbackHeaders: "data-redeem-callback-headers",
   sellerIdTag: "data-seller-id",
+  configIdTag: "data-config-id",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
   financeUrl: (widgetsHost) => `${widgetsHost}/#/finance`,
   redeemUrl: (widgetsHost) => `${widgetsHost}/#/redeem`
 };
-var scripts = document.getElementsByTagName("script");
-var widgetsHost = null;
+const scripts = document.getElementsByTagName("script");
+let widgetsHost = null;
 if (scripts) {
-  for (var i = 0; i < scripts.length; i++) {
+  for (let i = 0; i < scripts.length; i++) {
     if (
       scripts[i].attributes["src"]?.value &&
       scripts[i].attributes["src"].value.endsWith(`/${constants.scriptName}`)
@@ -41,7 +42,7 @@ if (scripts) {
   console.error("Unable to find <scripts> tag");
 }
 const injectCSS = (css) => {
-  let el = document.createElement("style");
+  const el = document.createElement("style");
   el.type = "text/css";
   el.innerText = css;
   document.head.appendChild(el);
@@ -52,19 +53,19 @@ injectCSS(
     `.${constants.css.loadingClass} { position: fixed; z-index: 1; width: 100%; left: 0; height: 100%; top: 0; border-style: none; opacity: 50%; background: black; cursor: wait; }`
 );
 const showLoading = () => {
-  var loading = document.createElement("div");
+  const loading = document.createElement("div");
   loading.id = constants.loadingId;
   loading.className = constants.css.loadingClass;
   document.body.appendChild(loading);
 };
 const hideLoading = () => {
-  let el = document.getElementById(constants.loadingId);
+  const el = document.getElementById(constants.loadingId);
   if (el) {
     el.remove();
   }
 };
 const createIFrame = (src, onLoad) => {
-  var bosonModal = document.createElement("iframe");
+  const bosonModal = document.createElement("iframe");
   bosonModal.id = constants.iFrameId;
   bosonModal.src = src;
   bosonModal.className = constants.css.modalClass;
@@ -72,7 +73,7 @@ const createIFrame = (src, onLoad) => {
   document.body.appendChild(bosonModal);
 };
 const hideIFrame = () => {
-  let el = document.getElementById(constants.iFrameId);
+  const el = document.getElementById(constants.iFrameId);
   if (el) {
     el.remove();
   }
@@ -91,9 +92,11 @@ function bosonWidgetReload() {
   const showFinanceId = document.getElementById(constants.showFinanceId);
   if (showFinanceId) {
     showFinanceId.onclick = function () {
-      var sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
+      const sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
+      const configId = showFinanceId.attributes[constants.configIdTag]?.value;
       bosonWidgetShowFinance({
-        sellerId
+        sellerId,
+        configId
       });
     };
   }
@@ -107,17 +110,21 @@ function bosonWidgetReload() {
       showRedeemId.id
     );
     showRedeemId.onclick = function () {
-      var exchangeId = showRedeemId.attributes[constants.exchangeIdTag]?.value;
-      var bypassMode = showRedeemId.attributes[constants.bypassModeTag]?.value;
-      var redeemCallbackUrl =
+      const exchangeId =
+        showRedeemId.attributes[constants.exchangeIdTag]?.value;
+      const bypassMode =
+        showRedeemId.attributes[constants.bypassModeTag]?.value;
+      const redeemCallbackUrl =
         showRedeemId.attributes[constants.redeemCallbackUrl]?.value;
-      var redeemCallbackHeaders =
+      const redeemCallbackHeaders =
         showRedeemId.attributes[constants.redeemCallbackHeaders]?.value;
+      const configId = showRedeemId.attributes[constants.configIdTag]?.value;
       bosonWidgetShowRedeem({
         exchangeId,
         bypassMode,
         redeemCallbackUrl,
-        redeemCallbackHeaders
+        redeemCallbackHeaders,
+        configId
       });
     };
   }
@@ -135,7 +142,8 @@ function bosonWidgetShowRedeem(args) {
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "bypassMode", value: args.bypassMode },
     { tag: "redeemCallbackUrl", value: args.redeemCallbackUrl },
-    { tag: "redeemCallbackHeaders", value: args.redeemCallbackHeaders }
+    { tag: "redeemCallbackHeaders", value: args.redeemCallbackHeaders },
+    { tag: "configId", value: args.configId }
   ]);
   showLoading();
   hideIFrame();
@@ -146,7 +154,10 @@ function bosonWidgetShowRedeem(args) {
 }
 
 function bosonWidgetShowFinance(args) {
-  const params = buildParams([{ tag: "sellerId", value: args.sellerId }]);
+  const params = buildParams([
+    { tag: "sellerId", value: args.sellerId },
+    { tag: "configId", value: args.configId }
+  ]);
   showLoading(constants.loadingDurationMSec);
   hideIFrame();
   createIFrame(
