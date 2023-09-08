@@ -14,6 +14,7 @@ export function Finance() {
   return (
     <FinanceWidget
       sellerId={sellerId}
+      configId={CONFIG.configId}
       envName={CONFIG.envName}
       metaTx={{
         apiKey: CONFIG.metaTxApiKey as string,
