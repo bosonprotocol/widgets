@@ -1,15 +1,10 @@
-import { ConfigId, EnvironmentType } from "@bosonprotocol/react-kit";
+import { EnvironmentType } from "@bosonprotocol/react-kit";
 import { Buffer } from "buffer";
 
 const envName = process.env.REACT_APP_ENV_NAME as EnvironmentType;
-const configId = process.env.REACT_APP_CONFIG_ID as ConfigId;
 
 if (!envName || ["testing", "staging", "production"].indexOf(envName) < 0) {
   throw `REACT_APP_ENV_NAME env variable is missing or invalid ('${envName}')`;
-}
-
-if (!configId) {
-  throw `REACT_APP_CONFIG_ID env variable is missing ('${configId}')`;
 }
 
 type ConfigFields =
@@ -129,7 +124,6 @@ if (!_CONFIG) {
 
 export const CONFIG = {
   envName,
-  configId,
   ipfsMetadataStorageHeaders: getIpfsMetadataStorageHeaders(
     process.env.REACT_APP_INFURA_IPFS_PROJECT_ID,
     process.env.REACT_APP_INFURA_IPFS_PROJECT_SECRET

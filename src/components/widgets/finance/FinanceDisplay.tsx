@@ -1,12 +1,15 @@
+import { getEnvConfigs } from "@bosonprotocol/react-kit";
 import CodeCopy from "react-codecopy";
 import { Link } from "react-router-dom";
 
+import { CONFIG } from "../../../config";
 import { Pre, Widget } from "../styles";
 import { financePath } from "./Finance";
 
 export function FinanceDisplay() {
   const financeQPobj = {
-    sellerId: "25"
+    sellerId: "25",
+    configId: getEnvConfigs(CONFIG.envName)[0].configId
   };
   const financeQP = new URLSearchParams(
     Object.entries(financeQPobj)
