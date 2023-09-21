@@ -15,6 +15,7 @@ const constants = {
   redeemCallbackHeaders: "data-redeem-callback-headers",
   sellerIdTag: "data-seller-id",
   configIdTag: "data-config-id",
+  accountTag: "data-account",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
   financeUrl: (widgetsHost) => `${widgetsHost}/#/finance`,
@@ -94,9 +95,11 @@ function bosonWidgetReload() {
     showFinanceId.onclick = function () {
       const sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
       const configId = showFinanceId.attributes[constants.configIdTag]?.value;
+      const account = showFinanceId.attributes[constants.accountTag]?.value;
       bosonWidgetShowFinance({
         sellerId,
-        configId
+        configId,
+        account
       });
     };
   }
@@ -119,12 +122,14 @@ function bosonWidgetReload() {
       const redeemCallbackHeaders =
         showRedeemId.attributes[constants.redeemCallbackHeaders]?.value;
       const configId = showRedeemId.attributes[constants.configIdTag]?.value;
+      const account = showRedeemId.attributes[constants.accountTag]?.value;
       bosonWidgetShowRedeem({
         exchangeId,
         bypassMode,
         redeemCallbackUrl,
         redeemCallbackHeaders,
-        configId
+        configId,
+        account
       });
     };
   }
@@ -143,7 +148,8 @@ function bosonWidgetShowRedeem(args) {
     { tag: "bypassMode", value: args.bypassMode },
     { tag: "redeemCallbackUrl", value: args.redeemCallbackUrl },
     { tag: "redeemCallbackHeaders", value: args.redeemCallbackHeaders },
-    { tag: "configId", value: args.configId }
+    { tag: "configId", value: args.configId },
+    { tag: "account", value: args.account }
   ]);
   showLoading();
   hideIFrame();
@@ -156,7 +162,8 @@ function bosonWidgetShowRedeem(args) {
 function bosonWidgetShowFinance(args) {
   const params = buildParams([
     { tag: "sellerId", value: args.sellerId },
-    { tag: "configId", value: args.configId }
+    { tag: "configId", value: args.configId },
+    { tag: "account", value: args.account }
   ]);
   showLoading(constants.loadingDurationMSec);
   hideIFrame();

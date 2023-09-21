@@ -32,11 +32,13 @@ export function Redeem() {
   if (!configId) {
     return <p>Missing 'configId' query param</p>;
   }
+  const account = searchParams.get("account") as string;
 
   return (
     <RedemptionWidget
       exchangeId={exchangeId}
       configId={configId}
+      forcedAccount={account}
       envName={CONFIG.envName}
       metaTx={{
         apiKey: CONFIG.metaTxApiKey as string,
