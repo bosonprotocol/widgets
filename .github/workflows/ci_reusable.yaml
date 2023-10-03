@@ -66,9 +66,9 @@ jobs:
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_TESTING: "https://drcenter-test.on.fleek.co/#/exchange/{id}/raise-dispute"
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_STAGING: "https://drcenter-staging.on.fleek.co/#/exchange/{id}/raise-dispute"
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_PRODUCTION: "https://disputes.bosonprotocol.io/#/exchange/{id}/raise-dispute"
-      REACT_APP_BUYER_SELLER_AGREEMENT_TEMPLATE: "ipfs://QmXfDShmggHm7BzMbkzv2rRowwPyJ55mypGp32qKSPGto4"
-      REACT_APP_RNFT_LICENSE_TEMPLATE: "ipfs://QmUxAXqM6smDYj7TvS9oDe5kRoAVmkqcyWCKEeNsD6JA97"
-      REACT_APP_FAIR_EXCHANGE_POLICY_RULES: "ipfs://QmV3Wy2wmrFdEXzhyhvvaW25Q8w2wTd2UypFVyhwsdBE8T"
+      REACT_APP_BUYER_SELLER_AGREEMENT_TEMPLATE: "ipfs://QmQ8ZTmmRV15rFaWG9KRyjFRrpaD1o2sDwZoYiWgBaAto6"
+      REACT_APP_RNFT_LICENSE_TEMPLATE: "ipfs://QmeVkdpKbfHKrPb9tXDXUoPEResEanGpcGANfAjb8bUQYT"
+      REACT_APP_FAIR_EXCHANGE_POLICY_RULES: "ipfs://QmNqhFGr9NUEMqz3oQC7yUqJG9mt4NZEpV5MCeemVMTSRs"
     outputs:
       jobLint: ${{ steps.lint.outputs.pass }}
       jobBuild: ${{ steps.build.outputs.pass }}
