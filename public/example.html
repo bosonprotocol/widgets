@@ -35,5 +35,12 @@
     <div>
       <button type="button" id="boson-redeem" class="bosonButton" data-redeem-callback-url="http%3A%2F%2Flocalhost%3A3666" data-redeem-callback-headers='%7B%0A%20%20"authorization"%3A%20"Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"%2C%0A%20%20"another-header"%3A%20"%2A%2F%2A"%0A%7D'>Show Redeem (3rd-party backend)</button>
     </div>
+    <script>
+      const searchParams = new URLSearchParams(window.location.search);
+      const configId = searchParams.get('configId');
+      document.querySelectorAll('button').forEach(($button)=>{
+        $button.setAttribute('data-config-id',configId);
+      })
+    </script>
   </body>
 </html>
