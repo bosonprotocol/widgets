@@ -17,8 +17,8 @@ type ConfigFields =
   | "licenseTemplate"
   | "fairExchangePolicyRules"
   | "walletConnectProjectId"
-  | "metaTxApiKey"
-  | "metaTxApiIds"
+  | "metaTxApiKeyMap"
+  | "metaTxApiIdsMap"
   | "raiseDisputeForExchange"
   | "ipfsGateway";
 
@@ -83,14 +83,14 @@ const EnvVariables: Array<{
     configField: "walletConnectProjectId"
   },
   {
-    envVar: "REACT_APP_META_TX_API_KEY",
+    envVar: "REACT_APP_META_TX_API_KEY_MAP",
     optional: true,
-    configField: "metaTxApiKey"
+    configField: "metaTxApiKeyMap"
   },
   {
-    envVar: "REACT_APP_META_TX_API_IDS",
+    envVar: "REACT_APP_META_TX_API_IDS_MAP",
     optional: true,
-    configField: "metaTxApiIds"
+    configField: "metaTxApiIdsMap"
   },
   {
     envVar: "REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE",
@@ -150,5 +150,36 @@ function getIpfsMetadataStorageHeaders(
     authorization: `Basic ${Buffer.from(
       infuraProjectId + ":" + infuraProjectSecret
     ).toString("base64")}`
+  };
+}
+
+export function getMetaTxConfig(configId: string): {
+  apiKey: string;
+  apiIds: string;
+} {
+  let apiKey = "";
+  let apiIds = "";
+  try {
+    const apiKeysPerConfigId = JSON.parse(
+      (CONFIG.metaTxApiKeyMap as string) || "{}"
+    );
+    apiKey = apiKeysPerConfigId[configId];
+  } catch (error) {
+    console.error(error);
+  }
+  try {
+    const apiIdsPerConfigId = JSON.parse(
+      (CONFIG.metaTxApiIdsMap as string) || "{}"
+    );
+    apiIds = apiIdsPerConfigId[configId];
+    if (typeof apiIds === "object") {
+      apiIds = JSON.stringify(apiIds);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return {
+    apiKey,
+    apiIds
   };
 }
