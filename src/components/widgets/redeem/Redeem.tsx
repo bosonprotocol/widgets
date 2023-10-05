@@ -5,7 +5,7 @@ import {
 } from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
-import { CONFIG } from "../../../config";
+import { CONFIG, getMetaTxConfig } from "../../../config";
 
 export const redeemPath = "/redeem";
 export function Redeem() {
@@ -40,10 +40,7 @@ export function Redeem() {
       configId={configId}
       forcedAccount={account}
       envName={CONFIG.envName}
-      metaTx={{
-        apiKey: CONFIG.metaTxApiKey as string,
-        apiIds: CONFIG.metaTxApiIds as string
-      }}
+      metaTx={getMetaTxConfig(configId)}
       tokensList={CONFIG.defaultTokens as string}
       dateFormat="YYYY/MM/DD"
       shortDateFormat="MMM DD, YYYY"

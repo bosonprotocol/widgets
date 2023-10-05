@@ -18,6 +18,12 @@ on:
       REACT_APP_RELEASE_NAME:
         required: false
         type: string
+      REACT_APP_META_TX_API_KEY_MAP:
+        required: true
+        type: string
+      REACT_APP_META_TX_API_IDS_MAP:
+        required: true
+        type: string
     secrets:
       FLEEK_API_KEY:
         required: false
@@ -26,10 +32,6 @@ on:
       REACT_APP_INFURA_IPFS_PROJECT_SECRET:
         required: false
       REACT_APP_WALLET_CONNECT_PROJECT_ID:
-        required: true
-      REACT_APP_META_TX_API_KEY:
-        required: true
-      REACT_APP_META_TX_API_IDS:
         required: true
     outputs:
       JOB_LINT:
@@ -50,8 +52,8 @@ jobs:
       REACT_APP_INFURA_IPFS_PROJECT_ID: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}
       REACT_APP_INFURA_IPFS_PROJECT_SECRET: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}
       REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID }}
-      REACT_APP_META_TX_API_KEY: ${{ secrets.REACT_APP_META_TX_API_KEY }}
-      REACT_APP_META_TX_API_IDS: ${{ secrets.REACT_APP_META_TX_API_IDS }}
+      REACT_APP_META_TX_API_KEY_MAP: ${{ inputs.REACT_APP_META_TX_API_KEY_MAP }}
+      REACT_APP_META_TX_API_IDS_MAP: ${{ inputs.REACT_APP_META_TX_API_IDS_MAP }}
       REACT_APP_DEFAULT_TOKENS_LIST_TESTING: "[{\"symbol\":\"MATIC\",\"name\":\"MATIC\",\"address\":\"0x0000000000000000000000000000000000000000\",\"decimals\":\"18\"},{\"symbol\":\"WETH\",\"name\":\"Wrapped Ether\",\"address\":\"0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa\",\"decimals\":\"18\"},{\"symbol\":\"BOSON\",\"name\":\"Boson Token (PoS)\",\"address\":\"0x1f5431E8679630790E8EbA3a9b41d1BB4d41aeD0\",\"decimals\":\"18\"},{\"symbol\":\"USDC\",\"name\":\"Mumbai USD Coin\",\"address\":\"0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747\",\"decimals\":\"6\"},{\"symbol\":\"DAI\",\"name\":\"DAI\",\"address\":\"0x001b3b4d0f3714ca98ba10f6042daebf0b1b7b6f\",\"decimals\":\"18\"},{\"symbol\":\"USDT\",\"name\":\"Tether USD\",\"address\":\"0xA02f6adc7926efeBBd59Fd43A84f4E0c0c91e832\",\"decimals\":\"6\"}]"
       REACT_APP_DEFAULT_TOKENS_LIST_STAGING: "[{\"symbol\":\"MATIC\",\"name\":\"MATIC\",\"address\":\"0x0000000000000000000000000000000000000000\",\"decimals\":\"18\"},{\"symbol\":\"WETH\",\"name\":\"Wrapped Ether\",\"address\":\"0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa\",\"decimals\":\"18\"},{\"symbol\":\"BOSON\",\"name\":\"Boson Token (PoS)\",\"address\":\"0x1f5431E8679630790E8EbA3a9b41d1BB4d41aeD0\",\"decimals\":\"18\"},{\"symbol\":\"USDC\",\"name\":\"Mumbai USD Coin\",\"address\":\"0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747\",\"decimals\":\"6\"},{\"symbol\":\"DAI\",\"name\":\"DAI\",\"address\":\"0x001b3b4d0f3714ca98ba10f6042daebf0b1b7b6f\",\"decimals\":\"18\"},{\"symbol\":\"USDT\",\"name\":\"Tether USD\",\"address\":\"0xA02f6adc7926efeBBd59Fd43A84f4E0c0c91e832\",\"decimals\":\"6\"}]"
       REACT_APP_DEFAULT_TOKENS_LIST_PRODUCTION: "[{\"symbol\":\"MATIC\",\"name\":\"MATIC\",\"address\":\"0x0000000000000000000000000000000000000000\",\"decimals\":\"18\"},{\"symbol\":\"WETH\",\"name\":\"Wrapped Ether\",\"address\":\"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619\",\"decimals\":\"18\"},{\"symbol\":\"BOSON\",\"name\":\"Boson Token (PoS)\",\"address\":\"0x9B3B0703D392321AD24338Ff1f846650437A43C9\",\"decimals\":\"18\"},{\"symbol\":\"USDC\",\"name\":\"USD Coin (PoS)\",\"address\":\"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174\",\"decimals\":\"6\"},{\"symbol\":\"DAI\",\"name\":\"(PoS) Dai Stablecoin\",\"address\":\"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063\",\"decimals\":\"18\"},{\"symbol\":\"USDT\",\"name\":\"(PoS) Tether USD\",\"address\":\"0xc2132D05D31c914a87C6611C10748AEb04B58e8F\",\"decimals\":\"6\"}]"
