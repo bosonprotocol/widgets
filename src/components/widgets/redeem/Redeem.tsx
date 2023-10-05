@@ -58,6 +58,7 @@ export function Redeem() {
       licenseTemplate={CONFIG.licenseTemplate as string}
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
+      ipfsGateway={CONFIG.ipfsGateway as string}
       ipfsProjectId={CONFIG.ipfsProjectId}
       ipfsProjectSecret={CONFIG.ipfsProjectSecret}
       children={<></>}

@@ -66,6 +66,7 @@ jobs:
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_TESTING: "https://drcenter-test.on.fleek.co/#/exchange/{id}/raise-dispute"
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_STAGING: "https://drcenter-staging.on.fleek.co/#/exchange/{id}/raise-dispute"
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_PRODUCTION: "https://disputes.bosonprotocol.io/#/exchange/{id}/raise-dispute"
+      REACT_APP_IPFS_GATEWAY: "https://bosonprotocol.infura-ipfs.io/ipfs"
       REACT_APP_BUYER_SELLER_AGREEMENT_TEMPLATE: "ipfs://QmQ8ZTmmRV15rFaWG9KRyjFRrpaD1o2sDwZoYiWgBaAto6"
       REACT_APP_RNFT_LICENSE_TEMPLATE: "ipfs://QmeVkdpKbfHKrPb9tXDXUoPEResEanGpcGANfAjb8bUQYT"
       REACT_APP_FAIR_EXCHANGE_POLICY_RULES: "ipfs://QmNqhFGr9NUEMqz3oQC7yUqJG9mt4NZEpV5MCeemVMTSRs"

@@ -19,7 +19,8 @@ type ConfigFields =
   | "walletConnectProjectId"
   | "metaTxApiKey"
   | "metaTxApiIds"
-  | "raiseDisputeForExchange";
+  | "raiseDisputeForExchange"
+  | "ipfsGateway";
 
 const envSuffixes: Record<EnvironmentType, string | undefined> = {
   testing: "_TESTING",
@@ -95,6 +96,10 @@ const EnvVariables: Array<{
     envVar: "REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE",
     envDependent: true,
     configField: "raiseDisputeForExchange"
+  },
+  {
+    envVar: "REACT_APP_IPFS_GATEWAY",
+    configField: "ipfsGateway"
   }
 ];
 
