@@ -41,7 +41,6 @@ export function Redeem() {
       forcedAccount={account}
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}
-      tokensList={CONFIG.defaultTokens as string}
       dateFormat="YYYY/MM/DD"
       shortDateFormat="MMM DD, YYYY"
       minimumDisputePeriodInDays={CONFIG.minimumDisputePeriodInDays as number}
@@ -61,7 +60,6 @@ export function Redeem() {
       children={<></>}
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
-      defaultDisputeResolverId={CONFIG.defaultDisputeResolverId as string}
       raiseDisputeForExchangeUrl={CONFIG.raiseDisputeForExchange as string}
       closeWidgetClick={() => {
         try {
