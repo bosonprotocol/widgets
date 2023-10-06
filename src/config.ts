@@ -8,8 +8,6 @@ if (!envName || ["testing", "staging", "production"].indexOf(envName) < 0) {
 }
 
 type ConfigFields =
-  | "defaultTokens"
-  | "defaultDisputeResolverId"
   | "contactSellerForExchange"
   | "minimumDisputePeriodInDays"
   | "minimumDisputeResolutionPeriodDays"
@@ -37,24 +35,9 @@ const EnvVariables: Array<{
   configField: ConfigFields;
 }> = [
   {
-    envVar: "REACT_APP_DEFAULT_TOKENS_LIST",
-    envDependent: true,
-    configField: "defaultTokens"
-  },
-  {
-    envVar: "REACT_APP_DEFAULT_DISPUTE_RESOLVER_ID",
-    envDependent: true,
-    configField: "defaultDisputeResolverId"
-  },
-  {
     envVar: "REACT_APP_CONTACT_SELLER_FOR_EXCHANGE",
     envDependent: true,
     configField: "contactSellerForExchange"
-  },
-  {
-    envVar: "REACT_APP_DEFAULT_TOKENS_LIST",
-    envDependent: true,
-    configField: "defaultTokens"
   },
   {
     envVar: "REACT_APP_DEFAULT_DISPUTE_PERIOD_DAYS",

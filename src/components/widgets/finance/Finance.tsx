@@ -20,7 +20,6 @@ export function Finance() {
       configId={configId}
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}
-      tokensList={CONFIG.defaultTokens as string}
       dateFormat="YYYY/MM/DD"
       shortDateFormat="MMM DD, YYYY"
       minimumDisputePeriodInDays={CONFIG.minimumDisputePeriodInDays as number}
