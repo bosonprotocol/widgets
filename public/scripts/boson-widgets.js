@@ -90,8 +90,11 @@ window.addEventListener("message", (event) => {
   }
 });
 function bosonWidgetReload() {
-  const showFinanceId = document.getElementById(constants.showFinanceId);
-  if (showFinanceId) {
+  const showFinanceEls = document.querySelectorAll(
+    `[id^="${constants.showFinanceId}"]`
+  );
+  for (let i = 0; i < showFinanceEls.length; i++) {
+    const showFinanceId = showFinanceEls[i];
     showFinanceId.onclick = function () {
       const sellerId = showFinanceId.attributes[constants.sellerIdTag]?.value;
       const configId = showFinanceId.attributes[constants.configIdTag]?.value;
@@ -115,6 +118,7 @@ function bosonWidgetReload() {
     showRedeemId.onclick = function () {
       const exchangeId =
         showRedeemId.attributes[constants.exchangeIdTag]?.value;
+      const sellerId = showRedeemId.attributes[constants.sellerIdTag]?.value;
       const bypassMode =
         showRedeemId.attributes[constants.bypassModeTag]?.value;
       const redeemCallbackUrl =
@@ -125,6 +129,7 @@ function bosonWidgetReload() {
       const account = showRedeemId.attributes[constants.accountTag]?.value;
       bosonWidgetShowRedeem({
         exchangeId,
+        sellerId,
         bypassMode,
         redeemCallbackUrl,
         redeemCallbackHeaders,
@@ -145,6 +150,7 @@ bosonWidgetReload();
 function bosonWidgetShowRedeem(args) {
   const params = buildParams([
     { tag: "exchangeId", value: args.exchangeId },
+    { tag: "sellerId", value: args.sellerId },
     { tag: "bypassMode", value: args.bypassMode },
     { tag: "redeemCallbackUrl", value: args.redeemCallbackUrl },
     { tag: "redeemCallbackHeaders", value: args.redeemCallbackHeaders },

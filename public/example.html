@@ -17,30 +17,129 @@
     </style>
   </head>
   <body>
-    <div>
-      <button type="button" id="boson-finance" class="bosonButton" data-seller-id="25">Show Finance</button>
-    </div>
-    <div>
-      <button type="button" id="boson-redeem" class="bosonButton">Show Redeem</button>
-    </div>
-    <div>
-      <button type="button" id="boson-redeem-80" class="bosonButton" data-exchange-id="80">Show Redeem (ExchangeId:80)</button>
-    </div>
-    <div>
-      <button type="button" id="boson-redeem-redeem-80" class="bosonButton" data-exchange-id="80" data-bypass-mode="REDEEM">Redeem Exchange 80</button>
-    </div>
-    <div>
-      <button type="button" id="boson-redeem-cancel-80" class="bosonButton" data-exchange-id="80" data-bypass-mode="CANCEL">Cancel Exchange 80</button>
-    </div>
-    <div>
-      <button type="button" id="boson-redeem" class="bosonButton" data-redeem-callback-url="http%3A%2F%2Flocalhost%3A3666" data-redeem-callback-headers='%7B%0A%20%20"authorization"%3A%20"Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"%2C%0A%20%20"another-header"%3A%20"%2A%2F%2A"%0A%7D'>Show Redeem (3rd-party backend)</button>
-    </div>
+    <h1>Boson Protocol Widgets</h1>
+    <section>
+      <h2>Finance Widget</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SellerId</td>
+            <td>
+              <input type="number" min="1" id="input-finance-seller-id" onchange="updateFinanceButton('data-seller-id', this.value)">
+            </td>
+            <td>
+              <button onclick="clearFinanceInputs(); setValue('input-finance-seller-id', '26')" >Example</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" id="boson-finance-button" class="bosonButton" disabled>Show Finance</button>
+    </section>
+    <section>
+      <h2>Redemption Widget</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ExchangeId</td>
+            <td>
+              <input type="number" min="1" id="input-redeem-exchange-id" onchange="updateRedeemButton('data-exchange-id', this.value)">
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>SellerId</td>
+            <td>
+              <input type="number" min="1" id="input-redeem-seller-id" onchange="updateRedeemButton('data-seller-id', this.value)">
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-seller-id', '26')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Bypass Mode</td>
+            <td>
+              <select id="select-redeem-bypass-mode" onchange="updateRedeemButton('data-bypass-mode', this.value)">
+                <option value="NORMAL">NORMAL</option>
+                <option value="REDEEM">REDEEM</option>
+                <option value="CANCEL">CANCEL</option>
+              </select>
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80'); setValue('select-redeem-bypass-mode', 'CANCEL')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>CallbackURL</td>
+            <td>
+              <input type="url" id="input-redeem-callback-url" onchange="updateRedeemButton('data-redeem-callback-url', encodeURI(this.value))" size="30">
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-callback-url', 'http://localhost:3666')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>CallbackHeader</td>
+            <td>
+              <textarea id="input-redeem-callback-header" onchange="updateRedeemButton('data-redeem-callback-headers', encodeURI(this.value))" rows="10" cols="30">
+              </textarea>
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-callback-url', 'http://localhost:3666'); setValue('input-redeem-callback-header', decodeURI('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="bosonButton" id="boson-redeem-button">Show Redeem</button>
+    </section>
     <script>
       const searchParams = new URLSearchParams(window.location.search);
       const configId = searchParams.get('configId');
       document.querySelectorAll('button').forEach(($button)=>{
         $button.setAttribute('data-config-id',configId);
       })
+      function updateRedeemButton(attribute, value) {
+        document.getElementById('boson-redeem-button').setAttribute(attribute, value)
+      }
+      function updateFinanceButton(attribute, value) {
+        document.getElementById('boson-finance-button').setAttribute(attribute, value)
+        if (value) {
+          document.getElementById('boson-finance-button').removeAttribute('disabled')
+        } else {
+          document.getElementById('boson-finance-button').setAttribute('disabled', true)
+        }
+      }
+      function setValue(elementId, value) {
+        let element = document.getElementById(elementId)
+        element.value = value
+        element.onchange()
+      }
+      function clearRedeemInputs() {
+        setValue('input-redeem-exchange-id', '')
+        setValue('input-redeem-seller-id', '')
+        setValue('select-redeem-bypass-mode', 'NORMAL')
+        setValue('input-redeem-callback-url', '')
+        setValue('input-redeem-callback-header', '')
+      }
+      function clearFinanceInputs() {
+        setValue('input-finance-seller-id', '')
+        updateFinanceButton('disabled', true)
+      }
     </script>
   </body>
 </html>
