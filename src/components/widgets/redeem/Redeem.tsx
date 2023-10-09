@@ -33,10 +33,18 @@ export function Redeem() {
     return <p>Missing 'configId' query param</p>;
   }
   const account = searchParams.get("account") as string;
+  const sellerIdsStr = searchParams.get("sellerIds") as string;
+  const sellerId = searchParams.get("sellerId") as string;
+  const sellerIds = sellerIdsStr
+    ? sellerIdsStr.split(",")
+    : sellerId
+    ? [sellerId]
+    : undefined;
 
   return (
     <RedemptionWidget
       exchangeId={exchangeId}
+      sellerIds={sellerIds}
       configId={configId}
       forcedAccount={account}
       envName={CONFIG.envName}

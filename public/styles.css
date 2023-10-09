@@ -16,6 +16,13 @@
   border-color: #09182C;
 }
 
+.bosonButton:disabled {
+  background: #4c4f53;
+  color: rgb(179, 179, 179);
+  border-color: #4c4f53;
+  cursor: not-allowed;
+}
+
 @media only screen and (min-width: 768px) and (max-width: 1199px) {
   .bosonButton {
     font-size: 14px;
