@@ -1,7 +1,8 @@
 import {
   ConfigId,
-  RedemptionBypassMode,
-  RedemptionWidget
+  RedemptionWidget,
+  RedemptionWidgetAction,
+  subgraph
 } from "@bosonprotocol/react-kit";
 import { useSearchParams } from "react-router-dom";
 
@@ -11,20 +12,31 @@ export const redeemPath = "/redeem";
 export function Redeem() {
   const [searchParams] = useSearchParams();
   const exchangeId = searchParams.get("exchangeId") || undefined;
-  const bypassMode: RedemptionBypassMode = checkBypassMode(
-    searchParams.get("bypassMode") || undefined
+  const showRedemptionOverviewStr = searchParams.get("showRedemptionOverview");
+  const showRedemptionOverview = showRedemptionOverviewStr
+    ? /^true$/i.test(showRedemptionOverviewStr)
+    : true; // default value
+  const widgetAction: RedemptionWidgetAction = checkWidgetAction(
+    searchParams.get("widgetAction") || undefined
   );
-  const redeemCallbackUrl = searchParams.get("redeemCallbackUrl") || undefined;
-  const redeemCallbackHeaders =
-    searchParams.get("redeemCallbackHeaders") || undefined;
-  let redeemCallbackHeadersDecoded = undefined;
-  if (redeemCallbackHeaders) {
+  const exchangeState: subgraph.ExchangeState = checkExchangeState(
+    searchParams.get("exchangeState") || undefined
+  );
+  const postDeliveryInfoUrl =
+    searchParams.get("postDeliveryInfoUrl") || undefined;
+  const postDeliveryInfoHeaders =
+    searchParams.get("postDeliveryInfoHeaders") || undefined;
+  let postDeliveryInfoHeadersDecoded = undefined;
+  if (postDeliveryInfoHeaders) {
     try {
-      redeemCallbackHeadersDecoded = JSON.parse(redeemCallbackHeaders);
-      console.log("redeemCallbackHeadersDecoded", redeemCallbackHeadersDecoded);
+      postDeliveryInfoHeadersDecoded = JSON.parse(postDeliveryInfoHeaders);
+      console.log(
+        "postDeliveryInfoHeadersDecoded",
+        postDeliveryInfoHeadersDecoded
+      );
     } catch (e) {
       console.error(
-        `Unable to parse JSON from redeemCallbackHeaders='${redeemCallbackHeaders}': ${e}`
+        `Unable to parse JSON from postDeliveryInfoHeaders='${postDeliveryInfoHeaders}': ${e}`
       );
     }
   }
@@ -43,6 +55,8 @@ export function Redeem() {
 
   return (
     <RedemptionWidget
+      showRedemptionOverview={showRedemptionOverview}
+      exchangeState={exchangeState}
       exchangeId={exchangeId}
       sellerIds={sellerIds}
       configId={configId}
@@ -77,25 +91,54 @@ export function Redeem() {
         }
       }}
       modalMargin="2%"
-      bypassMode={bypassMode}
-      redeemCallbackUrl={redeemCallbackUrl}
-      redeemCallbackHeaders={redeemCallbackHeadersDecoded}
+      widgetAction={widgetAction}
+      postDeliveryInfoUrl={postDeliveryInfoUrl}
+      postDeliveryInfoHeaders={postDeliveryInfoHeadersDecoded}
     ></RedemptionWidget>
   );
 }
 
-function checkBypassMode(
-  bypassModeStr: string | undefined
-): RedemptionBypassMode {
-  switch (bypassModeStr) {
-    case RedemptionBypassMode.REDEEM: {
-      return RedemptionBypassMode.REDEEM;
+function checkWidgetAction(
+  widgetActionStr: string | undefined
+): RedemptionWidgetAction {
+  switch (widgetActionStr?.toLowerCase()) {
+    case undefined:
+    case RedemptionWidgetAction.SELECT_EXCHANGE.toLowerCase(): {
+      return RedemptionWidgetAction.SELECT_EXCHANGE;
     }
-    case RedemptionBypassMode.CANCEL: {
-      return RedemptionBypassMode.CANCEL;
+    case RedemptionWidgetAction.EXCHANGE_DETAILS.toLowerCase(): {
+      return RedemptionWidgetAction.EXCHANGE_DETAILS;
     }
-    default: {
-      return RedemptionBypassMode.NORMAL;
+    case RedemptionWidgetAction.REDEEM_FORM.toLowerCase(): {
+      return RedemptionWidgetAction.REDEEM_FORM;
+    }
+    case RedemptionWidgetAction.CANCEL_FORM.toLowerCase(): {
+      return RedemptionWidgetAction.CANCEL_FORM;
+    }
+    case RedemptionWidgetAction.CONFIRM_REDEEM.toLowerCase(): {
+      return RedemptionWidgetAction.CONFIRM_REDEEM;
     }
   }
+  throw new Error(`Not supported widget action '${widgetActionStr}'`);
+}
+
+function checkExchangeState(
+  exchangeStateStr: string | undefined
+): subgraph.ExchangeState {
+  switch (exchangeStateStr?.toLowerCase()) {
+    case undefined:
+    case subgraph.ExchangeState.Committed.toLowerCase(): {
+      return subgraph.ExchangeState.Committed;
+    }
+    case subgraph.ExchangeState.Redeemed.toLowerCase(): {
+      return subgraph.ExchangeState.Redeemed;
+    }
+    case subgraph.ExchangeState.Disputed.toLowerCase(): {
+      return subgraph.ExchangeState.Disputed;
+    }
+    case subgraph.ExchangeState.Completed.toLowerCase(): {
+      return subgraph.ExchangeState.Completed;
+    }
+  }
+  throw new Error(`Not supported exchange state '${exchangeStateStr}'`);
 }

@@ -10,9 +10,11 @@ const constants = {
   showRedeemId: "boson-redeem",
   showFinanceId: "boson-finance",
   exchangeIdTag: "data-exchange-id",
-  bypassModeTag: "data-bypass-mode",
-  redeemCallbackUrl: "data-redeem-callback-url",
-  redeemCallbackHeaders: "data-redeem-callback-headers",
+  exchangeStateTag: "data-exchange-state",
+  showRedemptionOverviewTag: "data-show-redemption-overview",
+  widgetActionTag: "data-widget-action",
+  postDeliveryInfoUrlTag: "data-post-delivery-info-url",
+  postDeliveryInfoHeadersTag: "data-post-delivery-info-headers",
   sellerIdTag: "data-seller-id",
   configIdTag: "data-config-id",
   accountTag: "data-account",
@@ -119,20 +121,26 @@ function bosonWidgetReload() {
       const exchangeId =
         showRedeemId.attributes[constants.exchangeIdTag]?.value;
       const sellerId = showRedeemId.attributes[constants.sellerIdTag]?.value;
-      const bypassMode =
-        showRedeemId.attributes[constants.bypassModeTag]?.value;
-      const redeemCallbackUrl =
-        showRedeemId.attributes[constants.redeemCallbackUrl]?.value;
-      const redeemCallbackHeaders =
-        showRedeemId.attributes[constants.redeemCallbackHeaders]?.value;
+      const exchangeState =
+        showRedeemId.attributes[constants.exchangeStateTag]?.value;
+      const showRedemptionOverview =
+        showRedeemId.attributes[constants.showRedemptionOverviewTag]?.value;
+      const widgetAction =
+        showRedeemId.attributes[constants.widgetActionTag]?.value;
+      const postDeliveryInfoUrl =
+        showRedeemId.attributes[constants.postDeliveryInfoUrlTag]?.value;
+      const postDeliveryInfoHeaders =
+        showRedeemId.attributes[constants.postDeliveryInfoHeadersTag]?.value;
       const configId = showRedeemId.attributes[constants.configIdTag]?.value;
       const account = showRedeemId.attributes[constants.accountTag]?.value;
       bosonWidgetShowRedeem({
         exchangeId,
         sellerId,
-        bypassMode,
-        redeemCallbackUrl,
-        redeemCallbackHeaders,
+        exchangeState,
+        showRedemptionOverview,
+        widgetAction,
+        postDeliveryInfoUrl,
+        postDeliveryInfoHeaders,
         configId,
         account
       });
@@ -151,9 +159,11 @@ function bosonWidgetShowRedeem(args) {
   const params = buildParams([
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "sellerId", value: args.sellerId },
-    { tag: "bypassMode", value: args.bypassMode },
-    { tag: "redeemCallbackUrl", value: args.redeemCallbackUrl },
-    { tag: "redeemCallbackHeaders", value: args.redeemCallbackHeaders },
+    { tag: "exchangeState", value: args.exchangeState },
+    { tag: "showRedemptionOverview", value: args.showRedemptionOverview },
+    { tag: "widgetAction", value: args.widgetAction },
+    { tag: "postDeliveryInfoUrl", value: args.postDeliveryInfoUrl },
+    { tag: "postDeliveryInfoHeaders", value: args.postDeliveryInfoHeaders },
     { tag: "configId", value: args.configId },
     { tag: "account", value: args.account }
   ]);
