@@ -72,35 +72,60 @@
             </td>
           </tr>
           <tr>
-            <td>Bypass Mode</td>
+            <td>Show Overview</td>
             <td>
-              <select id="select-redeem-bypass-mode" onchange="updateRedeemButton('data-bypass-mode', this.value)">
-                <option value="NORMAL">NORMAL</option>
-                <option value="REDEEM">REDEEM</option>
-                <option value="CANCEL">CANCEL</option>
+              <input type="checkbox" id="input-redeem-show-overview" checked onchange="updateRedeemButton('data-show-redemption-overview', this.checked)">
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-show-overview', false, 'checked')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Exchange State</td>
+            <td>
+              <select id="select-redeem-exchange-state" onchange="updateRedeemButton('data-exchange-state', this.value)">
+                <option value="Committed">Committed</option>
+                <option value="Redeemed">Redeemed</option>
+                <option value="Disputed">Disputed</option>
+                <option value="Completed">Completed</option>
               </select>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80'); setValue('select-redeem-bypass-mode', 'CANCEL')" >Example</button>
+              <button onclick="clearRedeemInputs(); setValue('select-redeem-exchange-state', 'Redeemed')" >Example</button>
             </td>
           </tr>
           <tr>
-            <td>CallbackURL</td>
+            <td>Widget Action</td>
             <td>
-              <input type="url" id="input-redeem-callback-url" onchange="updateRedeemButton('data-redeem-callback-url', encodeURI(this.value))" size="30">
+              <select id="select-redeem-widget-action" onchange="updateRedeemButton('data-widget-action', this.value)">
+                <option value="SELECT_EXCHANGE">SELECT_EXCHANGE</option>
+                <option value="EXCHANGE_DETAILS">EXCHANGE_DETAILS</option>
+                <option value="REDEEM_FORM">REDEEM_FORM</option>
+                <option value="CANCEL_FORM">CANCEL_FORM</option>
+                <option value="CONFIRM_REDEEM">CONFIRM_REDEEM</option>
+              </select>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-callback-url', 'http://localhost:3666')" >Example</button>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80'); setValue('select-redeem-widget-action', 'CANCEL_FORM')" >Example</button>
             </td>
           </tr>
           <tr>
-            <td>CallbackHeader</td>
+            <td>PostDeliveryInfoURL</td>
             <td>
-              <textarea id="input-redeem-callback-header" onchange="updateRedeemButton('data-redeem-callback-headers', encodeURI(this.value))" rows="10" cols="30">
+              <input type="url" id="input-post-delivery-info-url" onchange="updateRedeemButton('data-post-delivery-info-url', encodeURI(this.value))" size="30">
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-post-delivery-info-url', 'http://localhost:3666')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PostDeliveryInfoHeader</td>
+            <td>
+              <textarea id="input-post-delivery-info-header" onchange="updateRedeemButton('data-post-delivery-info-headers', encodeURI(this.value))" rows="10" cols="30">
               </textarea>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-callback-url', 'http://localhost:3666'); setValue('input-redeem-callback-header', decodeURI('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+              <button onclick="clearRedeemInputs(); setValue('input-post-delivery-info-url', 'http://localhost:3666'); setValue('input-post-delivery-info-header', decodeURI('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
             </td>
           </tr>
         </tbody>
@@ -124,17 +149,19 @@
           document.getElementById('boson-finance-button').setAttribute('disabled', true)
         }
       }
-      function setValue(elementId, value) {
+      function setValue(elementId, value, attribute = "value") {
         let element = document.getElementById(elementId)
-        element.value = value
+        element[attribute] = value
         element.onchange()
       }
       function clearRedeemInputs() {
         setValue('input-redeem-exchange-id', '')
         setValue('input-redeem-seller-id', '')
-        setValue('select-redeem-bypass-mode', 'NORMAL')
-        setValue('input-redeem-callback-url', '')
-        setValue('input-redeem-callback-header', '')
+        setValue('select-redeem-widget-action', 'SELECT_EXCHANGE')
+        setValue('input-redeem-show-overview', true, 'checked')
+        setValue('select-redeem-exchange-state', 'Committed')
+        setValue('input-post-delivery-info-url', '')
+        setValue('input-post-delivery-info-header', '')
       }
       function clearFinanceInputs() {
         setValue('input-finance-seller-id', '')
