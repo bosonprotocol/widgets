@@ -160,7 +160,10 @@ function bosonWidgetShowRedeem(args) {
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "sellerId", value: args.sellerId },
     { tag: "exchangeState", value: args.exchangeState },
-    { tag: "showRedemptionOverview", value: args.showRedemptionOverview },
+    {
+      tag: "showRedemptionOverview",
+      value: args.showRedemptionOverview?.toString() // to allow passing either a real boolean or a string
+    },
     { tag: "widgetAction", value: args.widgetAction },
     { tag: "postDeliveryInfoUrl", value: args.postDeliveryInfoUrl },
     { tag: "postDeliveryInfoHeaders", value: args.postDeliveryInfoHeaders },
