@@ -22,6 +22,22 @@ export function Redeem() {
   const exchangeState: subgraph.ExchangeState = checkExchangeState(
     searchParams.get("exchangeState") || undefined
   );
+  const deliveryInfo = searchParams.get("deliveryInfo") || undefined;
+  let deliveryInfoDecoded = undefined;
+  if (deliveryInfo) {
+    try {
+      deliveryInfoDecoded = JSON.parse(deliveryInfo);
+      for (const key of Object.keys(deliveryInfoDecoded)) {
+        deliveryInfoDecoded[key] = decodeURIComponent(deliveryInfoDecoded[key]);
+      }
+      console.log("deliveryInfoDecoded", deliveryInfoDecoded);
+    } catch (e) {
+      console.error(
+        `Unable to parse JSON from deliveryInfo='${deliveryInfo}': ${e}`
+      );
+    }
+  }
+
   const postDeliveryInfoUrl =
     searchParams.get("postDeliveryInfoUrl") || undefined;
   const postDeliveryInfoHeaders =
@@ -37,6 +53,46 @@ export function Redeem() {
     } catch (e) {
       console.error(
         `Unable to parse JSON from postDeliveryInfoHeaders='${postDeliveryInfoHeaders}': ${e}`
+      );
+    }
+  }
+  const postRedemptionSubmittedUrl =
+    searchParams.get("postRedemptionSubmittedUrl") || undefined;
+  const postRedemptionSubmittedHeaders =
+    searchParams.get("postRedemptionSubmittedHeaders") || undefined;
+  let postRedemptionSubmittedHeadersDecoded = undefined;
+  if (postRedemptionSubmittedHeaders) {
+    try {
+      postRedemptionSubmittedHeadersDecoded = JSON.parse(
+        postRedemptionSubmittedHeaders
+      );
+      console.log(
+        "postRedemptionSubmittedHeadersDecoded",
+        postRedemptionSubmittedHeadersDecoded
+      );
+    } catch (e) {
+      console.error(
+        `Unable to parse JSON from postRedemptionSubmittedHeaders='${postRedemptionSubmittedHeaders}': ${e}`
+      );
+    }
+  }
+  const postRedemptionConfirmedUrl =
+    searchParams.get("postRedemptionConfirmedUrl") || undefined;
+  const postRedemptionConfirmedHeaders =
+    searchParams.get("postRedemptionConfirmedHeaders") || undefined;
+  let postRedemptionConfirmedHeadersDecoded = undefined;
+  if (postRedemptionConfirmedHeaders) {
+    try {
+      postRedemptionConfirmedHeadersDecoded = JSON.parse(
+        postRedemptionConfirmedHeaders
+      );
+      console.log(
+        "postRedemptionConfirmedHeadersDecoded",
+        postRedemptionConfirmedHeadersDecoded
+      );
+    } catch (e) {
+      console.error(
+        `Unable to parse JSON from postRedemptionConfirmedHeaders='${postRedemptionConfirmedHeaders}': ${e}`
       );
     }
   }
@@ -92,8 +148,13 @@ export function Redeem() {
       }}
       modalMargin="2%"
       widgetAction={widgetAction}
+      deliveryInfo={deliveryInfoDecoded}
       postDeliveryInfoUrl={postDeliveryInfoUrl}
       postDeliveryInfoHeaders={postDeliveryInfoHeadersDecoded}
+      postRedemptionSubmittedUrl={postRedemptionSubmittedUrl}
+      postRedemptionSubmittedHeaders={postRedemptionSubmittedHeadersDecoded}
+      postRedemptionConfirmedUrl={postRedemptionConfirmedUrl}
+      postRedemptionConfirmedHeaders={postRedemptionConfirmedHeadersDecoded}
     ></RedemptionWidget>
   );
 }

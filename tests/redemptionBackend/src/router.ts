@@ -37,6 +37,37 @@ router.post("/fail2", (req, res, next) => {
   }, 2000);
 });
 
+router.post("/fail3", (req, res, next) => {
+  console.log(
+    "Receive POST request",
+    req.url,
+    req.query,
+    req.params,
+    req.body,
+    req.headers
+  );
+  setTimeout(() => {
+    res.status(409).json({
+      accepted: false,
+      reason: `Something has gone wrong`
+    });
+  }, 2000);
+});
+
+router.post("/fail4", (req, res, next) => {
+  console.log(
+    "Receive POST request",
+    req.url,
+    req.query,
+    req.params,
+    req.body,
+    req.headers
+  );
+  setTimeout(() => {
+    res.status(409).send(`Help me please....`);
+  }, 2000);
+});
+
 router.post("/deliveryInfo", (req, res, next) => {
   console.log(
     "Receive POST request",
