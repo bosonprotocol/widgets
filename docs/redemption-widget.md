@@ -79,7 +79,10 @@ To add a sellerId filter to the redemption widget, add a *data-seller-id* tag to
 
 Instead of using the Redeem Button as shown above, the redemption widget can be embedded in any web page using an iFrame HTML element.
 
-For instance: ```<iframe src="https://widgets.bosonprotocol.io//#/redeem?configId=production-137-0"></iframe>```.
+For instance:
+```
+<iframe src="https://widgets.bosonprotocol.io//#/redeem?configId=production-137-0"></iframe>
+```
 
 In which case the page:
 - does not need to include any specific line (like the ```<script>``` tag for ```boson-widgets.js```
@@ -88,9 +91,15 @@ In which case the page:
 ### Redemption Widget Parameters
 
 The following parameters configures the widget. They must be passed in the widget URL (for instance when building an iFrame).
-For instance: ```<iframe src="https://widgets.bosonprotocol.io//#/redeem?sellerId=138&configId=production-137-0"></iframe>```.
+For instance:
+```
+<iframe src="https://widgets.bosonprotocol.io//#/redeem?sellerId=138&configId=production-137-0"></iframe>
+```
 
-When using the Redeem Button, as shown above, the parameters must be passed as HTML attributes to the Button tag. For instance: ```<button class="bosonButton" id="boson-redeem-button" data-config-id="production-137-0" data-seller-id="138">Show Redeem</button>```
+When using the Redeem Button, as shown above, the parameters must be passed as HTML attributes to the Button tag. For instance:
+```
+<button class="bosonButton" id="boson-redeem-button" data-config-id="production-137-0" data-seller-id="138">Show Redeem</button>
+```
 
 
 | URL parameter | HTML attribute | Required | Default Value | Purpose |
