@@ -9,7 +9,10 @@ const constants = {
   loadingId: "bosonLoading",
   showRedeemId: "boson-redeem",
   showFinanceId: "boson-finance",
+  configIdTag: "data-config-id",
   exchangeIdTag: "data-exchange-id",
+  sellerIdTag: "data-seller-id",
+  sellerIdsTag: "data-seller-ids",
   exchangeStateTag: "data-exchange-state",
   showRedemptionOverviewTag: "data-show-redemption-overview",
   widgetActionTag: "data-widget-action",
@@ -20,8 +23,6 @@ const constants = {
   postRedemptionSubmittedHeadersTag: "data-post-redemption-submitted-headers",
   postRedemptionConfirmedUrlTag: "data-post-redemption-confirmed-url",
   postRedemptionConfirmedHeadersTag: "data-post-redemption-confirmed-headers",
-  sellerIdTag: "data-seller-id",
-  configIdTag: "data-config-id",
   accountTag: "data-account",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
@@ -126,6 +127,7 @@ function bosonWidgetReload() {
       const exchangeId =
         showRedeemId.attributes[constants.exchangeIdTag]?.value;
       const sellerId = showRedeemId.attributes[constants.sellerIdTag]?.value;
+      const sellerIds = showRedeemId.attributes[constants.sellerIdsTag]?.value;
       const exchangeState =
         showRedeemId.attributes[constants.exchangeStateTag]?.value;
       const showRedemptionOverview =
@@ -153,6 +155,7 @@ function bosonWidgetReload() {
       bosonWidgetShowRedeem({
         exchangeId,
         sellerId,
+        sellerIds,
         exchangeState,
         showRedemptionOverview,
         widgetAction,
@@ -181,6 +184,7 @@ function bosonWidgetShowRedeem(args) {
   const params = buildParams([
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "sellerId", value: args.sellerId },
+    { tag: "sellerIds", value: args.sellerIds },
     { tag: "exchangeState", value: args.exchangeState },
     {
       tag: "showRedemptionOverview",
