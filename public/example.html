@@ -110,12 +110,22 @@
             </td>
           </tr>
           <tr>
+            <td>DeliveryInfo</td>
+            <td>
+              <textarea id="input-delivery-info" onchange="updateRedeemButton('data-delivery-info', encodeURI(this.value))" rows="10" cols="30">
+              </textarea>
+            </td>
+            <td>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-show-overview', false, 'checked'); setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-redeem-exchange-id', '133'); setValue('select-redeem-widget-action', 'CONFIRM_REDEEM'); setValue('input-delivery-info', fullDecodeUri('%7B%22name%22:%20%22TOTO%22,%20%22streetNameAndNumber%22:%20%221%20grand%20place%22,%20%22city%22:%20%22LILLE%22,%20%22state%22:%20%22NORD%22,%20%22zip%22:%20%2259000%22,%20%22country%22:%20%22FR%22,%20%22email%22:%20%22toto@mail.com%22,%20%22phone%22:%20%22%2B33123456789%22%7D'))" >Example</button>
+            </td>
+          </tr>
+          <tr>
             <td>PostDeliveryInfoURL</td>
             <td>
               <input type="url" id="input-post-delivery-info-url" onchange="updateRedeemButton('data-post-delivery-info-url', encodeURI(this.value))" size="30">
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-post-delivery-info-url', 'http://localhost:3666')" >Example</button>
+              <button onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo')" >Example</button>
             </td>
           </tr>
           <tr>
@@ -125,7 +135,45 @@
               </textarea>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-post-delivery-info-url', 'http://localhost:3666'); setValue('input-post-delivery-info-header', decodeURI('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+              <button onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-post-delivery-info-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PostRedemptionSubmittedURL</td>
+            <td>
+              <input type="url" id="input-post-redemption-submitted-url" onchange="updateRedeemButton('data-post-redemption-submitted-url', encodeURI(this.value))" size="30">
+            </td>
+            <td>
+              <button onclick="setValue('input-post-redemption-submitted-url', 'http://localhost:3666/submitted')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PostRedemptionSubmittedHeader</td>
+            <td>
+              <textarea id="input-post-redemption-submitted-header" onchange="updateRedeemButton('data-post-redemption-submitted-headers', encodeURI(this.value))" rows="10" cols="30">
+              </textarea>
+            </td>
+            <td>
+              <button onclick="setValue('input-post-redemption-submitted-url', 'http://localhost:3666/submitted'); setValue('input-post-redemption-submitted-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PostRedemptionConfirmedURL</td>
+            <td>
+              <input type="url" id="input-post-redemption-confirmed-url" onchange="updateRedeemButton('data-post-redemption-confirmed-url', encodeURI(this.value))" size="30">
+            </td>
+            <td>
+              <button onclick="setValue('input-post-redemption-confirmed-url', 'http://localhost:3666/confirmed')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PostRedemptionConfirmedHeader</td>
+            <td>
+              <textarea id="input-post-redemption-confirmed-header" onchange="updateRedeemButton('data-post-redemption-confirmed-headers', encodeURI(this.value))" rows="10" cols="30">
+              </textarea>
+            </td>
+            <td>
+              <button onclick="setValue('input-post-redemption-confirmed-url', 'http://localhost:3666/confirmed'); setValue('input-post-redemption-confirmed-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
             </td>
           </tr>
         </tbody>
@@ -162,10 +210,22 @@
         setValue('select-redeem-exchange-state', 'Committed')
         setValue('input-post-delivery-info-url', '')
         setValue('input-post-delivery-info-header', '')
+        setValue('input-post-redemption-submitted-url', '')
+        setValue('input-post-redemption-submitted-header', '')
+        setValue('input-post-redemption-confirmed-url', '')
+        setValue('input-post-redemption-confirmed-header', '')
+        setValue('input-delivery-info', '')
       }
       function clearFinanceInputs() {
         setValue('input-finance-seller-id', '')
         updateFinanceButton('disabled', true)
+      }
+      function fullDecodeUri(s) {
+        const s2 = decodeURI(s);
+        if (s2 !== s) {
+          return fullDecodeUri(s2)
+        }
+        return s2
       }
     </script>
   </body>

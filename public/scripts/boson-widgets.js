@@ -13,8 +13,13 @@ const constants = {
   exchangeStateTag: "data-exchange-state",
   showRedemptionOverviewTag: "data-show-redemption-overview",
   widgetActionTag: "data-widget-action",
+  deliveryInfoTag: "data-delivery-info",
   postDeliveryInfoUrlTag: "data-post-delivery-info-url",
   postDeliveryInfoHeadersTag: "data-post-delivery-info-headers",
+  postRedemptionSubmittedUrlTag: "data-post-redemption-submitted-url",
+  postRedemptionSubmittedHeadersTag: "data-post-redemption-submitted-headers",
+  postRedemptionConfirmedUrlTag: "data-post-redemption-confirmed-url",
+  postRedemptionConfirmedHeadersTag: "data-post-redemption-confirmed-headers",
   sellerIdTag: "data-seller-id",
   configIdTag: "data-config-id",
   accountTag: "data-account",
@@ -127,10 +132,22 @@ function bosonWidgetReload() {
         showRedeemId.attributes[constants.showRedemptionOverviewTag]?.value;
       const widgetAction =
         showRedeemId.attributes[constants.widgetActionTag]?.value;
+      const deliveryInfo =
+        showRedeemId.attributes[constants.deliveryInfoTag]?.value;
       const postDeliveryInfoUrl =
         showRedeemId.attributes[constants.postDeliveryInfoUrlTag]?.value;
       const postDeliveryInfoHeaders =
         showRedeemId.attributes[constants.postDeliveryInfoHeadersTag]?.value;
+      const postRedemptionSubmittedUrl =
+        showRedeemId.attributes[constants.postRedemptionSubmittedUrlTag]?.value;
+      const postRedemptionSubmittedHeaders =
+        showRedeemId.attributes[constants.postRedemptionSubmittedHeadersTag]
+          ?.value;
+      const postRedemptionConfirmedUrl =
+        showRedeemId.attributes[constants.postRedemptionConfirmedUrlTag]?.value;
+      const postRedemptionConfirmedHeaders =
+        showRedeemId.attributes[constants.postRedemptionConfirmedHeadersTag]
+          ?.value;
       const configId = showRedeemId.attributes[constants.configIdTag]?.value;
       const account = showRedeemId.attributes[constants.accountTag]?.value;
       bosonWidgetShowRedeem({
@@ -139,8 +156,13 @@ function bosonWidgetReload() {
         exchangeState,
         showRedemptionOverview,
         widgetAction,
+        deliveryInfo,
         postDeliveryInfoUrl,
         postDeliveryInfoHeaders,
+        postRedemptionSubmittedUrl,
+        postRedemptionSubmittedHeaders,
+        postRedemptionConfirmedUrl,
+        postRedemptionConfirmedHeaders,
         configId,
         account
       });
@@ -165,8 +187,25 @@ function bosonWidgetShowRedeem(args) {
       value: args.showRedemptionOverview?.toString() // to allow passing either a real boolean or a string
     },
     { tag: "widgetAction", value: args.widgetAction },
+    { tag: "deliveryInfo", value: args.deliveryInfo },
     { tag: "postDeliveryInfoUrl", value: args.postDeliveryInfoUrl },
     { tag: "postDeliveryInfoHeaders", value: args.postDeliveryInfoHeaders },
+    {
+      tag: "postRedemptionSubmittedUrl",
+      value: args.postRedemptionSubmittedUrl
+    },
+    {
+      tag: "postRedemptionSubmittedHeaders",
+      value: args.postRedemptionSubmittedHeaders
+    },
+    {
+      tag: "postRedemptionConfirmedUrl",
+      value: args.postRedemptionConfirmedUrl
+    },
+    {
+      tag: "postRedemptionConfirmedHeaders",
+      value: args.postRedemptionConfirmedHeaders
+    },
     { tag: "configId", value: args.configId },
     { tag: "account", value: args.account }
   ]);
