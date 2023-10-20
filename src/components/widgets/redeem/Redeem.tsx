@@ -30,7 +30,6 @@ export function Redeem() {
       for (const key of Object.keys(deliveryInfoDecoded)) {
         deliveryInfoDecoded[key] = decodeURIComponent(deliveryInfoDecoded[key]);
       }
-      console.log("deliveryInfoDecoded", deliveryInfoDecoded);
     } catch (e) {
       console.error(
         `Unable to parse JSON from deliveryInfo='${deliveryInfo}': ${e}`
@@ -46,10 +45,6 @@ export function Redeem() {
   if (postDeliveryInfoHeaders) {
     try {
       postDeliveryInfoHeadersDecoded = JSON.parse(postDeliveryInfoHeaders);
-      console.log(
-        "postDeliveryInfoHeadersDecoded",
-        postDeliveryInfoHeadersDecoded
-      );
     } catch (e) {
       console.error(
         `Unable to parse JSON from postDeliveryInfoHeaders='${postDeliveryInfoHeaders}': ${e}`
@@ -66,10 +61,6 @@ export function Redeem() {
       postRedemptionSubmittedHeadersDecoded = JSON.parse(
         postRedemptionSubmittedHeaders
       );
-      console.log(
-        "postRedemptionSubmittedHeadersDecoded",
-        postRedemptionSubmittedHeadersDecoded
-      );
     } catch (e) {
       console.error(
         `Unable to parse JSON from postRedemptionSubmittedHeaders='${postRedemptionSubmittedHeaders}': ${e}`
@@ -85,10 +76,6 @@ export function Redeem() {
     try {
       postRedemptionConfirmedHeadersDecoded = JSON.parse(
         postRedemptionConfirmedHeaders
-      );
-      console.log(
-        "postRedemptionConfirmedHeadersDecoded",
-        postRedemptionConfirmedHeadersDecoded
       );
     } catch (e) {
       console.error(
