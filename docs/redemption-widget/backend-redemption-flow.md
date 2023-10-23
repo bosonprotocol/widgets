@@ -21,13 +21,12 @@ If required, every backend request can contain specific headers (for instance us
 | parameter | required | purpose |
 | ------ | -------- | ------- |
 | configId | yes | the Boson Protocol environment the widget is linked to (see [Boson Environments](../boson-environments.md)) |
-| sellerId | no | specifies the sellerId to filter the exchanges shown to the user (step #3 below)
-| sellerIds | no | specifies the list of sellerIds to filter the exchanges shown to the user (step #3 below)
-| postDeliveryInfoUrl | yes - in this present case | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details (step #6.2 below)
+| sellerIds | no | specifies the list of sellerIds to filter the exchanges shown to the user ([step #3 below](#Select-Exchange))
+| postDeliveryInfoUrl | yes - in this present case | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details ([step #6.2 below](#postDeliveryInfo))
 | postDeliveryInfoHeaders | no | specifies some request headers that must be added to the ***DeliveryInfo*** HTTP request
-| postRedemptionSubmittedUrl | no | this is the URL to which the widget will post the ***RedemptionSubmitted*** HTTP request with the delivery Details (step #6.4 below)
+| postRedemptionSubmittedUrl | no | this is the URL to which the widget will post the ***RedemptionSubmitted*** HTTP request with the delivery Details ([step #6.4 below](#postRedemptionSubmitted))
 | postRedemptionSubmittedHeaders | no | specifies some request headers that must be added to the ***RedemptionSubmitted*** HTTP request
-| postRedemptionConfirmedUrl | no | this is the URL to which the widget will post the ***RedemptionConfirmed*** HTTP request with the delivery Details (step #7 below)
+| postRedemptionConfirmedUrl | no | this is the URL to which the widget will post the ***RedemptionConfirmed*** HTTP request with the delivery Details ([step #7 below](#postRedemptionConfirmed))
 | postRedemptionConfirmedHeaders | no | specifies some request headers that must be added to the ***RedemptionConfirmed*** HTTP request
 
 ###  Main Flow (continuous)
@@ -39,22 +38,24 @@ When the Seller website activates the Redemption Widget with the adequate option
    ![Wallet connection](./../assets/redemption-widget/1-wallet-connection.png)
    In case the user wallet is already connected, this step is skipped
 
+<div id="showRedemptionOverview"></div>
 2. Redemption Overview
    
    ![Redemption Overview](./../assets/redemption-widget/2-redemption-overview.png)
-   
+
+<div id="Select-Exchange"></div>
 3. Select Exchange
    
    ![Select Exchange](./../assets/redemption-widget/3-select-exchange-filtered.png)
    
-   Committed exchanges owned by the connected wallet are shown to the user, that are the rNFT owned by the wallet and that the user can redeem. In this example, the ***sellerId*** parameter is used to show only the exchanges of a unique seller.
+   Committed exchanges are shown to the user. These are the rNFT owned by the wallet and that the user can redeem. In this example, the ***sellerIds*** parameter is used to show only the exchanges of a unique seller.
    
    The user selects an rNFT and clicks it to show the "Exchange Card". Optionally, the Redeem button can be directly clicked, which leads the user directly to the Redeem Form
 
 4. Exchange Card
    
    ![Exchange Card](./../assets/redemption-widget/4-exchange-card-2.png)
-   This view show details about the exchange, and presents a Redeem button (in case the rNFT is redeemable) that the user can click to jump to the Redeem Form
+   This view shows details about the exchange, and presents a Redeem button (in case the rNFT is redeemable) that the user can click to jump to the Redeem Form
 
 5. Redeem Form
    
@@ -69,6 +70,7 @@ When the Seller website activates the Redemption Widget with the adequate option
 
    First, the user is asked to sign the delivery details with their wallet to allow the backend to verify the request is coming from the real buyer.
 
+   <div id="postDeliveryInfo"></div>
    6.2 POST DeliveryInfo
 
    Once the message is signed by the wallet an HTTP request ***post DeliverInfo***  is sent to the backend containing the delivery information, details about the redeemed exchange, and the user signature.
@@ -83,6 +85,7 @@ When the Seller website activates the Redemption Widget with the adequate option
 
    Now the user is asked to click on **Confirm Redemption** to send the Redeem transaction on-chain (to be signed/confirmed by the user with their wallet)
 
+   <div id="postRedemptionSubmitted"></div>
    6.4 POST Redemption Submitted
 
    Once the Redeem transaction is signed by the wallet and sent on-chain, an HTTP request ***post RedemptionSubmitted***  is sent to the backend containing the details about the redeemed exchange and the expected transaction hash *(Note: the hash of the real transaction may be different than the expected one, for instance in case the wallet resubmits with higher fees, to speed it up)*.
@@ -93,6 +96,7 @@ When the Seller website activates the Redemption Widget with the adequate option
    ![Congratulations](./../assets/redemption-widget/7-congratulations-2.jpg)
    Once the Redeem transaction is confirmed on-chain, a congratulation message is shown to the user.
 
+   <div id="postRedemptionConfirmed"></div>
    Once the Redeem transaction is confirmed on-chain, an HTTP request ***post RedemptionConfirmed***  is sent to the backend, containing the details about the redeemed exchange, the effective transaction hash and the blockNumber where the transaction has been validated.
 
    The backend response to this HTTP request has no effect on the widget flow.
@@ -111,7 +115,7 @@ It is possible to interrupt the redemption flow between the delivery details is 
 
 This is useful to allow full redemption to include an additional step or verification between these 2 steps.
 
-Interruption is triggered by the response the backend sends back to the widget when replying to the HTTP ***post DeliverInfo*** request (step #6.2 above).
+Interruption is triggered by the response the backend sends back to the widget when replying to the HTTP ***post DeliverInfo*** request ([step #6.2 above](#postDeliveryInfo)).
 
 6. Redeem Confirmation
    
@@ -140,13 +144,13 @@ To start the widget directly on the Redemption Confirmation flow, the following 
 | configId | yes | the Boson Protocol environment the widget is linked to (see [Boson Environments](../boson-environments.md)) |
 | exchangeId | yes - in this present case | the ID of the exchange being redeemed.
 | widgetAction | yes - in this present case | **"CONFIRM_REDEEM"**: the action the widget is going to jump on
-| showRedemptionOverview | yes - in this present case | **false**: to skip the Redemption Overview (step #2 above)
+| showRedemptionOverview | yes - in this present case | **false**: to skip the Redemption Overview ([step #2 above](#showRedemptionOverview))
 | deliveryInfo | yes - in this present case | the delivery details that have been validated by the eCommerce backend for this redemption, shown to the user before they confirm the redemption.
-| postDeliveryInfoUrl | yes - in this present case | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details (step #6.2 below)
+| postDeliveryInfoUrl | yes - in this present case | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details ([step #6.2 above](#postDeliveryInfo))
 | postDeliveryInfoHeaders | no | optionally specifies some request headers that must be added to the ***DeliveryInfo*** HTTP request
-| postRedemptionSubmittedUrl | no | this is the URL to which the widget will post the ***RedemptionSubmitted*** HTTP request with the delivery Details (step #6.4 below)
+| postRedemptionSubmittedUrl | no | this is the URL to which the widget will post the ***RedemptionSubmitted*** HTTP request with the delivery Details ([step #6.4 above](#postRedemptionSubmitted))
 | postRedemptionSubmittedHeaders | no | optionally specifies some request headers that must be added to the ***RedemptionSubmitted*** HTTP request
-| postRedemptionConfirmedUrl | no | this is the URL to which the widget will post the ***RedemptionConfirmed*** HTTP request with the delivery Details (step #7 below)
+| postRedemptionConfirmedUrl | no | this is the URL to which the widget will post the ***RedemptionConfirmed*** HTTP request with the delivery Details ([step #7 above](#postRedemptionConfirmed))
 | postRedemptionConfirmedHeaders | no | optionally specifies some request headers that must be added to the ***RedemptionConfirmed*** HTTP request
 
 6. Redeem Confirmation (follow-up)

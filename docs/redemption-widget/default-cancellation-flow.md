@@ -22,7 +22,7 @@ When the Seller website activates the Redemption Widget with the default options
 
 4. Exchange Card
    ![Exchange Card](./../assets/redemption-widget/4-exchange-card.png)
-   This view shows details about the exchange, and present a Cancel button (in case the rNFT is cancellable) that the user can click to jump to the Cancel Form
+   This view shows details about the exchange, and presents a Cancel button (in case the rNFT is cancellable) that the user can click to jump to the Cancel Form
 
 5. Cancel Form
    ![Cancel Form](./../assets/redemption-widget/5-cancel-form.png)

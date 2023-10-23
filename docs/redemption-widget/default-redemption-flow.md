@@ -8,7 +8,7 @@ When the Seller website activate the Redemption Widget with the default options,
 
 1. Wallet connection (if needed)
    ![Wallet connection](./../assets/redemption-widget/1-wallet-connection.png)
-   In case the user wallet is already connected, this step is ignored
+   In case the user wallet is already connected, this step is skipped
 
 2. Redemption Overview
    ![Redemption Overview](./../assets/redemption-widget/2-redemption-overview.png)
@@ -16,13 +16,13 @@ When the Seller website activate the Redemption Widget with the default options,
 3. Select Exchange
    ![Select Exchange](./../assets/redemption-widget/3-select-exchange.png)
    
-   By default, the Committed exchanges are shown to the user, that are the rNFT owned by the wallet and that the user can redeem.
+   By default, the Committed exchanges are shown to the user. These are the rNFT owned by the wallet and that the user can redeem.
    
-   The user select a rNFT and click it to show the "Exchange Card". Optionally, Redeem button can be directly clicked, that lead the user directly to the Redeem Form
+   The user selects an rNFT and clicks it to show the "Exchange Card". Optionally, the Redeem button can be directly clicked, which leads the user directly to the Redeem Form
 
 4. Exchange Card
    ![Exchange Card](./../assets/redemption-widget/4-exchange-card.png)
-   This view show details about the exchange, and present a Redeem button (in case the rNFT is redeemable) that the user click to jump to the Redeem Form
+   This view shows details about the exchange, and presents a Redeem button (in case the rNFT is redeemable) that the user can click to jump to the Redeem Form
 
 5. Redeem Form
    ![Redeem Form](./../assets/redemption-widget/5-redeem-form.png)
