@@ -4,13 +4,13 @@
 
 ## Redemption Flow with 3rd party eCommerce backend
 
-This flow suppose a 3r-party eCommerce system is used to manage the redemption.
+This flow supposes a 3r-party eCommerce system is used to manage the redemption.
 
 Compared to the [default flow](./default-redemption-flow.md), the main difference is that the delivery information filled by the user is sent via an HTTP POST request to a backend URL passed as a parameter (***postDeliveryInfoUrl***), instead of being sent to the Seller via XMTP.
 
 When replying to the postDeliveryInfo request, it's possible for the backend to decide if the widget should continue to the next step or not. This can be useful:
  - in case the delivery details can't be validated
- - in case the flow needs to interrupt, for instance to perform Shipping Cost checkout before the on-chain transaction is submitted
+ - in case the flow needs to be interrupted, for instance, to perform Shipping Cost checkout before the on-chain transaction is submitted
 
 In addition, the on-chain Redeem transaction submission and confirmation can be relayed to the backend using respective parameters ***postRedemptionSubmittedUrl*** and ***postRedemptionConfirmedUrl***.
 
@@ -37,7 +37,7 @@ When the Seller website activates the Redemption Widget with the adequate option
 1. Wallet connection (if needed)
    
    ![Wallet connection](./../assets/redemption-widget/1-wallet-connection.png)
-   In case the user wallet is already connected, this step is ignored
+   In case the user wallet is already connected, this step is skipped
 
 2. Redemption Overview
    
@@ -49,12 +49,12 @@ When the Seller website activates the Redemption Widget with the adequate option
    
    Committed exchanges owned by the connected wallet are shown to the user, that are the rNFT owned by the wallet and that the user can redeem. In this example, the ***sellerId*** parameter is used to show only the exchanges of a unique seller.
    
-   The user select a rNFT and click it to show the "Exchange Card". Optionally, Redeem button can be directly clicked, that lead the user directly to the Redeem Form
+   The user selects an rNFT and clicks it to show the "Exchange Card". Optionally, the Redeem button can be directly clicked, which leads the user directly to the Redeem Form
 
 4. Exchange Card
    
    ![Exchange Card](./../assets/redemption-widget/4-exchange-card-2.png)
-   This view show details about the exchange, and present a Redeem button (in case the rNFT is redeemable) that the user click to jump to the Redeem Form
+   This view show details about the exchange, and presents a Redeem button (in case the rNFT is redeemable) that the user can click to jump to the Redeem Form
 
 5. Redeem Form
    
@@ -67,11 +67,11 @@ When the Seller website activates the Redemption Widget with the adequate option
    
    6.1. User Signature
 
-   First, The user is asked to sign the delivery details with their wallet, to allow the backend to verify the request is coming from the real buyer.
+   First, the user is asked to sign the delivery details with their wallet to allow the backend to verify the request is coming from the real buyer.
 
    6.2 POST DeliveryInfo
 
-   Once the message is signed by the wallet, an HTTP request ***post DeliverInfo***  is sent to the backend, containing the delivery information, details about the redeemed exchange, and the user signature.
+   Once the message is signed by the wallet an HTTP request ***post DeliverInfo***  is sent to the backend containing the delivery information, details about the redeemed exchange, and the user signature.
 
    The backend should verify, from the signature, that the signer is the buyer wallet, then store the delivery information for this exchange.
 
@@ -81,11 +81,11 @@ When the Seller website activates the Redemption Widget with the adequate option
 
    6.3 Sign/Send Redemption Transaction
 
-   Now the user is asks to click on **Confirm Redemption** to send the Redeem transaction on-chain (to be signed/confirmed by the user with their wallet)
+   Now the user is asked to click on **Confirm Redemption** to send the Redeem transaction on-chain (to be signed/confirmed by the user with their wallet)
 
    6.4 POST Redemption Submitted
 
-   Once the Redeem transaction is signed by the wallet and sent on-chain, an HTTP request ***post RedemptionSubmitted***  is sent to the backend, containing the details about the redeemed exchange, and the expected transaction hash *(Note: the hash of the real transaction may be different than the expected one, for instance in case the wallet resubmits with higher fees, to speed it up)*.
+   Once the Redeem transaction is signed by the wallet and sent on-chain, an HTTP request ***post RedemptionSubmitted***  is sent to the backend containing the details about the redeemed exchange and the expected transaction hash *(Note: the hash of the real transaction may be different than the expected one, for instance in case the wallet resubmits with higher fees, to speed it up)*.
 
    The backend response to this HTTP request has no effect on the widget flow.
 
@@ -109,7 +109,7 @@ When the Seller website activates the Redemption Widget with the adequate option
 
 It is possible to interrupt the redemption flow between the delivery details is sent to the backend and the redeem transaction is sent on-chain.
 
-This is useful to allow full redemption to include an additional step or verification between this 2 steps.
+This is useful to allow full redemption to include an additional step or verification between these 2 steps.
 
 Interruption is triggered by the response the backend sends back to the widget when replying to the HTTP ***post DeliverInfo*** request (step #6.2 above).
 
@@ -129,7 +129,7 @@ Interruption is triggered by the response the backend sends back to the widget w
 
    The next step is, for the backend, to handle the shipping cost checkout, or any other action required at this stage.
    
-   When done, the widget can be called again, with adequate parameters, to end up the redemption flow.
+   When done, the widget can be called again, with adequate parameters, to end the redemption flow.
 
 ### End of Redemption confirmation, following an interrupted flow
 

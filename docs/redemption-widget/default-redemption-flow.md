@@ -30,9 +30,9 @@ When the Seller website activate the Redemption Widget with the default options,
 
 6. Redeem Confirmation
    ![Redeem Confirmation](./../assets/redemption-widget/6-redeem-confirmation.png)
-   The user needs to Initialize the Chat layer (signing a message with their wallet) to allow the delivery information to be sent to the Seller. [XMTP](https://xmtp.org/) is used as a chat layer, insuring decentralization and privacy of Buyer/Seller communication
+   The user needs to Initialize the Chat layer (signing a message with their wallet) to allow the delivery information to be sent to the Seller. [XMTP](https://xmtp.org/) is used as a chat layer, insuring decentralization and privacy of Buyer/Seller communication.
 
-   Once the Chat is Initialized, the user clicks "Confirm address and redeem", that:
+   Once the Chat is Initialized, the user clicks "Confirm address and redeem", which:
    - sends the delivery details to the Seller (via XMTP)
    - sends the Redeem transaction on-chain (to be signed/confirmed by the user with their wallet)
 

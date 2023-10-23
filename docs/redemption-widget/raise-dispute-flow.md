@@ -23,7 +23,7 @@ When the Seller website activates the Redemption Widget with the appropriate par
 1. Wallet connection (if needed)
    
    ![Wallet connection](./../assets/redemption-widget/1-wallet-connection.png)
-   In case the user wallet is already connected, this step is ignored
+   In case the user wallet is already connected, this step is skipped
 
 2. Select Exchange
    
