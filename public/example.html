@@ -63,12 +63,12 @@
             </td>
           </tr>
           <tr>
-            <td>SellerId</td>
+            <td>SellerIds</td>
             <td>
-              <input type="number" min="1" id="input-redeem-seller-id" onchange="updateRedeemButton('data-seller-id', this.value)">
+              <input type="string" id="input-redeem-seller-ids" onchange="updateRedeemButton('data-seller-ids', this.value)">
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-seller-id', '26')" >Example</button>
+              <button onclick="clearRedeemInputs(); setValue('input-redeem-seller-ids', '26,138,110')" >Example</button>
             </td>
           </tr>
           <tr>
@@ -204,7 +204,7 @@
       }
       function clearRedeemInputs() {
         setValue('input-redeem-exchange-id', '')
-        setValue('input-redeem-seller-id', '')
+        setValue('input-redeem-seller-ids', '')
         setValue('select-redeem-widget-action', 'SELECT_EXCHANGE')
         setValue('input-redeem-show-overview', true, 'checked')
         setValue('select-redeem-exchange-state', 'Committed')
