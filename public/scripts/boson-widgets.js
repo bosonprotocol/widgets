@@ -19,6 +19,9 @@ const constants = {
   deliveryInfoTag: "data-delivery-info",
   postDeliveryInfoUrlTag: "data-post-delivery-info-url",
   postDeliveryInfoHeadersTag: "data-post-delivery-info-headers",
+  dataTargetOrigin: "data-target-origin",
+  dataWaitForResponse: "data-wait-for-response",
+  dataSendDeliveryInfoXMTP: "data-send-delivery-info-XMTP",
   postRedemptionSubmittedUrlTag: "data-post-redemption-submitted-url",
   postRedemptionSubmittedHeadersTag: "data-post-redemption-submitted-headers",
   postRedemptionConfirmedUrlTag: "data-post-redemption-confirmed-url",
@@ -26,6 +29,10 @@ const constants = {
   accountTag: "data-account",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
+  deliveryInfoMessage: "boson-delivery-info",
+  deliveryInfoMessageResponse: "boson-delivery-info-response",
+  redemptionSubmittedMessage: "boson-redemption-submitted",
+  redemptionConfirmedMessage: "boson-redemption-confirmed",
   financeUrl: (widgetsHost) => `${widgetsHost}/#/finance`,
   redeemUrl: (widgetsHost) => `${widgetsHost}/#/redeem`
 };
@@ -81,8 +88,11 @@ const createIFrame = (src, onLoad) => {
   bosonModal.onload = onLoad;
   document.body.appendChild(bosonModal);
 };
+const getIFrame = () => {
+  return document.getElementById(constants.iFrameId);
+};
 const hideIFrame = () => {
-  const el = document.getElementById(constants.iFrameId);
+  const el = getIFrame();
   if (el) {
     el.remove();
   }
@@ -152,6 +162,13 @@ function bosonWidgetReload() {
           ?.value;
       const configId = showRedeemId.attributes[constants.configIdTag]?.value;
       const account = showRedeemId.attributes[constants.accountTag]?.value;
+      const targetOrigin =
+        showRedeemId.attributes[constants.dataTargetOrigin]?.value;
+      const shouldWaitForResponse =
+        showRedeemId.attributes[constants.dataWaitForResponse]?.value;
+      const sendDeliveryInfoThroughXMTP =
+        showRedeemId.attributes[constants.dataSendDeliveryInfoXMTP]?.value;
+
       bosonWidgetShowRedeem({
         exchangeId,
         sellerId,
@@ -167,7 +184,10 @@ function bosonWidgetReload() {
         postRedemptionConfirmedUrl,
         postRedemptionConfirmedHeaders,
         configId,
-        account
+        account,
+        targetOrigin,
+        shouldWaitForResponse,
+        sendDeliveryInfoThroughXMTP
       });
     };
   }
@@ -211,7 +231,13 @@ function bosonWidgetShowRedeem(args) {
       value: args.postRedemptionConfirmedHeaders
     },
     { tag: "configId", value: args.configId },
-    { tag: "account", value: args.account }
+    { tag: "account", value: args.account },
+    { tag: "targetOrigin", value: args.targetOrigin },
+    { tag: "shouldWaitForResponse", value: args.shouldWaitForResponse },
+    {
+      tag: "sendDeliveryInfoThroughXMTP",
+      value: args.sendDeliveryInfoThroughXMTP
+    }
   ]);
   showLoading();
   hideIFrame();

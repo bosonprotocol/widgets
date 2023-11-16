@@ -4,6 +4,7 @@ import {
   RedemptionWidgetAction,
   subgraph
 } from "@bosonprotocol/react-kit";
+import { DeliveryInfoCallbackResponse } from "@bosonprotocol/react-kit/dist/cjs/hooks/callbacks/useRedemptionCallbacks";
 import { useSearchParams } from "react-router-dom";
 
 import { CONFIG, getMetaTxConfig } from "../../../config";
@@ -12,10 +13,10 @@ export const redeemPath = "/redeem";
 export function Redeem() {
   const [searchParams] = useSearchParams();
   const exchangeId = searchParams.get("exchangeId") || undefined;
-  const showRedemptionOverviewStr = searchParams.get("showRedemptionOverview");
-  const showRedemptionOverview = showRedemptionOverviewStr
-    ? /^true$/i.test(showRedemptionOverviewStr)
-    : true; // default value
+  const showRedemptionOverview = extractBooleanParam(
+    searchParams.get("showRedemptionOverview"),
+    true
+  );
   const widgetAction: RedemptionWidgetAction = checkWidgetAction(
     searchParams.get("widgetAction") || undefined
   );
@@ -36,6 +37,15 @@ export function Redeem() {
       );
     }
   }
+  const sendDeliveryInfoThroughXMTP = extractBooleanParam(
+    searchParams.get("sendDeliveryInfoThroughXMTP"),
+    true
+  );
+  const targetOrigin = searchParams.get("targetOrigin") || undefined;
+  const shouldWaitForResponse = extractBooleanParam(
+    searchParams.get("shouldWaitForResponse"),
+    false
+  );
 
   const postDeliveryInfoUrl =
     searchParams.get("postDeliveryInfoUrl") || undefined;
@@ -96,9 +106,15 @@ export function Redeem() {
     ? [sellerId]
     : undefined;
 
+  // In case the deliveryInfo shall be transferred between frontend windows, the targetOrigin
+  //  the deliveryInfo message shall be posted to
+  //  (see https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#targetorigin)
+  // deliveryInfoTargetOrigin?: string;
+
   return (
     <RedemptionWidget
       showRedemptionOverview={showRedemptionOverview}
+      sendDeliveryInfoThroughXMTP={sendDeliveryInfoThroughXMTP}
       exchangeState={exchangeState}
       exchangeId={exchangeId}
       sellerIds={sellerIds}
@@ -133,6 +149,105 @@ export function Redeem() {
           console.error(`Unable to post message ${e}`);
         }
       }}
+      deliveryInfoHandler={
+        targetOrigin
+          ? async (message) => {
+              try {
+                const event = {
+                  type: "boson-delivery-info",
+                  message
+                };
+                // precaution: register to the response before posting the message
+                const responseType = "boson-delivery-info-response";
+                const _waitForResponse = shouldWaitForResponse
+                  ? (waitForResponse(responseType) as Promise<{
+                      message: DeliveryInfoCallbackResponse;
+                      origin: string;
+                    }>)
+                  : undefined;
+                // post the message
+                console.log(
+                  `Post '${event.type}' message to '${targetOrigin}'`
+                );
+                window.parent.postMessage(event, targetOrigin);
+                if (_waitForResponse) {
+                  console.log(`Wait for response '${responseType}' message`);
+                  const response = await _waitForResponse;
+                  console.log(
+                    `Received response '${responseType}' from '${
+                      response.origin
+                    }'. Content: '${JSON.stringify(
+                      JSON.stringify(response.message)
+                    )}'`
+                  );
+                  return response.message;
+                }
+                return {
+                  accepted: true,
+                  resume: true,
+                  reason: ""
+                };
+              } catch (e) {
+                console.error(`Unable to post message ${e}`);
+                return {
+                  accepted: false,
+                  reason: "",
+                  resume: false
+                };
+              }
+            }
+          : undefined
+      }
+      redemptionSubmittedHandler={
+        targetOrigin
+          ? async (message) => {
+              try {
+                const event = {
+                  type: "boson-redemption-submitted",
+                  message
+                };
+                // post the message
+                console.log(`Post ${event.type} message to ${targetOrigin}`);
+                window.parent.postMessage(event, targetOrigin);
+                return {
+                  accepted: true,
+                  reason: ""
+                };
+              } catch (e) {
+                console.error(`Unable to post message ${e}`);
+                return {
+                  accepted: false,
+                  reason: ""
+                };
+              }
+            }
+          : undefined
+      }
+      redemptionConfirmedHandler={
+        targetOrigin
+          ? async (message) => {
+              try {
+                const event = {
+                  type: "boson-redemption-confirmed",
+                  message
+                };
+                // post the message
+                console.log(`Post ${event.type} message to ${targetOrigin}`);
+                window.parent.postMessage(event, targetOrigin);
+                return {
+                  accepted: true,
+                  reason: ""
+                };
+              } catch (e) {
+                console.error(`Unable to post message ${e}`);
+                return {
+                  accepted: false,
+                  reason: ""
+                };
+              }
+            }
+          : undefined
+      }
       modalMargin="2%"
       widgetAction={widgetAction}
       deliveryInfo={deliveryInfoDecoded}
@@ -189,4 +304,33 @@ function checkExchangeState(
     }
   }
   throw new Error(`Not supported exchange state '${exchangeStateStr}'`);
+}
+
+function extractBooleanParam(
+  paramStr: string | null,
+  defaultValue: boolean
+): boolean {
+  return paramStr ? /^true$/i.test(paramStr) : defaultValue;
+}
+
+async function waitForResponse(
+  response: string
+): Promise<{ message: unknown; origin: string }> {
+  return new Promise<{ message: unknown; origin: string }>(
+    (resolve, reject) => {
+      const eventType = "message";
+      const listener = (event: MessageEvent | undefined) => {
+        try {
+          if (event?.data?.type === response) {
+            // Ensure the listener won't be called again. Do not use "once" option because some other message could be received in the meanwhile
+            window.removeEventListener(eventType, listener);
+            resolve({ message: event.data.message, origin: event.origin });
+          }
+        } catch (e) {
+          reject(e);
+        }
+      };
+      window.addEventListener(eventType, listener);
+    }
+  );
 }

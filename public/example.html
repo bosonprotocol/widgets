@@ -77,7 +77,7 @@
               <input type="checkbox" id="input-redeem-show-overview" checked onchange="updateRedeemButton('data-show-redemption-overview', this.checked)">
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-show-overview', false, 'checked')" >Example</button>
+              <button onclick="setValue('input-redeem-show-overview', !getValue('input-redeem-show-overview', 'checked'), 'checked')" >Example</button>
             </td>
           </tr>
           <tr>
@@ -110,13 +110,22 @@
             </td>
           </tr>
           <tr>
+            <td>Send DeliveryInfo Through XMTP</td>
+            <td>
+              <input type="checkbox" id="input-send-delivery-info-XMTP" checked onchange="updateRedeemButton('data-send-delivery-info-XMTP', this.checked)">
+            </td>
+            <td>
+              <button onclick="setValue('input-send-delivery-info-XMTP', !getValue('input-send-delivery-info-XMTP', 'checked'), 'checked')" >Example</button>
+            </td>
+          </tr>
+          <tr>
             <td>DeliveryInfo</td>
             <td>
               <textarea id="input-delivery-info" onchange="updateRedeemButton('data-delivery-info', encodeURI(this.value))" rows="10" cols="30">
               </textarea>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-show-overview', false, 'checked'); setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-redeem-exchange-id', '133'); setValue('select-redeem-widget-action', 'CONFIRM_REDEEM'); setValue('input-delivery-info', fullDecodeUri('%7B%22name%22:%20%22TOTO%22,%20%22streetNameAndNumber%22:%20%221%20grand%20place%22,%20%22city%22:%20%22LILLE%22,%20%22state%22:%20%22NORD%22,%20%22zip%22:%20%2259000%22,%20%22country%22:%20%22FR%22,%20%22email%22:%20%22toto@mail.com%22,%20%22phone%22:%20%22%2B33123456789%22%7D'))" >Example</button>
+              <button onclick="setValue('input-redeem-show-overview', false, 'checked'); setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-redeem-exchange-id', '133'); setValue('select-redeem-widget-action', 'CONFIRM_REDEEM'); setValue('input-delivery-info', fullDecodeUri('%7B%22name%22:%20%22TOTO%22,%20%22streetNameAndNumber%22:%20%221%20grand%20place%22,%20%22city%22:%20%22LILLE%22,%20%22state%22:%20%22NORD%22,%20%22zip%22:%20%2259000%22,%20%22country%22:%20%22FR%22,%20%22email%22:%20%22toto@mail.com%22,%20%22phone%22:%20%22%2B33123456789%22%7D'))" >Example</button>
             </td>
           </tr>
           <tr>
@@ -136,6 +145,24 @@
             </td>
             <td>
               <button onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-post-delivery-info-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>TargetOrigin</td>
+            <td>
+              <input type="url" id="input-target-origin" onchange="updateRedeemButton('data-target-origin', encodeURI(this.value))" size="30">
+            </td>
+            <td>
+              <button onclick="setValue('input-target-origin', window.location.origin)" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Should Wait For Response</td>
+            <td>
+              <input type="checkbox" id="input-wait-for-response" autocomplete="off" onchange="updateRedeemButton('data-wait-for-response', this.checked)">
+            </td>
+            <td>
+              <button onclick="setValue('input-wait-for-response', !getValue('input-wait-for-response', 'checked'), 'checked')" >Example</button>
             </td>
           </tr>
           <tr>
@@ -202,12 +229,19 @@
         element[attribute] = value
         element.onchange()
       }
+      function getValue(elementId, attribute = "value") {
+        let element = document.getElementById(elementId)
+        return element[attribute]
+      }
       function clearRedeemInputs() {
         setValue('input-redeem-exchange-id', '')
         setValue('input-redeem-seller-ids', '')
         setValue('select-redeem-widget-action', 'SELECT_EXCHANGE')
         setValue('input-redeem-show-overview', true, 'checked')
         setValue('select-redeem-exchange-state', 'Committed')
+        setValue('input-send-delivery-info-XMTP', true, 'checked')
+        setValue('input-target-origin', '')
+        setValue('input-wait-for-response', true, 'checked')
         setValue('input-post-delivery-info-url', '')
         setValue('input-post-delivery-info-header', '')
         setValue('input-post-redemption-submitted-url', '')
@@ -227,6 +261,50 @@
         }
         return s2
       }
+      window.addEventListener("message", (event) => {
+        if (event.data.type === constants.deliveryInfoMessage) {
+          console.log(
+            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+          );
+          if (getValue('input-wait-for-response', 'checked')) {
+            // wait for a bit and send a response to the iFrame (only relevant when )
+            setTimeout(() => {
+              const el = getIFrame();
+              if (el) {
+                const target = event.origin;
+                console.log(
+                  `Post response message '${constants.deliveryInfoMessageResponse}' to the iFrame '${target}'`
+                );
+                // https://stackoverflow.com/questions/40991114/issue-communication-with-postmessage-from-parent-to-child-iframe
+                el.contentWindow.postMessage(
+                  {
+                    type: constants.deliveryInfoMessageResponse,
+                    message: {
+                      accepted: true,
+                      reason: "",
+                      resume: true
+                    }
+                  },
+                  target
+                );
+              } else {
+                console.error("Unable to retrieve the iFrame");
+              }
+            }, 5000);
+          }
+        }
+        if (event.data.type === constants.redemptionSubmittedMessage) {
+          console.log(
+            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+          );
+        }
+        if (event.data.type === constants.redemptionConfirmedMessage) {
+          console.log(
+            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+          );
+        }
+      });
+
     </script>
   </body>
 </html>
