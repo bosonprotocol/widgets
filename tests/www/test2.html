@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC>
+<html>
+  <head>
+    <title>Widget Integration Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://localhost:3000/styles.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <script async type="text/javascript" src="http://localhost:3000/scripts/boson-widgets.js"></script>
+    <style>
+      div {
+        margin: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <button type="button" id="boson-redeem-1" class="bosonButton" data-config-id="testing-80001-0" data-target-origin="http://127.0.0.1:5500" data-wait-for-response="true" data-send-delivery-info-XMTP="false">Redeem</button>
+  </body>
+  <script>
+    window.addEventListener("message", (event) => {
+      if (event.data.type === constants.deliveryInfoMessage) {
+        console.log(
+          `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+        );
+        // wait for a bit and send a response to the iFrame (only relevant when data-wait-for-response=="true")
+        setTimeout(() => {
+          const el = getIFrame();
+          if (el) {
+            const target = event.origin;
+            console.log(
+              `Post response message '${constants.deliveryInfoMessageResponse}' to the iFrame '${target}'`
+            );
+            // https://stackoverflow.com/questions/40991114/issue-communication-with-postmessage-from-parent-to-child-iframe
+            el.contentWindow.postMessage(
+              {
+                type: constants.deliveryInfoMessageResponse,
+                message: {
+                  accepted: true,
+                  reason: "",
+                  resume: true
+                }
+              },
+              target
+            );
+          } else {
+            console.error("Unable to retrieve the iFrame");
+          }
+        }, 5000);
+      }
+      if (event.data.type === constants.redemptionSubmittedMessage) {
+        console.log(
+          `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+        );
+      }
+      if (event.data.type === constants.redemptionConfirmedMessage) {
+        console.log(
+          `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+        );
+      }
+    });
+  </script>
+</html>

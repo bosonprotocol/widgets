@@ -112,6 +112,9 @@ When using the Redeem Button, as shown above, the parameters must be passed as H
 | exchangeState | data-exchange-state | no | "Committed" | State of the exchanges when shown in the Select Exchange step. Relevant when widgetAction is SELECT_EXCHANGE. | ```"Redeemed"```
 | showRedemptionOverview | data-show-redemption-overview | no | true | set to 'false' to skip the Redemption Overview (first step in the [user flow](./redemption-widget/default-redemption-flow.md)) | ```false```
 | deliveryInfo | data-delivery-info | no | none | specify the delivery details that shall prefill the Redeem form, or be recapped on Confirm Redeem step. | ```'{"name":"TITI","streetNameAndNumber":"1 grand place","city":"LILLE","state":"NORD","zip":"59000","country":"FR","email":"toto@mail.com","phone":"+33123456789"}'```
+| sendDeliveryInfoThroughXMTP | data-send-delivery-info-XMTP | yes | none | whether the widget should send the delivery information to the seller via XMTP | `true`
+| targetOrigin | data-target-origin | no | none | If set, the widget will send frontend messages (`boson-delivery-info`, `boson-redemption-submitted` and `boson-redemption-confirmed`) to this origin when appropriate | `"https://myshop.com"`
+| shouldWaitForResponse | data-wait-for-response | no | none | whether the widget should wait for a response (`boson-delivery-info-response`) to the deliveryInfo message (`boson-delivery-info`). If false, the widget does not wait and progress further with the redemption flow | `false`
 | postDeliveryInfoUrl | data-post-delivery-info-url | no  | none | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details (see [Redemption with 3rd party eCommerce backend](./redemption-widget/backend-redemption-flow.md)) | ```"https://myshop.com/deliveryInfo"```
 | postDeliveryInfoHeaders | data-post-delivery-info-headers | no | none | optionally specifies some request headers that must be added to the ***DeliveryInfo*** HTTP request | ```'{"authorization":"Bearer eyJhbGciOiJIUzL1Ni2sInR5cCI6IkpXVCJ7","another-header":"*****"}'```
 | postRedemptionSubmittedUrl | data-post-redemption-submitted-url | no | none | this is the URL to which the widget will post the ***RedemptionSubmitted*** HTTP request with the delivery Details | ```"https://myshop.com/redemptionSubmitted"```
@@ -127,6 +130,7 @@ Hereafter are detailed examples of the redemption flows supported by the widget.
 - [Default redemption flow](./redemption-widget/default-redemption-flow.md)
 - [Marketplace redemption flow](./redemption-widget/marketplace-redemption-flow.md)
 - [Redemption with 3rd party eCommerce backend](./redemption-widget/backend-redemption-flow.md)
+- [Redemption with frontend messaging](./redemption-widget/frontend-redemption-flow.md)
 
 The redemption widget can also support other usecases:
 - [Default cancellation flow](./redemption-widget/default-cancellation-flow.md)

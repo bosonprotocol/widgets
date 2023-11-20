@@ -6,10 +6,12 @@
 
 This flow supposes a 3r-party eCommerce system is used to manage the redemption.
 
-Compared to the [default flow](./default-redemption-flow.md), the main difference is that the delivery information filled by the user is sent via an HTTP POST request to a backend URL passed as a parameter (***postDeliveryInfoUrl***), instead of being sent to the Seller via XMTP.
+Compared to the [default flow](./default-redemption-flow.md), the main difference is that the delivery information filled by the user is sent via an HTTP POST request to a backend URL passed as a parameter (***postDeliveryInfoUrl***).
+
+*Note: sending the delivery information to XMTP can still be activated, depending on the value given to the `sendDeliveryInfoThroughXMTP` widget parameter.*
 
 When replying to the postDeliveryInfo request, it's possible for the backend to decide if the widget should continue to the next step or not. This can be useful:
- - in case the delivery details can't be validated
+ - in case the delivery details are not valid, in which case the user can provide other delivery details, or choose to cancel the voucher
  - in case the flow needs to be interrupted, for instance, to perform Shipping Cost checkout before the on-chain transaction is submitted
 
 In addition, the on-chain Redeem transaction submission and confirmation can be relayed to the backend using respective parameters ***postRedemptionSubmittedUrl*** and ***postRedemptionConfirmedUrl***.
@@ -22,6 +24,7 @@ If required, every backend request can contain specific headers (for instance us
 | ------ | -------- | ------- |
 | configId | yes | the Boson Protocol environment the widget is linked to (see [Boson Environments](../boson-environments.md)) |
 | sellerIds | no | specifies the list of sellerIds to filter the exchanges shown to the user ([step #3 below](#Select-Exchange))
+| sendDeliveryInfoThroughXMTP | yes | whether the widget should send the delivery information to the seller via XMTP
 | postDeliveryInfoUrl | yes - in this present case | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details ([step #6.2 below](#postDeliveryInfo))
 | postDeliveryInfoHeaders | no | specifies some request headers that must be added to the ***DeliveryInfo*** HTTP request
 | postRedemptionSubmittedUrl | no | this is the URL to which the widget will post the ***RedemptionSubmitted*** HTTP request with the delivery Details ([step #6.4 below](#postRedemptionSubmitted))
