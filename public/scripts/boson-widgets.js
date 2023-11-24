@@ -33,8 +33,10 @@ const constants = {
   deliveryInfoMessageResponse: "boson-delivery-info-response",
   redemptionSubmittedMessage: "boson-redemption-submitted",
   redemptionConfirmedMessage: "boson-redemption-confirmed",
-  financeUrl: (widgetsHost) => `${widgetsHost}/#/finance`,
-  redeemUrl: (widgetsHost) => `${widgetsHost}/#/redeem`
+  financeUrl: (widgetsHost, params) =>
+    `${widgetsHost}/#/finance?${new URLSearchParams(params).toString()}`,
+  redeemUrl: (widgetsHost, params) =>
+    `${widgetsHost}/#/redeem?${new URLSearchParams(params).toString()}`
 };
 const scripts = document.getElementsByTagName("script");
 let widgetsHost = null;
@@ -97,11 +99,10 @@ const hideIFrame = () => {
     el.remove();
   }
 };
-const buildParams = (paramsTable) =>
-  paramsTable
-    .map((param) => (param.value ? `${param.tag}=${param.value}` : undefined))
-    .filter((p) => !!p)
-    .join("&");
+const toCleanedObject = (paramsTable) =>
+  Object.fromEntries(
+    paramsTable.filter((p) => !!p.value).map(({ tag, value }) => [tag, value])
+  );
 window.addEventListener("message", (event) => {
   if (event.data === constants.hideModalMessage) {
     hideIFrame();
@@ -201,7 +202,7 @@ function bosonWidgetReload() {
 bosonWidgetReload();
 
 function bosonWidgetShowRedeem(args) {
-  const params = buildParams([
+  const paramsObject = toCleanedObject([
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "sellerId", value: args.sellerId },
     { tag: "sellerIds", value: args.sellerIds },
@@ -241,22 +242,20 @@ function bosonWidgetShowRedeem(args) {
   ]);
   showLoading();
   hideIFrame();
-  createIFrame(
-    `${constants.redeemUrl(widgetsHost)}${params ? "?" + params : ""}`,
-    () => hideLoading()
+  createIFrame(constants.redeemUrl(widgetsHost, paramsObject), () =>
+    hideLoading()
   );
 }
 
 function bosonWidgetShowFinance(args) {
-  const params = buildParams([
+  const paramsObject = toCleanedObject([
     { tag: "sellerId", value: args.sellerId },
     { tag: "configId", value: args.configId },
     { tag: "account", value: args.account }
   ]);
   showLoading(constants.loadingDurationMSec);
   hideIFrame();
-  createIFrame(
-    `${constants.financeUrl(widgetsHost)}${params ? "?" + params : ""}`,
-    () => hideLoading()
+  createIFrame(constants.financeUrl(widgetsHost, paramsObject), () =>
+    hideLoading()
   );
 }

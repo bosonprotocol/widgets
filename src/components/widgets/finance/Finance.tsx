@@ -6,17 +6,22 @@ import { CONFIG, getMetaTxConfig } from "../../../config";
 export const financePath = "/finance";
 export function Finance() {
   const [searchParams] = useSearchParams();
-  const sellerId = searchParams.get("sellerId");
-  if (!sellerId) {
-    return <p>Missing 'sellerId' query param</p>;
-  }
   const configId = searchParams.get("configId") as ConfigId;
   if (!configId) {
     return <p>Missing 'configId' query param</p>;
   }
+  const sellerId = searchParams.get("sellerId");
+  const parentOrigin = searchParams.get("parentOrigin");
+  if (sellerId && !parentOrigin) {
+    return <p>Missing 'parentOrigin' query param</p>;
+  }
+  if (!sellerId && parentOrigin) {
+    return <p>Missing 'sellerId' query param</p>;
+  }
   return (
     <FinanceWidget
       sellerId={sellerId}
+      parentOrigin={parentOrigin as `http${string}` | null}
       configId={configId}
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}

@@ -8,7 +8,6 @@ import { financePath } from "./Finance";
 
 export function FinanceDisplay() {
   const financeQPobj = {
-    sellerId: "25",
     configId: getEnvConfigs(CONFIG.envName)[0].configId
   };
   const financeQP = new URLSearchParams(
@@ -16,7 +15,7 @@ export function FinanceDisplay() {
   ).toString();
   const title = "Finance widget";
   const width = "100%";
-  const height = "400px";
+  const height = "650px";
   const iframeText = `<iframe width="${width}" height="${height}" src="${`/#${financePath}?${decodeURIComponent(
     financeQP
   )}`}" title="${title}" />`;
