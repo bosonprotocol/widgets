@@ -21,7 +21,7 @@ export function Finance() {
   return (
     <FinanceWidget
       sellerId={sellerId}
-      parentOrigin={parentOrigin as `http${string}` | null}
+      parentOrigin={parentOrigin}
       configId={configId}
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}
