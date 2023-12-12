@@ -27,6 +27,7 @@ const constants = {
   postRedemptionConfirmedUrlTag: "data-post-redemption-confirmed-url",
   postRedemptionConfirmedHeadersTag: "data-post-redemption-confirmed-headers",
   accountTag: "data-account",
+  dataParentOrigin: "data-parent-origin",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
   deliveryInfoMessage: "boson-delivery-info",
@@ -108,7 +109,7 @@ window.addEventListener("message", (event) => {
     hideIFrame();
   }
 });
-function bosonWidgetReload() {
+function bosonWidgetReload(onLoadIframe) {
   const showFinanceEls = document.querySelectorAll(
     `[id^="${constants.showFinanceId}"]`
   );
@@ -169,27 +170,33 @@ function bosonWidgetReload() {
         showRedeemId.attributes[constants.dataWaitForResponse]?.value;
       const sendDeliveryInfoThroughXMTP =
         showRedeemId.attributes[constants.dataSendDeliveryInfoXMTP]?.value;
+      const parentOrigin =
+        showRedeemId.attributes[constants.dataParentOrigin]?.value;
 
-      bosonWidgetShowRedeem({
-        exchangeId,
-        sellerId,
-        sellerIds,
-        exchangeState,
-        showRedemptionOverview,
-        widgetAction,
-        deliveryInfo,
-        postDeliveryInfoUrl,
-        postDeliveryInfoHeaders,
-        postRedemptionSubmittedUrl,
-        postRedemptionSubmittedHeaders,
-        postRedemptionConfirmedUrl,
-        postRedemptionConfirmedHeaders,
-        configId,
-        account,
-        targetOrigin,
-        shouldWaitForResponse,
-        sendDeliveryInfoThroughXMTP
-      });
+      bosonWidgetShowRedeem(
+        {
+          exchangeId,
+          sellerId,
+          sellerIds,
+          exchangeState,
+          showRedemptionOverview,
+          widgetAction,
+          deliveryInfo,
+          postDeliveryInfoUrl,
+          postDeliveryInfoHeaders,
+          postRedemptionSubmittedUrl,
+          postRedemptionSubmittedHeaders,
+          postRedemptionConfirmedUrl,
+          postRedemptionConfirmedHeaders,
+          configId,
+          account,
+          targetOrigin,
+          shouldWaitForResponse,
+          sendDeliveryInfoThroughXMTP,
+          parentOrigin
+        },
+        onLoadIframe
+      );
     };
   }
   const hideModalId = document.getElementById(constants.hideModalId);
@@ -201,7 +208,7 @@ function bosonWidgetReload() {
 }
 bosonWidgetReload();
 
-function bosonWidgetShowRedeem(args) {
+function bosonWidgetShowRedeem(args, onLoadIframe) {
   const paramsObject = toCleanedObject([
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "sellerId", value: args.sellerId },
@@ -238,13 +245,20 @@ function bosonWidgetShowRedeem(args) {
     {
       tag: "sendDeliveryInfoThroughXMTP",
       value: args.sendDeliveryInfoThroughXMTP
+    },
+    {
+      tag: "parentOrigin",
+      value: args.parentOrigin
     }
   ]);
   showLoading();
   hideIFrame();
-  createIFrame(constants.redeemUrl(widgetsHost, paramsObject), () =>
-    hideLoading()
-  );
+  createIFrame(constants.redeemUrl(widgetsHost, paramsObject), function (ev) {
+    hideLoading();
+    if (onLoadIframe && typeof onLoadIframe === "function") {
+      onLoadIframe({ iframe: this, ev });
+    }
+  });
 }
 
 function bosonWidgetShowFinance(args) {
