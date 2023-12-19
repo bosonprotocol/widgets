@@ -265,7 +265,11 @@ function bosonWidgetShowFinance(args) {
   const paramsObject = toCleanedObject([
     { tag: "sellerId", value: args.sellerId },
     { tag: "configId", value: args.configId },
-    { tag: "account", value: args.account }
+    { tag: "account", value: args.account },
+    {
+      tag: "withExternalSigner",
+      value: args.withExternalSigner
+    }
   ]);
   showLoading(constants.loadingDurationMSec);
   hideIFrame();
