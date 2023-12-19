@@ -11,17 +11,17 @@ export function Finance() {
     return <p>Missing 'configId' query param</p>;
   }
   const sellerId = searchParams.get("sellerId");
-  const parentOrigin = searchParams.get("parentOrigin");
-  if (sellerId && !parentOrigin) {
-    return <p>Missing 'parentOrigin' query param</p>;
+  const withExternalSigner = searchParams.get("withExternalSigner");
+  if (sellerId && !withExternalSigner) {
+    return <p>Missing 'withExternalSigner' query param</p>;
   }
-  if (!sellerId && parentOrigin) {
+  if (!sellerId && withExternalSigner) {
     return <p>Missing 'sellerId' query param</p>;
   }
   return (
     <FinanceWidget
       sellerId={sellerId}
-      parentOrigin={parentOrigin}
+      withExternalSigner={withExternalSigner === "true"}
       configId={configId}
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}
