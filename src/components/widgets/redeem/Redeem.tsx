@@ -152,11 +152,12 @@ export function Redeem() {
       }}
       deliveryInfoHandler={
         targetOrigin
-          ? async (message) => {
+          ? async (message, signature) => {
               try {
                 const event = {
                   type: "boson-delivery-info",
-                  message
+                  message,
+                  signature
                 };
                 // precaution: register to the response before posting the message
                 const responseType = "boson-delivery-info-response";

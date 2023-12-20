@@ -264,7 +264,7 @@
       window.addEventListener("message", (event) => {
         if (event.data.type === constants.deliveryInfoMessage) {
           console.log(
-            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'  Signature: '${event.data.signature}'`
           );
           if (getValue('input-wait-for-response', 'checked')) {
             // wait for a bit and send a response to the iFrame (only relevant when )
