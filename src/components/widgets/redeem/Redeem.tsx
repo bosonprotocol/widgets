@@ -105,7 +105,7 @@ export function Redeem() {
     : sellerId
     ? [sellerId]
     : undefined;
-  const parentOrigin = searchParams.get("parentOrigin");
+  const withExternalSigner = searchParams.get("withExternalSigner");
   // In case the deliveryInfo shall be transferred between frontend windows, the targetOrigin
   //  the deliveryInfo message shall be posted to
   //  (see https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#targetorigin)
@@ -113,7 +113,7 @@ export function Redeem() {
 
   return (
     <RedemptionWidget
-      parentOrigin={parentOrigin}
+      withExternalSigner={withExternalSigner === "true"}
       showRedemptionOverview={showRedemptionOverview}
       sendDeliveryInfoThroughXMTP={sendDeliveryInfoThroughXMTP}
       exchangeState={exchangeState}

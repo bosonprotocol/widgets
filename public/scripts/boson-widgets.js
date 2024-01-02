@@ -27,7 +27,7 @@ const constants = {
   postRedemptionConfirmedUrlTag: "data-post-redemption-confirmed-url",
   postRedemptionConfirmedHeadersTag: "data-post-redemption-confirmed-headers",
   accountTag: "data-account",
-  dataParentOrigin: "data-parent-origin",
+  dataWithExternalSigner: "data-with-external-signer",
   hideModalId: "boson-hide-modal",
   hideModalMessage: "boson-close-iframe",
   deliveryInfoMessage: "boson-delivery-info",
@@ -170,8 +170,8 @@ function bosonWidgetReload(onLoadIframe) {
         showRedeemId.attributes[constants.dataWaitForResponse]?.value;
       const sendDeliveryInfoThroughXMTP =
         showRedeemId.attributes[constants.dataSendDeliveryInfoXMTP]?.value;
-      const parentOrigin =
-        showRedeemId.attributes[constants.dataParentOrigin]?.value;
+      const withExternalSigner =
+        showRedeemId.attributes[constants.dataWithExternalSigner]?.value;
 
       bosonWidgetShowRedeem(
         {
@@ -193,7 +193,7 @@ function bosonWidgetReload(onLoadIframe) {
           targetOrigin,
           shouldWaitForResponse,
           sendDeliveryInfoThroughXMTP,
-          parentOrigin
+          withExternalSigner
         },
         onLoadIframe
       );
@@ -247,8 +247,8 @@ function bosonWidgetShowRedeem(args, onLoadIframe) {
       value: args.sendDeliveryInfoThroughXMTP
     },
     {
-      tag: "parentOrigin",
-      value: args.parentOrigin
+      tag: "withExternalSigner",
+      value: args.withExternalSigner
     }
   ]);
   showLoading();
@@ -265,7 +265,11 @@ function bosonWidgetShowFinance(args) {
   const paramsObject = toCleanedObject([
     { tag: "sellerId", value: args.sellerId },
     { tag: "configId", value: args.configId },
-    { tag: "account", value: args.account }
+    { tag: "account", value: args.account },
+    {
+      tag: "withExternalSigner",
+      value: args.withExternalSigner
+    }
   ]);
   showLoading(constants.loadingDurationMSec);
   hideIFrame();
