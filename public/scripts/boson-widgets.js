@@ -13,6 +13,7 @@ const constants = {
   exchangeIdTag: "data-exchange-id",
   sellerIdTag: "data-seller-id",
   sellerIdsTag: "data-seller-ids",
+  signaturesTag: "data-signatures",
   exchangeStateTag: "data-exchange-state",
   showRedemptionOverviewTag: "data-show-redemption-overview",
   widgetActionTag: "data-widget-action",
@@ -140,6 +141,8 @@ function bosonWidgetReload(onLoadIframe) {
         showRedeemId.attributes[constants.exchangeIdTag]?.value;
       const sellerId = showRedeemId.attributes[constants.sellerIdTag]?.value;
       const sellerIds = showRedeemId.attributes[constants.sellerIdsTag]?.value;
+      const signatures =
+        showRedeemId.attributes[constants.signaturesTag]?.value;
       const exchangeState =
         showRedeemId.attributes[constants.exchangeStateTag]?.value;
       const showRedemptionOverview =
@@ -178,6 +181,7 @@ function bosonWidgetReload(onLoadIframe) {
           exchangeId,
           sellerId,
           sellerIds,
+          signatures,
           exchangeState,
           showRedemptionOverview,
           widgetAction,
@@ -213,6 +217,7 @@ function bosonWidgetShowRedeem(args, onLoadIframe) {
     { tag: "exchangeId", value: args.exchangeId },
     { tag: "sellerId", value: args.sellerId },
     { tag: "sellerIds", value: args.sellerIds },
+    { tag: "signatures", value: args.signatures },
     { tag: "exchangeState", value: args.exchangeState },
     {
       tag: "showRedemptionOverview",

@@ -68,7 +68,16 @@
               <input type="string" id="input-redeem-seller-ids" onchange="updateRedeemButton('data-seller-ids', this.value)">
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-seller-ids', '26,138,110')" >Example</button>
+              <button onclick="setValue('input-redeem-seller-ids', '4'); setValue('input-target-origin', window.location.origin); setValue('input-redeem-signatures', '0x3ff5a843bd6207f8888f525a6d148920dc8cb297ed47dda75d7151b15d0b45e9377d658bf8406bda7bb5283adb590fdccc57106a78343d09994bbdf28f32b3c01b')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Signatures</td>
+            <td>
+              <input type="string" id="input-redeem-signatures" onchange="updateRedeemButton('data-signatures', this.value)">
+            </td>
+            <td>
+              <button onclick="setValue('input-redeem-seller-ids', '4'); setValue('input-target-origin', window.location.origin); setValue('input-redeem-signatures', '0x3ff5a843bd6207f8888f525a6d148920dc8cb297ed47dda75d7151b15d0b45e9377d658bf8406bda7bb5283adb590fdccc57106a78343d09994bbdf28f32b3c01b')" >Example</button>
             </td>
           </tr>
           <tr>
@@ -236,6 +245,7 @@
       function clearRedeemInputs() {
         setValue('input-redeem-exchange-id', '')
         setValue('input-redeem-seller-ids', '')
+        setValue('input-redeem-signatures', '')
         setValue('select-redeem-widget-action', 'SELECT_EXCHANGE')
         setValue('input-redeem-show-overview', true, 'checked')
         setValue('select-redeem-exchange-state', 'Committed')
