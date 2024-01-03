@@ -18,6 +18,7 @@ const constants = {
   showRedemptionOverviewTag: "data-show-redemption-overview",
   widgetActionTag: "data-widget-action",
   deliveryInfoTag: "data-delivery-info",
+  eventTagTag: "data-event-tag",
   postDeliveryInfoUrlTag: "data-post-delivery-info-url",
   postDeliveryInfoHeadersTag: "data-post-delivery-info-headers",
   dataTargetOrigin: "data-target-origin",
@@ -175,6 +176,7 @@ function bosonWidgetReload(onLoadIframe) {
         showRedeemId.attributes[constants.dataSendDeliveryInfoXMTP]?.value;
       const withExternalSigner =
         showRedeemId.attributes[constants.dataWithExternalSigner]?.value;
+      const eventTag = showRedeemId.attributes[constants.eventTagTag]?.value;
 
       bosonWidgetShowRedeem(
         {
@@ -197,7 +199,8 @@ function bosonWidgetReload(onLoadIframe) {
           targetOrigin,
           shouldWaitForResponse,
           sendDeliveryInfoThroughXMTP,
-          withExternalSigner
+          withExternalSigner,
+          eventTag
         },
         onLoadIframe
       );
@@ -254,7 +257,8 @@ function bosonWidgetShowRedeem(args, onLoadIframe) {
     {
       tag: "withExternalSigner",
       value: args.withExternalSigner
-    }
+    },
+    { tag: "eventTag", value: args.eventTag }
   ]);
   showLoading();
   hideIFrame();

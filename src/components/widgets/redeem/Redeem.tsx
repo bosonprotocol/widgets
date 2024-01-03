@@ -109,6 +109,8 @@ export function Redeem() {
   const signaturesStr = searchParams.get("signatures") as string;
   const signatures = signaturesStr ? signaturesStr.split(",") : undefined;
 
+  const eventTag = searchParams.get("eventTag") as string;
+
   // In case the deliveryInfo shall be transferred between frontend windows, the targetOrigin
   //  the deliveryInfo message shall be posted to
   //  (see https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#targetorigin)
@@ -161,7 +163,8 @@ export function Redeem() {
                 const event = {
                   type: "boson-delivery-info",
                   message,
-                  signature
+                  signature,
+                  tag: eventTag
                 };
                 // precaution: register to the response before posting the message
                 const responseType = "boson-delivery-info-response";
