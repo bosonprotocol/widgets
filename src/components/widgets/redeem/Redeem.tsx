@@ -106,6 +106,9 @@ export function Redeem() {
     ? [sellerId]
     : undefined;
   const withExternalSigner = searchParams.get("withExternalSigner");
+  const signaturesStr = searchParams.get("signatures") as string;
+  const signatures = signaturesStr ? signaturesStr.split(",") : undefined;
+
   // In case the deliveryInfo shall be transferred between frontend windows, the targetOrigin
   //  the deliveryInfo message shall be posted to
   //  (see https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#targetorigin)
@@ -119,6 +122,7 @@ export function Redeem() {
       exchangeState={exchangeState}
       exchangeId={exchangeId}
       sellerIds={sellerIds}
+      signatures={signatures}
       configId={configId}
       forcedAccount={account}
       envName={CONFIG.envName}

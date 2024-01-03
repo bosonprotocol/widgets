@@ -20,6 +20,7 @@ In addition, the on-chain Redeem transaction submission and confirmation can be 
 | ------ | -------- | ------- |
 | configId | yes | the Boson Protocol environment the widget is linked to (see [Boson Environments](../boson-environments.md)) |
 | sellerIds | no | specifies the list of sellerIds to filter the exchanges shown to the user ([step #3 below](#Select-Exchange))
+| signatures | yes | for each seller listed in sellerId, signatures shall contain the signature, by the seller's admin wallet, of the message {"origin":"<parentWindowOrigin>"} where <parentWindowOrigin> is the domain of the page integrating the widget (for instance www.mystore.com)
 | sendDeliveryInfoThroughXMTP | yes | whether the widget should send the delivery information to the seller via XMTP
 | targetOrigin | yes - in this present case | If set, the widget will send frontend messages (`boson-delivery-info`, `boson-redemption-submitted` and `boson-redemption-confirmed`) to this origin when appropriate
 | shouldWaitForResponse | no | whether the widget should wait for a response (`boson-delivery-info-response`) to the deliveryInfo message (`boson-delivery-info`). If false, the widget does not wait and progress further with the redemption flow

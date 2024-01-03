@@ -23,7 +23,8 @@ If required, every backend request can contain specific headers (for instance us
 | parameter | required | purpose |
 | ------ | -------- | ------- |
 | configId | yes | the Boson Protocol environment the widget is linked to (see [Boson Environments](../boson-environments.md)) |
-| sellerIds | no | specifies the list of sellerIds to filter the exchanges shown to the user ([step #3 below](#Select-Exchange))
+| sellerIds | yes | specifies the list of sellerIds to filter the exchanges shown to the user ([step #3 below](#Select-Exchange))
+| signatures | yes | for each seller listed in sellerId, signatures shall contain the signature, by the seller's admin wallet, of the message {"origin":"<parentWindowOrigin>"} where <parentWindowOrigin> is the domain of the page integrating the widget (for instance www.mystore.com)
 | sendDeliveryInfoThroughXMTP | yes | whether the widget should send the delivery information to the seller via XMTP
 | postDeliveryInfoUrl | yes - in this present case | this is the URL to which the widget will post the ***DeliveryInfo*** HTTP request with the delivery Details ([step #6.2 below](#postDeliveryInfo))
 | postDeliveryInfoHeaders | no | specifies some request headers that must be added to the ***DeliveryInfo*** HTTP request
