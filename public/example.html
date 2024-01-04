@@ -166,6 +166,15 @@
             </td>
           </tr>
           <tr>
+            <td>EventTag</td>
+            <td>
+              <input type="url" id="input-event-tag" onchange="updateRedeemButton('data-event-tag', encodeURI(this.value))" size="30">
+            </td>
+            <td>
+              <button onclick="setValue('input-event-tag', 'bosonModal')" >Example</button>
+            </td>
+          </tr>
+          <tr>
             <td>Should Wait For Response</td>
             <td>
               <input type="checkbox" id="input-wait-for-response" autocomplete="off" onchange="updateRedeemButton('data-wait-for-response', this.checked)">
@@ -274,7 +283,7 @@
       window.addEventListener("message", (event) => {
         if (event.data.type === constants.deliveryInfoMessage) {
           console.log(
-            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'  Signature: '${event.data.signature}'`
+            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data)}'`
           );
           if (getValue('input-wait-for-response', 'checked')) {
             // wait for a bit and send a response to the iFrame (only relevant when )
