@@ -4,7 +4,7 @@ import {
   RedemptionWidgetAction,
   subgraph
 } from "@bosonprotocol/react-kit";
-import { DeliveryInfoCallbackResponse } from "@bosonprotocol/react-kit/dist/cjs/hooks/callbacks/useRedemptionCallbacks";
+import { DeliveryInfoCallbackResponse } from "@bosonprotocol/react-kit/dist/cjs/hooks/callbacks/types";
 import { useSearchParams } from "react-router-dom";
 
 import { CONFIG, getMetaTxConfig } from "../../../config";
