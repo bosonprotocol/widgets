@@ -299,17 +299,17 @@ function checkExchangeState(
 ): subgraph.ExchangeState {
   switch (exchangeStateStr?.toLowerCase()) {
     case undefined:
-    case subgraph.ExchangeState.Committed.toLowerCase(): {
-      return subgraph.ExchangeState.Committed;
+    case subgraph.ExchangeState.COMMITTED.toLowerCase(): {
+      return subgraph.ExchangeState.COMMITTED;
     }
-    case subgraph.ExchangeState.Redeemed.toLowerCase(): {
-      return subgraph.ExchangeState.Redeemed;
+    case subgraph.ExchangeState.REDEEMED.toLowerCase(): {
+      return subgraph.ExchangeState.REDEEMED;
     }
-    case subgraph.ExchangeState.Disputed.toLowerCase(): {
-      return subgraph.ExchangeState.Disputed;
+    case subgraph.ExchangeState.DISPUTED.toLowerCase(): {
+      return subgraph.ExchangeState.DISPUTED;
     }
-    case subgraph.ExchangeState.Completed.toLowerCase(): {
-      return subgraph.ExchangeState.Completed;
+    case subgraph.ExchangeState.COMPLETED.toLowerCase(): {
+      return subgraph.ExchangeState.COMPLETED;
     }
   }
   throw new Error(`Not supported exchange state '${exchangeStateStr}'`);
