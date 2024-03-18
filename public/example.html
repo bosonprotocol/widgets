@@ -19,7 +19,7 @@
   <body>
     <h1>Boson Protocol Widgets</h1>
     <section>
-      <h2>Finance Widget</h2>
+      <h2>Commit Widget</h2>
       <table>
         <thead>
           <tr>
@@ -32,15 +32,33 @@
           <tr>
             <td>SellerId</td>
             <td>
-              <input type="number" min="1" id="input-finance-seller-id" onchange="updateFinanceButton('data-seller-id', this.value)">
+              <input type="number" min="1" id="input-commit-seller-id" onchange="updateCommitButton('data-seller-id', this.value)">
             </td>
             <td>
-              <button onclick="clearFinanceInputs(); setValue('input-finance-seller-id', '26')" >Example</button>
+              <button onclick="setValue('input-commit-seller-id', '26')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>ProductUuid</td>
+            <td>
+              <input type="string" id="input-commit-product-uuid" onchange="updateCommitButton('data-product-uuid', this.value)">
+            </td>
+            <td>
+              <button onclick="setValue('input-commit-product-uuid', '2256bad-f146-04bd-2a66-6fda84bbe5a')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>LookAndFeel</td>
+            <td>
+              <input type="string" id="input-commit-look-and-feel" onchange="updateCommitButton('data-look-and-feel', this.value)">
+            </td>
+            <td>
+              <button onclick="setValue('input-commit-look-and-feel', 'regular')" >Example</button>
             </td>
           </tr>
         </tbody>
       </table>
-      <button type="button" id="boson-finance-button" class="bosonButton" disabled>Show Finance</button>
+      <button class="bosonButton" id="boson-commit-button">Show Commit</button>
     </section>
     <section>
       <h2>Redemption Widget</h2>
@@ -225,6 +243,30 @@
       </table>
       <button class="bosonButton" id="boson-redeem-button">Show Redeem</button>
     </section>
+    <section>
+      <h2>Finance Widget</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SellerId</td>
+            <td>
+              <input type="number" min="1" id="input-finance-seller-id" onchange="updateFinanceButton('data-seller-id', this.value)">
+            </td>
+            <td>
+              <button onclick="clearFinanceInputs(); setValue('input-finance-seller-id', '26')" >Example</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" id="boson-finance-button" class="bosonButton" disabled>Show Finance</button>
+    </section>
     <script>
       const searchParams = new URLSearchParams(window.location.search);
       const configId = searchParams.get('configId');
@@ -233,6 +275,9 @@
       })
       function updateRedeemButton(attribute, value) {
         document.getElementById('boson-redeem-button').setAttribute(attribute, value)
+      }
+      function updateCommitButton(attribute, value) {
+        document.getElementById('boson-commit-button').setAttribute(attribute, value)
       }
       function updateFinanceButton(attribute, value) {
         document.getElementById('boson-finance-button').setAttribute(attribute, value)

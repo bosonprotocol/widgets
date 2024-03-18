@@ -5,6 +5,7 @@
 ## Getting started
 
 - How tos & guides:
+   - [Commit Widget](./docs/commit-widget.md)
    - [Redemption Widget](./docs/redemption-widget.md)
    - Finance Widget
 - [Local development](docs/local-development.md)

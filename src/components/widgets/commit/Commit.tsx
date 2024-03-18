@@ -32,10 +32,8 @@ export function Commit() {
   if (!productUuid && sellerId) {
     return <p>Missing 'productUuid' query param</p>;
   }
-  const lookAndFeel = searchParams.get("lookAndFeel") as "regular" | "modal";
-  if (!lookAndFeel) {
-    return <p>Missing 'lookAndFeel' query param</p>;
-  }
+  const lookAndFeel =
+    (searchParams.get("lookAndFeel") as "regular" | "modal") || "regular";
   const modalMargin = searchParams.get(
     "modalMargin"
   ) as CSSProperties["margin"];
