@@ -4,9 +4,9 @@
 
 # The Commit Widget 
 
-## Committing to a Boson Product using the Boson Widget
+## Integrating ‘Commit’ functionality using the Boson Widget
 
-With the Boson Commit Widget, Sellers can now allow their Customers to Commit to a Boson Product on their own domains.
+With the Boson Commit Widget Sellers can allow their customers to commit to a Boson offer on their own domains.
 
 The Boson Commit Widget allows Sellers to simply embed, via a few lines of code, commit functionality of their products into an existing website.
 
@@ -93,3 +93,9 @@ When using the Commit Button, as shown above, the parameters must be passed as H
 | account | data-account | no | none | the address of the wallet the widget should accept. When specified, the user can't connect any other wallet that the one specified.  This parameter is optional and can be used if you want to prevent the user to use the Commit Widget if they don't connect with the given wallet. | ```"0x023456789abcd0213456789abcd213456789abcd"```
 | lookAndFeel | data-look-and-feel | no | ```"regular"``` | the look and feel for the Widget (```"regular"``` or ```"modal"```). When set to ```"modal"```, allow to define a margin around the widget to be appearing like a modal popup. | ```"modal"```
 | modalMargin | data-modal-margin | no | none | the margin to apply around the widget when lookAndFeel is set to ```"modal"``` | ```"5%"```
+
+## Discover more...
+
+The Commit Widget is part of the React Component library from Boson Core Component you can discover on this [Storybook page](https://main--65f314a856a256708dd840ea.chromatic.com/?path=/story/widgets-commit--commit)
+
+You can find an example HTML file which embeds the widgets on the the widgets subdomain : https://widgets.bosonprotocol.io/example.html
