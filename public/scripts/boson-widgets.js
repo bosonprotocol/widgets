@@ -7,10 +7,16 @@ const constants = {
   loadingDurationMSec: 200,
   iFrameId: "bosonModal",
   loadingId: "bosonLoading",
+  showCommitId: "boson-commit",
   showRedeemId: "boson-redeem",
   showFinanceId: "boson-finance",
   configIdTag: "data-config-id",
   exchangeIdTag: "data-exchange-id",
+  productUuidTag: "data-product-uuid",
+  bundleUuidTag: "data-bundle-uuid",
+  offerIdTag: "data-offer-id",
+  lookAndFeelTag: "data-look-and-feel",
+  modalMarginTag: "data-modal-margin",
   sellerIdTag: "data-seller-id",
   sellerIdsTag: "data-seller-ids",
   signaturesTag: "data-signatures",
@@ -38,6 +44,8 @@ const constants = {
   redemptionConfirmedMessage: "boson-redemption-confirmed",
   financeUrl: (widgetsHost, params) =>
     `${widgetsHost}/#/finance?${new URLSearchParams(params).toString()}`,
+  commitUrl: (widgetsHost, params) =>
+    `${widgetsHost}/#/commit?${new URLSearchParams(params).toString()}`,
   redeemUrl: (widgetsHost, params) =>
     `${widgetsHost}/#/redeem?${new URLSearchParams(params).toString()}`
 };
@@ -128,6 +136,39 @@ function bosonWidgetReload(onLoadIframe) {
       });
     };
   }
+  const showCommitEls = document.querySelectorAll(
+    `[id^="${constants.showCommitId}"]`
+  );
+  for (let i = 0; i < showCommitEls.length; i++) {
+    const showCommitId = showCommitEls[i];
+    showCommitId.onclick = function () {
+      const configId = showCommitId.attributes[constants.configIdTag]?.value;
+      const productUuid =
+        showCommitId.attributes[constants.productUuidTag]?.value;
+      const bundleUuid =
+        showCommitId.attributes[constants.bundleUuidTag]?.value;
+      const offerId = showCommitId.attributes[constants.offerIdTag]?.value;
+      const sellerId = showCommitId.attributes[constants.sellerIdTag]?.value;
+      const lookAndFeel =
+        showCommitId.attributes[constants.lookAndFeelTag]?.value;
+      const modalMargin =
+        showCommitId.attributes[constants.modalMarginTag]?.value;
+      const account = showCommitId.attributes[constants.accountTag]?.value;
+      bosonWidgetShowCommit(
+        {
+          sellerId,
+          configId,
+          account,
+          productUuid,
+          bundleUuid,
+          offerId,
+          lookAndFeel,
+          modalMargin
+        },
+        onLoadIframe
+      );
+    };
+  }
   const showRedeemEls = document.querySelectorAll(
     `[id^="${constants.showRedeemId}"]`
   );
@@ -214,6 +255,27 @@ function bosonWidgetReload(onLoadIframe) {
   }
 }
 bosonWidgetReload();
+
+function bosonWidgetShowCommit(args, onLoadIframe) {
+  const paramsObject = toCleanedObject([
+    { tag: "sellerId", value: args.sellerId },
+    { tag: "configId", value: args.configId },
+    { tag: "account", value: args.account },
+    { tag: "productUuid", value: args.productUuid },
+    { tag: "bundleUuid", value: args.bundleUuid },
+    { tag: "offerId", value: args.offerId },
+    { tag: "lookAndFeel", value: args.lookAndFeel },
+    { tag: "modalMargin", value: args.modalMargin }
+  ]);
+  showLoading();
+  hideIFrame();
+  createIFrame(constants.commitUrl(widgetsHost, paramsObject), function (ev) {
+    hideLoading();
+    if (onLoadIframe && typeof onLoadIframe === "function") {
+      onLoadIframe({ iframe: this, ev });
+    }
+  });
+}
 
 function bosonWidgetShowRedeem(args, onLoadIframe) {
   const paramsObject = toCleanedObject([

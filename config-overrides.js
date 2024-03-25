@@ -3,9 +3,17 @@
 const {
   override,
   addWebpackResolve,
-  addWebpackPlugin
+  addWebpackPlugin,
+  overrideDevServer
 } = require("customize-cra");
 const webpack = require("webpack");
+
+const devServerConfig = () => (config) => {
+  return {
+    ...config,
+    open: ["/#/dev"]
+  };
+};
 
 module.exports = {
   // The Webpack config to use when compiling your react app for development or production.
@@ -33,5 +41,6 @@ module.exports = {
       //     process: "process/browser"
       //   })
     )
-  )
+  ),
+  devServer: overrideDevServer(devServerConfig())
 };
