@@ -27,7 +27,7 @@ To integrate the Boson Commit Widget, all a seller needs to do is:
 The button shall be parameterized with the following arguments:
 - ```data-config-id```: specifies the Boson Configuration addressed by the widget (here ***production-137-0*** is the production configuration deployed on the Polygon blockchain). See [Boson Environment](./boson-environments.md) to get more details.
 - ```data-seller-id```: specifies the Boson Seller ID that publishes the Product being offered with the plugin
-- ```data-product-uuid```: specified the ProductUUID of the Product being offered with the plugin
+- ```data-product-uuid```: specifies the ProductUUID of the Product being offered with the plugin
 
 When a user will click the "Show Commit" button, the Commit Widget will popup and allow the user to:
 - show details about the specified Product
