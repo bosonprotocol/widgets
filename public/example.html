@@ -44,7 +44,16 @@
               <input type="string" id="input-commit-product-uuid" onchange="updateCommitButton('data-product-uuid', this.value)">
             </td>
             <td>
-              <button onclick="setValue('input-commit-product-uuid', '2256bad-f146-04bd-2a66-6fda84bbe5a')" >Example</button>
+              <button onclick="setValue('input-commit-seller-id', '26'); setValue('input-commit-product-uuid', '2256bad-f146-04bd-2a66-6fda84bbe5a'); setValue('input-commit-bundle-uuid', '')" >Example</button>
+            </td>
+          </tr>
+          <tr>
+            <td>BundleUuid</td>
+            <td>
+              <input type="string" id="input-commit-bundle-uuid" onchange="updateCommitButton('data-bundle-uuid', this.value)">
+            </td>
+            <td>
+              <button onclick="setValue('input-commit-seller-id', '138'); setValue('input-commit-bundle-uuid', '4d5262-28cf-d860-06f-6406bd65fa10'); setValue('input-commit-product-uuid', '')" >Example</button>
             </td>
           </tr>
           <tr>

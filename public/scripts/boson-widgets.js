@@ -13,6 +13,7 @@ const constants = {
   configIdTag: "data-config-id",
   exchangeIdTag: "data-exchange-id",
   productUuidTag: "data-product-uuid",
+  bundleUuidTag: "data-bundle-uuid",
   offerIdTag: "data-offer-id",
   lookAndFeelTag: "data-look-and-feel",
   modalMarginTag: "data-modal-margin",
@@ -144,6 +145,8 @@ function bosonWidgetReload(onLoadIframe) {
       const configId = showCommitId.attributes[constants.configIdTag]?.value;
       const productUuid =
         showCommitId.attributes[constants.productUuidTag]?.value;
+      const bundleUuid =
+        showCommitId.attributes[constants.bundleUuidTag]?.value;
       const offerId = showCommitId.attributes[constants.offerIdTag]?.value;
       const sellerId = showCommitId.attributes[constants.sellerIdTag]?.value;
       const lookAndFeel =
@@ -157,6 +160,7 @@ function bosonWidgetReload(onLoadIframe) {
           configId,
           account,
           productUuid,
+          bundleUuid,
           offerId,
           lookAndFeel,
           modalMargin
@@ -258,6 +262,7 @@ function bosonWidgetShowCommit(args, onLoadIframe) {
     { tag: "configId", value: args.configId },
     { tag: "account", value: args.account },
     { tag: "productUuid", value: args.productUuid },
+    { tag: "bundleUuid", value: args.bundleUuid },
     { tag: "offerId", value: args.offerId },
     { tag: "lookAndFeel", value: args.lookAndFeel },
     { tag: "modalMargin", value: args.modalMargin }

@@ -12,25 +12,33 @@ export function Commit() {
     return <p>Missing 'configId' query param</p>;
   }
   const productUuid = searchParams.get("productUuid");
+  const bundleUuid = searchParams.get("bundleUuid");
   const offerId = searchParams.get("offerId");
   const sellerId = searchParams.get("sellerId");
-  if (productUuid && sellerId && offerId) {
+  if ((productUuid || bundleUuid) && sellerId && offerId) {
     return (
       <p>
-        Do not specify all 'productUuid', 'sellerId' and 'offerId' query params
+        Do not specify all 'productUuid' or 'bundleUuid', 'sellerId' and
+        'offerId' query params
       </p>
     );
   }
-  if (!productUuid && !sellerId && !offerId) {
+  if (!(productUuid || bundleUuid) && !sellerId && !offerId) {
     return (
-      <p>Missing ('productUuid' and 'sellerId') or 'offerId' query params</p>
+      <p>
+        Missing ('productUuid' and 'sellerId') or ('bundleUuid' and 'sellerId')
+        or 'offerId' query params
+      </p>
     );
   }
-  if (productUuid && !sellerId) {
+  if ((productUuid || bundleUuid) && !sellerId) {
     return <p>Missing 'sellerId' query param</p>;
   }
-  if (!productUuid && sellerId) {
-    return <p>Missing 'productUuid' query param</p>;
+  if (!(productUuid || bundleUuid) && sellerId) {
+    return <p>Missing 'productUuid' or 'bundleUuid' query param</p>;
+  }
+  if (productUuid && bundleUuid) {
+    return <p>Do not specify both 'productUuid' and 'bundleId' query params</p>;
   }
   const lookAndFeel =
     (searchParams.get("lookAndFeel") as "regular" | "modal") || "regular";
@@ -48,6 +56,7 @@ export function Commit() {
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}
       productUuid={productUuid ?? ""}
+      bundleUuid={bundleUuid ?? ""}
       sellerId={sellerId ?? ""}
       offerId={offerId ?? ""}
       lookAndFeel={lookAndFeel}
