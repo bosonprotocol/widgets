@@ -5,8 +5,6 @@ import { CommitDisplay } from "./widgets/commit/CommitDisplay";
 import { FinanceDisplay } from "./widgets/finance/FinanceDisplay";
 import { RedeemDisplay } from "./widgets/redeem/RedeemDisplay";
 
-export const indexPath = "/";
-
 const envConfigs = getEnvConfigs(CONFIG.envName);
 
 export function Index() {
