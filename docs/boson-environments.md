@@ -42,6 +42,7 @@ The following table recaps all configurations, per environment
 <tr><th>Configuration</th><th>Blockchain</th><th>Subgraph</th></tr>
 <tr><td>staging-80001-0	</td><td>Polygon Mumbai (testnet)</td><td>https://api.thegraph.com/subgraphs/name/bosonprotocol/mumbai-staging</td></tr>
 <tr><td>staging-5-0	</td><td>Ethereum Goerli (testnet)</td><td>https://api.thegraph.com/subgraphs/name/bosonprotocol/goerli-staging</td></tr>
+<tr><td>staging-11155111-0	</td><td>Ethereum Sepolia (testnet)</td><td>https://api.thegraph.com/subgraphs/name/bosonprotocol/sepolia-staging</td></tr>
 </table>
 <table>
 <tr><th>dApps</th><th></th></tr>
@@ -58,6 +59,7 @@ The following table recaps all configurations, per environment
 <tr><th>Configuration</th><th>Blockchain</th><th>Subgraph</th></tr>
 <tr><td>testing-80001-0</td><td>Polygon Mumbai (testnet)</td><td>https://api.thegraph.com/subgraphs/name/bosonprotocol/mumbai-testing</td></tr>
 <tr><td>testing-5-0	</td><td>Ethereum Goerli (testnet)</td><td>https://api.thegraph.com/subgraphs/name/bosonprotocol/goerli-testing</td></tr>
+<tr><td>testing-11155111-0	</td><td>Ethereum Sepolia (testnet)</td><td>https://api.thegraph.com/subgraphs/name/bosonprotocol/sepolia-testing</td></tr>
 </table>
 <table>
 <tr><th>dApps</th><th></th></tr>
