@@ -1,9 +1,11 @@
 /* eslint-disable no-var */
-// import { CommitButton as BosonCommitButton } from "@bosonprotocol/react-kit";
-import { ElementRef, useEffect, useRef } from "react";
-import { createGlobalStyle } from "styled-components";
 
+import { ElementRef, useEffect, useMemo, useRef } from "react";
+import { createGlobalStyle } from "styled-components";
+import * as yup from "yup";
 export const commitButtonPath = "/commit-button";
+
+declare const Modal: (props: Record<string, unknown>) => any;
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -23,16 +25,17 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
   }
 `;
+const emptyObject = {};
 export function CommitButton() {
   const ref = useRef<ElementRef<"button">>(null);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  console.log("CommitButton window.xprops", window.xprops);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const { renderToSelector, ...commitWidgetProps } = window.xprops ?? {};
+  const props = window.xprops ?? emptyObject;
+  const { renderToSelector, buttonStyle, ...commitWidgetProps } = props;
   useEffect(() => {
-    if (ref.current) {
+    if (
+      ref.current &&
+      typeof props.onGetDimensions === "function" &&
+      props.onGetDimensions
+    ) {
       const dimensionProps = {
         offsetHeight: ref.current.offsetHeight,
         offsetWidth: ref.current.offsetWidth,
@@ -40,19 +43,31 @@ export function CommitButton() {
           JSON.stringify(ref.current.getBoundingClientRect())
         )
       };
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      window.xprops.onGetDimensions(dimensionProps);
+      props.onGetDimensions?.(dimensionProps);
     }
-  }, []);
+  }, [props]);
+  const buttonStyleObj = useMemo(() => {
+    const buttonStyleValidated = yup
+      .object({
+        width: yup.string(),
+        height: yup.string()
+      })
+      .validateSync(buttonStyle);
+    if (typeof buttonStyle === "object") {
+      return buttonStyleValidated;
+    }
+    return {} as typeof buttonStyleValidated;
+  }, [buttonStyle]);
   return (
     <>
       <GlobalStyle />
       <button
+        style={{
+          width: buttonStyleObj.width,
+          height: buttonStyleObj.height
+        }}
         ref={ref}
         onClick={() => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           Modal(commitWidgetProps).renderTo(
             window.parent,
             renderToSelector || "body",

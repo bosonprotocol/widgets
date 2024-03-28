@@ -2,6 +2,7 @@ import { CommitWidget, ConfigId } from "@bosonprotocol/react-kit";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CSSProperties } from "styled-components";
+import * as yup from "yup";
 
 import { CONFIG, getMetaTxConfig } from "../../../config";
 
@@ -12,9 +13,10 @@ export function Commit() {
   const withProps = searchParams.get("props");
   const getProp = useCallback(
     (key: string) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return withProps ? window.xprops[key] : searchParams.get(key);
+      if (withProps) {
+        return yup.string().validateSync(window.xprops[key]);
+      }
+      return searchParams.get(key);
     },
     [withProps, searchParams]
   );
@@ -90,9 +92,13 @@ export function Commit() {
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       closeWidgetClick={() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        window.xprops.close();
+        if (
+          "close" in window.xprops &&
+          typeof window.xprops.close === "function"
+        ) {
+          window.xprops.close();
+        }
+
         try {
           window.parent.postMessage("boson-close-iframe", "*");
         } catch (e) {

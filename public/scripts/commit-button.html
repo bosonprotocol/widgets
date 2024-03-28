@@ -25,6 +25,11 @@
       sellerId: "138",
       modalMargin: "2%",
       lookAndFeel: "modal",
+      buttonStyle: {
+        width: "100px",
+        height: "200px",
+        border: "1px solid red" // ignored on purpose, we dont allow that
+      },
       onGetDimensions: function (dimensions) {
         const { boundingClientRect } = dimensions;
         document.querySelector(
