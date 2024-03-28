@@ -40,5 +40,5 @@
       "typescript": {}
     }
   },
-  "ignorePatterns": []
+  "ignorePatterns": ["public/scripts/zoid/*"]
 }
