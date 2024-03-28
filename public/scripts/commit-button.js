@@ -108,14 +108,17 @@ var CommitButton = zoid.create({
       ? "https://widgets-test.on.fleek.co/#/commit-button"
       : "http://localhost:3006/#/commit-button";
   },
-  dimensions: { width: "100%" },
+  dimensions: { width: "100%", height: "40px" },
   containerTemplate: function (args) {
     return containerTemplate(
       {
         ...args,
         dimensions: {
           ...args.dimensions,
-          height: args.props.buttonStyle.height || "inherit"
+          height:
+            args.props.buttonStyle && typeof args.props.buttonStyle === "object"
+              ? args.props.buttonStyle.height || "inherit"
+              : args.dimensions.height
         }
       },
       { uidStyles: `position: relative;` }
