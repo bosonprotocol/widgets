@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { ReactComponent as BosonLogo } from "../../logo.svg";
@@ -24,9 +24,9 @@ const Redirecting = styled.div`
 `;
 
 export const RedirectToDocs: React.FC = () => {
-  useEffect(() => {
-    window.location.href = widgetsPage;
-  }, []);
+  //   useEffect(() => {
+  //     window.location.href = widgetsPage;
+  //   }, []);
   return (
     <div
       style={{

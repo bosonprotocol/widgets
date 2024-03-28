@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@bosonprotocol/react-kit": "^0.29.0-alpha.12",
+    "@krakenjs/zoid": "^10.3.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -32,7 +33,9 @@
     "lint": "eslint --ignore-path ./.gitignore --ext .js,.ts,.tsx . --fix",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "link-cc": "node ./scripts/link-to-local-core-components.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "npm run copy-zoid",
+    "copy-zoid": "shx mkdir -p public/scripts/zoid || true && shx cp -R node_modules/@krakenjs/zoid/dist/* public/scripts/zoid"
   },
   "eslintConfig": {
     "extends": [
@@ -85,6 +88,7 @@
     "lint-staged": "^13.2.0",
     "path-browserify": "^1.0.1",
     "prettier": "^2.8.8",
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "shx": "^0.3.4"
   }
 }
