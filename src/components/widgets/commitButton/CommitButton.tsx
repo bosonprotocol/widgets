@@ -69,7 +69,7 @@ export function CommitButton() {
     return () => {
       resizeObserver?.disconnect();
     };
-  });
+  }, [sendDimensions]);
   const buttonStyleObj = useMemo(() => {
     const buttonStyleValidated = yup
       .object({
