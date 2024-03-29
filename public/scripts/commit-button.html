@@ -25,19 +25,22 @@
       sellerId: "138",
       modalMargin: "2%",
       lookAndFeel: "modal",
+      disabled: false,
       buttonStyle: {
-        width: "100px",
-        height: "200px",
-        border: "1px solid red" // ignored on purpose, we dont allow that
+        minWidth: "100px",
+        minHeight: "200px",
+        border: "1px solid red", // ignored on purpose, we dont allow that
+        shape: "rounded",
+        color: "black"
       },
       onGetDimensions: function (dimensions) {
-        const { boundingClientRect } = dimensions;
+        const { offsetHeight, offsetWidth } = dimensions;
         document.querySelector(
           "#container"
-        ).style.height = `${boundingClientRect.height}px`;
+        ).style.height = `${offsetHeight}px`;
         document.querySelector(
           "#container"
-        ).style.width = `${boundingClientRect.width}px`;
+        ).style.minWidth = `${offsetWidth}px`;
       }
     });
 

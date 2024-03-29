@@ -117,11 +117,11 @@ var CommitButton = zoid.create({
           ...args.dimensions,
           height:
             args.props.buttonStyle && typeof args.props.buttonStyle === "object"
-              ? args.props.buttonStyle.height || "inherit"
+              ? args.props.buttonStyle.minHeight || "inherit"
               : args.dimensions.height
         }
       },
-      { uidStyles: `position: relative;` }
+      { uidStyles: `position: relative;min-height: 100%;` }
     );
   }
 });

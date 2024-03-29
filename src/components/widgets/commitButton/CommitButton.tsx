@@ -1,6 +1,7 @@
 /* eslint-disable no-var */
 
-import { ElementRef, useEffect, useMemo, useRef } from "react";
+import { CommitButtonView } from "@bosonprotocol/react-kit";
+import { ElementRef, useCallback, useEffect, useMemo, useRef } from "react";
 import { createGlobalStyle } from "styled-components";
 import * as yup from "yup";
 export const commitButtonPath = "/commit-button";
@@ -26,11 +27,21 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 const emptyObject = {};
+const yupStringOrNumber = yup
+  .mixed<string | number>()
+  .test(
+    "is-string-or-number",
+    "The field must be either a string or a number",
+    (value) =>
+      value === undefined
+        ? true
+        : typeof value === "string" || typeof value === "number"
+  );
 export function CommitButton() {
-  const ref = useRef<ElementRef<"button">>(null);
+  const ref = useRef<ElementRef<"div">>(null);
   const props = window.xprops ?? emptyObject;
   const { renderToSelector, buttonStyle, ...commitWidgetProps } = props;
-  useEffect(() => {
+  const sendDimensions = useCallback(() => {
     if (
       ref.current &&
       typeof props.onGetDimensions === "function" &&
@@ -46,11 +57,26 @@ export function CommitButton() {
       props.onGetDimensions?.(dimensionProps);
     }
   }, [props]);
+  useEffect(() => {
+    let resizeObserver: ResizeObserver;
+    if (ref.current) {
+      const resizeObserver = new ResizeObserver(() => {
+        sendDimensions();
+      });
+
+      resizeObserver.observe(ref.current);
+    }
+    return () => {
+      resizeObserver?.disconnect();
+    };
+  });
   const buttonStyleObj = useMemo(() => {
     const buttonStyleValidated = yup
       .object({
-        width: yup.string(),
-        height: yup.string()
+        minWidth: yupStringOrNumber,
+        minHeight: yupStringOrNumber,
+        shape: yup.mixed().oneOf(["sharp", "rounded", "pill"]).optional(),
+        color: yup.mixed().oneOf(["green", "black", "white"]).optional()
       })
       .validateSync(buttonStyle);
     if (typeof buttonStyle === "object") {
@@ -61,12 +87,13 @@ export function CommitButton() {
   return (
     <>
       <GlobalStyle />
-      <button
-        style={{
-          width: buttonStyleObj.width,
-          height: buttonStyleObj.height
-        }}
+      <CommitButtonView
+        minWidth={buttonStyleObj.minWidth}
+        minHeight={buttonStyleObj.minHeight}
+        shape={buttonStyleObj.shape}
+        color={buttonStyleObj.color}
         ref={ref}
+        disabled={"disabled" in props && !!props.disabled}
         onClick={() => {
           Modal(commitWidgetProps).renderTo(
             window.parent,
@@ -74,9 +101,7 @@ export function CommitButton() {
             "iframe"
           );
         }}
-      >
-        Commit to Buy
-      </button>
+      />
     </>
   );
 }

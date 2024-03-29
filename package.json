@@ -5,6 +5,7 @@
   "dependencies": {
     "@bosonprotocol/react-kit": "^0.29.0-alpha.12",
     "@krakenjs/zoid": "^10.3.3",
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
