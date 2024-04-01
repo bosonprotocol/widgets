@@ -40,7 +40,90 @@ module.exports = {
       //   new webpack.ProvidePlugin({
       //     process: "process/browser"
       //   })
-    )
+    ),
+    (config) => {
+      if (config.module) {
+        config.module.rules = config.module.rules?.map((rule) => {
+          console.log("rule", rule, "keys", Object.keys(rule));
+          console.log();
+          if (!("test" in rule) && "oneOf" in rule) {
+            const r = {
+              ...rule,
+              oneOf: rule.oneOf.map((innerRule) => {
+                return "test" in innerRule &&
+                  ((typeof innerRule.test === "function" &&
+                    innerRule.test(".svg")) ||
+                    (innerRule.test[0] &&
+                      typeof innerRule.test[0].test === "function" &&
+                      innerRule.test[0].test(".svg")))
+                  ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    { ...innerRule, exclude: /assets.+\.svg$/ }
+                  : innerRule;
+              })
+            };
+            r.oneOf.unshift({
+              test: /\.svg$/,
+              // use: ["@svgr/webpack"]
+              use: [
+                {
+                  loader: "@svgr/webpack",
+                  options: {
+                    svgoConfig: {
+                      plugins: [
+                        {
+                          name: "preset-default",
+                          params: {
+                            overrides: {
+                              // disable plugins
+                              removeViewBox: false
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            });
+            return r;
+          }
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return "test" in rule && rule.test.test(".svg")
+            ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              { ...rule, exclude: /assets.+\.svg$/ }
+            : rule;
+        });
+        // config.module.rules?.unshift({
+        //   test: /\.svg$/,
+        //   // use: ["@svgr/webpack"]
+        //   use: [
+        //     {
+        //       loader: "@svgr/webpack",
+        //       options: {
+        //         svgoConfig: {
+        //           plugins: [
+        //             {
+        //               name: "preset-default",
+        //               params: {
+        //                 overrides: {
+        //                   // disable plugins
+        //                   removeViewBox: false
+        //                 }
+        //               }
+        //             }
+        //           ]
+        //         }
+        //       }
+        //     }
+        //   ]
+        // });
+      }
+      config.plugins = config.plugins?.filter((plugin) => !!plugin);
+      return config;
+    }
   ),
   devServer: overrideDevServer(devServerConfig())
 };

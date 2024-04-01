@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
-import { ReactComponent as BosonLogo } from "../../logo.svg";
+import BosonLogo from "../../logo.svg";
 export const redirectPath = "/";
 
 const widgetsPage = "https://docs.bosonprotocol.io/docs/category/widgets";
@@ -37,6 +38,7 @@ export const RedirectToDocs: React.FC = () => {
         height: "100%"
       }}
     >
+      {/* @ts-ignore */}
       <BosonLogo width="300px" style={{ maxWidth: "100%" }} />
       <Redirecting>Redirecting</Redirecting>
       <p
