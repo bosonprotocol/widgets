@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-var */
 
 import { CommitButtonView } from "@bosonprotocol/react-kit";
@@ -6,7 +7,8 @@ import { createGlobalStyle } from "styled-components";
 import * as yup from "yup";
 export const commitButtonPath = "/commit-button";
 
-declare const Modal: (props: Record<string, unknown>) => any;
+declare const CommitWidgetModal: (props: Record<string, unknown>) => any;
+declare const PurchaseOverviewModal: () => any;
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -95,12 +97,24 @@ export function CommitButton() {
         ref={ref}
         disabled={"disabled" in props && !!props.disabled}
         onClick={() => {
-          Modal(commitWidgetProps).renderTo(
+          CommitWidgetModal(commitWidgetProps).renderTo(
             window.parent,
             renderToSelector || "body",
             "iframe"
           );
         }}
+        {...(props.tagline
+          ? {
+              tagline: true,
+              onTaglineClick: () => {
+                PurchaseOverviewModal().renderTo(
+                  window.parent,
+                  renderToSelector || "body",
+                  "iframe"
+                );
+              }
+            }
+          : { tagline: false })}
       />
     </>
   );

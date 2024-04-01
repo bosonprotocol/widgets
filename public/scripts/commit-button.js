@@ -126,9 +126,16 @@ var CommitButton = zoid.create({
   }
 });
 
-var Modal = zoid.create({
+var CommitWidgetModal = zoid.create({
   tag: "boson-commit-modal",
   url: "http://localhost:3006/#/commit?props=1",
+  dimensions: { width: "100%", height: "100%" },
+  containerTemplate
+});
+
+var PurchaseOverviewModal = zoid.create({
+  tag: "purchase-overview-modal",
+  url: "http://localhost:3006/#/purchase-overview",
   dimensions: { width: "100%", height: "100%" },
   containerTemplate
 });

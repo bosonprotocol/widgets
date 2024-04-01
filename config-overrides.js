@@ -44,8 +44,6 @@ module.exports = {
     (config) => {
       if (config.module) {
         config.module.rules = config.module.rules?.map((rule) => {
-          console.log("rule", rule, "keys", Object.keys(rule));
-          console.log();
           if (!("test" in rule) && "oneOf" in rule) {
             const r = {
               ...rule,
@@ -96,30 +94,6 @@ module.exports = {
               { ...rule, exclude: /assets.+\.svg$/ }
             : rule;
         });
-        // config.module.rules?.unshift({
-        //   test: /\.svg$/,
-        //   // use: ["@svgr/webpack"]
-        //   use: [
-        //     {
-        //       loader: "@svgr/webpack",
-        //       options: {
-        //         svgoConfig: {
-        //           plugins: [
-        //             {
-        //               name: "preset-default",
-        //               params: {
-        //                 overrides: {
-        //                   // disable plugins
-        //                   removeViewBox: false
-        //                 }
-        //               }
-        //             }
-        //           ]
-        //         }
-        //       }
-        //     }
-        //   ]
-        // });
       }
       config.plugins = config.plugins?.filter((plugin) => !!plugin);
       return config;
