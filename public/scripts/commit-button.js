@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
-
+const scriptOrigin = getScriptOrigin();
+// const scriptOrigin = "http://localhost:3006/#";
+function getScriptOrigin() {
+  const scriptElCommitButton = document.querySelector(
+    'script[src$="/commit-button.js"]'
+  );
+  const src = scriptElCommitButton.getAttribute("src");
+  const url = new URL(src);
+  return `${url.origin}/#`;
+}
 const EVENT = {
   RENDER: "zoid-render",
   RENDERED: "zoid-rendered",
@@ -101,19 +110,9 @@ function containerTemplate(
   return div;
 }
 
-function getOriginFromProps({ props }) {
-  return !props.configId || props.configId.startsWith("production")
-    ? "https://widgets.bosonprotocol.io/#"
-    : props.configId.startsWith("staging")
-    ? "https://widgets-staging.on.fleek.co/#"
-    : "https://widgets-test.on.fleek.co/#"; //"http://localhost:3006/#";
-}
-
 var CommitButton = zoid.create({
   tag: "boson-commit-button",
-  url: ({ props }) => {
-    return `${getOriginFromProps({ props })}/commit-button`;
-  },
+  url: `${scriptOrigin}/commit-button`,
   dimensions: { width: "100%", height: "40px" },
   containerTemplate: function (args) {
     return containerTemplate(
@@ -134,18 +133,14 @@ var CommitButton = zoid.create({
 
 var CommitWidgetModal = zoid.create({
   tag: "boson-commit-modal",
-  url: ({ props }) => {
-    return `${getOriginFromProps({ props })}/commit?props=1`;
-  },
+  url: `${scriptOrigin}/commit?props=1`,
   dimensions: { width: "100%", height: "100%" },
   containerTemplate
 });
 
 var PurchaseOverviewModal = zoid.create({
   tag: "purchase-overview-modal",
-  url: ({ props }) => {
-    return `${getOriginFromProps({ props })}/purchase-overview`;
-  },
+  url: `${scriptOrigin}/purchase-overview`,
   dimensions: { width: "100%", height: "100%" },
   containerTemplate
 });
