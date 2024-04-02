@@ -15,13 +15,15 @@ export const PurchaseOverview = () => {
           test: (value) => {
             return value === undefined || typeof value === "function";
           }
-        })
+        }),
+        modalMargin: yup.string().optional()
       })
       .validateSync(props);
   }, [props]);
   return (
     <PurchaseOverviewReactKit
       lookAndFeel="modal"
+      modalMargin={validatedProps.modalMargin}
       hideModal={
         validatedProps.close ||
         (() => console.log("close purchase overview modal"))

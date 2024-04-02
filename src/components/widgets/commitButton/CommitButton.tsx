@@ -8,7 +8,7 @@ import * as yup from "yup";
 export const commitButtonPath = "/commit-button";
 
 declare const CommitWidgetModal: (props: Record<string, unknown>) => any;
-declare const PurchaseOverviewModal: () => any;
+declare const PurchaseOverviewModal: (props: Record<string, unknown>) => any;
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -107,7 +107,9 @@ export function CommitButton() {
           ? {
               tagline: true,
               onTaglineClick: () => {
-                PurchaseOverviewModal().renderTo(
+                PurchaseOverviewModal({
+                  modalMargin: props.modalMargin || "2%"
+                }).renderTo(
                   window.parent,
                   renderToSelector || "body",
                   "iframe"
