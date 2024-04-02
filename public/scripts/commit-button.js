@@ -7,7 +7,7 @@ function getScriptOrigin() {
     'script[src$="/commit-button.js"]'
   );
   const src = scriptElCommitButton.getAttribute("src");
-  if (src.startsWith("../../")) {
+  if (src.startsWith("../../") || src.startsWith("./")) {
     return `${window.location.origin}/#`;
   }
   const url = new URL(src);
