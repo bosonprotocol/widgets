@@ -43,6 +43,7 @@ export function CommitButton() {
   const ref = useRef<ElementRef<"div">>(null);
   const props = window.xprops ?? emptyObject;
   const { renderToSelector, buttonStyle, ...commitWidgetProps } = props;
+  const modalMargin = props.modalMargin || "2%";
   const sendDimensions = useCallback(() => {
     if (
       ref.current &&
@@ -97,7 +98,7 @@ export function CommitButton() {
         ref={ref}
         disabled={"disabled" in props && !!props.disabled}
         onClick={() => {
-          CommitWidgetModal(commitWidgetProps).renderTo(
+          CommitWidgetModal({ ...commitWidgetProps, modalMargin }).renderTo(
             window.parent,
             renderToSelector || "body",
             "iframe"
@@ -108,7 +109,7 @@ export function CommitButton() {
               tagline: true,
               onTaglineClick: () => {
                 PurchaseOverviewModal({
-                  modalMargin: props.modalMargin || "2%"
+                  modalMargin
                 }).renderTo(
                   window.parent,
                   renderToSelector || "body",
