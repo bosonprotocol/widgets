@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<head>
+  <script src="./zoid/zoid.js"></script>
+  <script src="../../scripts/commit-button.js"></script>
+  <style>
+    html,
+    body {
+      min-height: 100vh;
+      overflow-y: hidden;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Commit button example</h3>
+
+  <div id="container"></div>
+
+  <script>
+    const instance = CommitButton({
+      configId: "testing-80001-0",
+      productUuid: "086b32-3fcd-00d1-0624-67513e85415c",
+      sellerId: "138",
+      modalMargin: "2%",
+      lookAndFeel: "modal",
+      disabled: false,
+      tagline: true,
+      buttonStyle: {
+        minWidth: "100px",
+        minHeight: "200px",
+        border: "1px solid red", // ignored on purpose, we dont allow that
+        shape: "rounded",
+        color: "white"
+      },
+      onGetDimensions: function (dimensions) {
+        const { offsetHeight, offsetWidth } = dimensions;
+        document.querySelector(
+          "#container"
+        ).style.height = `${offsetHeight}px`;
+        document.querySelector(
+          "#container"
+        ).style.minWidth = `${offsetWidth}px`;
+      }
+    });
+
+    instance.render("#container");
+  </script>
+</body>

@@ -1,20 +1,33 @@
 import { CommitWidget, ConfigId } from "@bosonprotocol/react-kit";
+import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CSSProperties } from "styled-components";
+import * as yup from "yup";
 
 import { CONFIG, getMetaTxConfig } from "../../../config";
 
 export const commitPath = "/commit";
+
 export function Commit() {
   const [searchParams] = useSearchParams();
-  const configId = searchParams.get("configId") as ConfigId;
+  const withProps = searchParams.get("props");
+  const getProp = useCallback(
+    (key: string) => {
+      if (withProps) {
+        return yup.string().validateSync(window.xprops[key]);
+      }
+      return searchParams.get(key);
+    },
+    [withProps, searchParams]
+  );
+  const configId = getProp("configId") as ConfigId;
   if (!configId) {
     return <p>Missing 'configId' query param</p>;
   }
-  const productUuid = searchParams.get("productUuid");
-  const bundleUuid = searchParams.get("bundleUuid");
-  const offerId = searchParams.get("offerId");
-  const sellerId = searchParams.get("sellerId");
+  const productUuid = getProp("productUuid");
+  const bundleUuid = getProp("bundleUuid");
+  const offerId = getProp("offerId");
+  const sellerId = getProp("sellerId");
   if ((productUuid || bundleUuid) && sellerId && offerId) {
     return (
       <p>
@@ -41,12 +54,10 @@ export function Commit() {
     return <p>Do not specify both 'productUuid' and 'bundleId' query params</p>;
   }
   const lookAndFeel =
-    (searchParams.get("lookAndFeel") as "regular" | "modal") || "regular";
-  const modalMargin = searchParams.get(
-    "modalMargin"
-  ) as CSSProperties["margin"];
-  const account = searchParams.get("account") as string;
-  const withExternalSigner = searchParams.get("withExternalSigner");
+    (getProp("lookAndFeel") as "regular" | "modal") || "regular";
+  const modalMargin = getProp("modalMargin") as CSSProperties["margin"];
+  const account = getProp("account") as string;
+  const withExternalSigner = getProp("withExternalSigner");
 
   return (
     <CommitWidget
@@ -81,6 +92,13 @@ export function Commit() {
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       closeWidgetClick={() => {
+        if (
+          "close" in window.xprops &&
+          typeof window.xprops.close === "function"
+        ) {
+          window.xprops.close();
+        }
+
         try {
           window.parent.postMessage("boson-close-iframe", "*");
         } catch (e) {
