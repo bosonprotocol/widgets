@@ -101,12 +101,18 @@ function containerTemplate(
   return div;
 }
 
+function getOriginFromProps({ props }) {
+  return !props.configId || props.configId.startsWith("production")
+    ? "https://widgets.bosonprotocol.io/#"
+    : props.configId.startsWith("staging")
+    ? "https://widgets-staging.on.fleek.co/#"
+    : "https://widgets-test.on.fleek.co/#"; //"http://localhost:3006/#";
+}
+
 var CommitButton = zoid.create({
   tag: "boson-commit-button",
   url: ({ props }) => {
-    return !props.configId || props.configId.startsWith("production")
-      ? "https://widgets-test.on.fleek.co/#/commit-button"
-      : "http://localhost:3006/#/commit-button";
+    return `${getOriginFromProps({ props })}/commit-button`;
   },
   dimensions: { width: "100%", height: "40px" },
   containerTemplate: function (args) {
@@ -128,14 +134,18 @@ var CommitButton = zoid.create({
 
 var CommitWidgetModal = zoid.create({
   tag: "boson-commit-modal",
-  url: "http://localhost:3006/#/commit?props=1",
+  url: ({ props }) => {
+    return `${getOriginFromProps({ props })}/commit?props=1`;
+  },
   dimensions: { width: "100%", height: "100%" },
   containerTemplate
 });
 
 var PurchaseOverviewModal = zoid.create({
   tag: "purchase-overview-modal",
-  url: "http://localhost:3006/#/purchase-overview",
+  url: ({ props }) => {
+    return `${getOriginFromProps({ props })}/purchase-overview`;
+  },
   dimensions: { width: "100%", height: "100%" },
   containerTemplate
 });
