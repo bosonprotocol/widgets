@@ -104,20 +104,11 @@ export function CommitButton() {
             "iframe"
           );
         }}
-        {...(props.tagline
-          ? {
-              tagline: true,
-              onTaglineClick: () => {
-                PurchaseOverviewModal({
-                  modalMargin
-                }).renderTo(
-                  window.parent,
-                  renderToSelector || "body",
-                  "iframe"
-                );
-              }
-            }
-          : { tagline: false })}
+        onTaglineClick={() => {
+          PurchaseOverviewModal({
+            modalMargin
+          }).renderTo(window.parent, renderToSelector || "body", "iframe");
+        }}
       />
     </>
   );
