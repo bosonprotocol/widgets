@@ -3,31 +3,14 @@
 
 import { CommitButtonView } from "@bosonprotocol/react-kit";
 import { ElementRef, useCallback, useEffect, useMemo, useRef } from "react";
-import { createGlobalStyle } from "styled-components";
 import * as yup from "yup";
+
+import { GlobalStyle } from "../styles";
 export const commitButtonPath = "/commit-button";
 
 declare const CommitWidgetModal: (props: Record<string, unknown>) => any;
 declare const PurchaseOverviewModal: (props: Record<string, unknown>) => any;
 
-const GlobalStyle = createGlobalStyle`
-  html, body, #root {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-
-    font-family: "Plus Jakarta Sans", sans-serif;
-
-    margin: 0;
-    padding: 0;
-    font-style: normal;
-
-    height: unset;
-  }
-  #root{
-    display: flex;
-  }
-`;
 const emptyObject = {};
 const yupStringOrNumber = yup
   .mixed<string | number>()

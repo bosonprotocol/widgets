@@ -4,6 +4,8 @@
 import { PurchaseOverview as PurchaseOverviewReactKit } from "@bosonprotocol/react-kit";
 import { useMemo } from "react";
 import * as yup from "yup";
+
+import { GlobalStyle } from "../styles";
 export const purchaseOverviewPath = "/purchase-overview";
 const emptyObject = {};
 export const PurchaseOverview = () => {
@@ -21,13 +23,16 @@ export const PurchaseOverview = () => {
       .validateSync(props);
   }, [props]);
   return (
-    <PurchaseOverviewReactKit
-      lookAndFeel="modal"
-      modalMargin={validatedProps.modalMargin}
-      hideModal={
-        validatedProps.close ||
-        (() => console.log("close purchase overview modal"))
-      }
-    />
+    <>
+      <GlobalStyle />
+      <PurchaseOverviewReactKit
+        lookAndFeel="modal"
+        modalMargin={validatedProps.modalMargin}
+        hideModal={
+          validatedProps.close ||
+          (() => console.log("close purchase overview modal"))
+        }
+      />
+    </>
   );
 };
