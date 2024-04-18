@@ -3,6 +3,7 @@
 
 import { CommitButtonView } from "@bosonprotocol/react-kit";
 import { ElementRef, useCallback, useEffect, useMemo, useRef } from "react";
+import { useState } from "react";
 import * as yup from "yup";
 
 import { GlobalStyle } from "../styles";
@@ -11,7 +12,6 @@ export const commitButtonPath = "/commit-button";
 declare const CommitWidgetModal: (props: Record<string, unknown>) => any;
 declare const PurchaseOverviewModal: (props: Record<string, unknown>) => any;
 
-const emptyObject = {};
 const yupStringOrNumber = yup
   .mixed<string | number>()
   .test(
@@ -24,8 +24,15 @@ const yupStringOrNumber = yup
   );
 export function CommitButton() {
   const ref = useRef<ElementRef<"div">>(null);
-  const props = window.xprops ?? emptyObject;
+  const [props, setProps] = useState(window.xprops ?? {});
   const { renderToSelector, buttonStyle, ...commitWidgetProps } = props;
+  useEffect(() => {
+    if ("xprops" in window && typeof window.xprops.onProps === "function") {
+      window.xprops.onProps((newProps: typeof props) => {
+        setProps({ ...newProps });
+      });
+    }
+  }, []);
   const modalMargin = props.modalMargin || "2%";
   const sendDimensions = useCallback(() => {
     if (

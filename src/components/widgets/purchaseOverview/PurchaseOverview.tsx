@@ -2,14 +2,20 @@
 /* eslint-disable no-var */
 
 import { PurchaseOverview as PurchaseOverviewReactKit } from "@bosonprotocol/react-kit";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as yup from "yup";
 
 import { GlobalStyle } from "../styles";
 export const purchaseOverviewPath = "/purchase-overview";
-const emptyObject = {};
 export const PurchaseOverview = () => {
-  const props = window.xprops ?? emptyObject;
+  const [props, setProps] = useState(window.xprops ?? {});
+  useEffect(() => {
+    if ("xprops" in window && typeof window.xprops.onProps === "function") {
+      window.xprops.onProps((newProps: typeof props) => {
+        setProps({ ...newProps });
+      });
+    }
+  }, []);
   const validatedProps = useMemo(() => {
     return yup
       .object({
