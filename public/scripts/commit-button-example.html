@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-  <script src="./zoid/zoid.js"></script>
+  <script src="./zoid/zoid.min.js"></script>
   <script src="../../scripts/commit-button.js"></script>
   <style>
     html,
@@ -20,13 +20,14 @@
   <div id="container"></div>
 
   <script>
+    let disabled = false;
     const instance = CommitButton({
       configId: "testing-80002-0",
       productUuid: "086b32-3fcd-00d1-0624-67513e85415c",
       sellerId: "138",
       modalMargin: "2%",
       lookAndFeel: "modal",
-      disabled: false,
+      disabled,
       buttonStyle: {
         minWidth: "100px",
         minHeight: "200px",
@@ -36,9 +37,7 @@
       },
       onGetDimensions: function (dimensions) {
         const { offsetHeight, offsetWidth } = dimensions;
-        document.querySelector(
-          "#container"
-        ).style.height = `${offsetHeight}px`;
+        document.querySelector("#container").style.height = `${offsetHeight}px`;
         document.querySelector(
           "#container"
         ).style.minWidth = `${offsetWidth}px`;
@@ -46,5 +45,10 @@
     });
 
     instance.render("#container");
+    function toggleDisableState() {
+      disabled = !disabled;
+      instance.updateProps({ disabled });
+    }
   </script>
+  <button onclick="toggleDisableState()" style="margin: 20px;">toggle disable state</button>
 </body>
