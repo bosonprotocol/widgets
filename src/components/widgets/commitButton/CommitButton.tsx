@@ -25,7 +25,8 @@ const yupStringOrNumber = yup
 export function CommitButton() {
   const ref = useRef<ElementRef<"div">>(null);
   const [props, setProps] = useState(window.xprops ?? {});
-  const { renderToSelector, buttonStyle, ...commitWidgetProps } = props;
+  const { renderToSelector, buttonStyle, context, ...commitWidgetProps } =
+    props;
   useEffect(() => {
     if ("xprops" in window && typeof window.xprops.onProps === "function") {
       window.xprops.onProps((newProps: typeof props) => {
@@ -77,6 +78,18 @@ export function CommitButton() {
     }
     return {} as typeof buttonStyleValidated;
   }, [buttonStyle]);
+  const validatedContext = useMemo(() => {
+    if (!context) {
+      return "iframe";
+    }
+
+    if (yup.mixed().oneOf(["iframe", "popup"]).isValidSync(context)) {
+      return context;
+    }
+    throw new Error(
+      `"context" must be either "iframe" or "popup", "${context}" given`
+    );
+  }, [context]);
   return (
     <>
       <GlobalStyle />
@@ -91,13 +104,17 @@ export function CommitButton() {
           CommitWidgetModal({ ...commitWidgetProps, modalMargin }).renderTo(
             window.parent,
             renderToSelector || "body",
-            "iframe"
+            validatedContext
           );
         }}
         onTaglineClick={() => {
           PurchaseOverviewModal({
             modalMargin
-          }).renderTo(window.parent, renderToSelector || "body", "iframe");
+          }).renderTo(
+            window.parent,
+            renderToSelector || "body",
+            validatedContext
+          );
         }}
       />
     </>
