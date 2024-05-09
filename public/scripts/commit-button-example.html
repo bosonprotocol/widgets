@@ -21,10 +21,23 @@
 
   <script>
     let disabled = false;
-    const instance = CommitButton({
+    let context = "iframe";
+    const isProd =
+      window.location.href.startsWith("https://widgets.bosonprotocol.io") ||
+      window.location.href.startsWith("https://widgets-production.on.fleek.co");
+    const prodData = {
+      configId: "production-137-0",
+      productUuid: "2540b-1cf7-26e7-ddaf-4de1dcf7ebc",
+      sellerId: "2"
+    };
+    const argsThatDependOnEnv = {
       configId: "testing-80002-0",
       productUuid: "086b32-3fcd-00d1-0624-67513e85415c",
       sellerId: "138",
+      ...(isProd && prodData)
+    };
+    const instance = CommitButton({
+      ...argsThatDependOnEnv,
       context: "iframe",
       modalMargin: "2%",
       lookAndFeel: "modal",
@@ -50,6 +63,15 @@
       disabled = !disabled;
       instance.updateProps({ disabled });
     }
+    function toggleContextState() {
+      context = context === "iframe" ? "popup" : "iframe";
+      instance.updateProps({ context });
+    }
   </script>
-  <button onclick="toggleDisableState()" style="margin: 20px;">toggle disable state</button>
+  <button onclick="toggleDisableState()" style="margin: 20px">
+    toggle disable state
+  </button>
+  <button onclick="toggleContextState()" style="margin: 20px">
+    toggle context state
+  </button>
 </body>
