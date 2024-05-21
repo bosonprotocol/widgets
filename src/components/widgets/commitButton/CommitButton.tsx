@@ -90,6 +90,10 @@ export function CommitButton() {
       `"context" must be either "iframe" or "popup", "${context}" given`
     );
   }, [context]);
+  const renderToValue = renderToSelector || "body";
+  const bodyOverflow = useMemo(() => {
+    return renderToValue === "body" ? "hidden" : undefined;
+  }, [renderToValue]);
   return (
     <>
       <GlobalStyle />
@@ -101,20 +105,29 @@ export function CommitButton() {
         ref={ref}
         disabled={"disabled" in props && !!props.disabled}
         onClick={() => {
-          CommitWidgetModal({ ...commitWidgetProps, modalMargin }).renderTo(
-            window.parent,
-            renderToSelector || "body",
-            validatedContext
-          );
+          CommitWidgetModal({
+            bodyOverflow,
+            ...commitWidgetProps,
+            modalMargin
+          }).renderTo(window.parent, renderToValue, validatedContext);
+          if (
+            typeof props.onClickCommitButton === "function" &&
+            props.onClickCommitButton
+          ) {
+            props.onClickCommitButton();
+          }
         }}
         onTaglineClick={() => {
           PurchaseOverviewModal({
+            bodyOverflow,
             modalMargin
-          }).renderTo(
-            window.parent,
-            renderToSelector || "body",
-            validatedContext
-          );
+          }).renderTo(window.parent, renderToValue, validatedContext);
+          if (
+            typeof props.onClickTagline === "function" &&
+            props.onClickTagline
+          ) {
+            props.onClickTagline();
+          }
         }}
       />
     </>
