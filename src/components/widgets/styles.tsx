@@ -34,20 +34,14 @@ export const GlobalStyle = createGlobalStyle<{
     margin: 0;
     padding: 0;
     font-style: normal;
-
-    height: unset;
   }
-  body{
+  body {
     ${({ $bodyOverflow }) =>
       $bodyOverflow &&
       css`
         overflow: ${$bodyOverflow};
       `}
   }
-  #root{
-    display: flex;
-  }
-
 
   a,
   button,
