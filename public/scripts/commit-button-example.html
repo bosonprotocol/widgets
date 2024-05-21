@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <script src="./zoid/zoid.min.js"></script>
   <script src="../../scripts/commit-button.js"></script>
   <style>
@@ -32,8 +34,8 @@
     };
     const argsThatDependOnEnv = {
       configId: "testing-80002-0",
-      productUuid: "086b32-3fcd-00d1-0624-67513e85415c",
-      sellerId: "138",
+      productUuid: "f4bb0f8-2f2c-d151-2801-0d3c6250461",
+      sellerId: "4",
       ...(isProd && prodData)
     };
     const instance = CommitButton({
@@ -55,6 +57,13 @@
         document.querySelector(
           "#container"
         ).style.minWidth = `${offsetWidth}px`;
+      },
+      onClickCommitButton: function () {
+        document.querySelector("body").style.overflow = "hidden";
+        console.log("you clicked on the commit button!");
+      },
+      onClickTagline: function () {
+        console.log("you clicked on the tagline!");
       }
     });
 

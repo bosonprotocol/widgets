@@ -5,6 +5,7 @@ import { CSSProperties } from "styled-components";
 import * as yup from "yup";
 
 import { CONFIG, getMetaTxConfig } from "../../../config";
+import { GlobalStyle } from "../styles";
 
 export const commitPath = "/commit";
 
@@ -58,53 +59,56 @@ export function Commit() {
   const modalMargin = getProp("modalMargin") as CSSProperties["margin"];
   const account = getProp("account") as string;
   const withExternalSigner = getProp("withExternalSigner");
-
+  const bodyOverflow = getProp("bodyOverflow");
   return (
-    <CommitWidget
-      withExternalSigner={withExternalSigner === "true"}
-      configId={configId}
-      forcedAccount={account}
-      envName={CONFIG.envName}
-      metaTx={getMetaTxConfig(configId)}
-      productUuid={productUuid ?? ""}
-      bundleUuid={bundleUuid ?? ""}
-      sellerId={sellerId ?? ""}
-      offerId={offerId ?? ""}
-      lookAndFeel={lookAndFeel}
-      modalMargin={modalMargin}
-      dateFormat="YYYY/MM/DD"
-      shortDateFormat="MMM DD, YYYY"
-      minimumDisputePeriodInDays={CONFIG.minimumDisputePeriodInDays as number}
-      minimumDisputeResolutionPeriodDays={
-        CONFIG.minimumDisputeResolutionPeriodDays as number
-      }
-      contactSellerForExchangeUrl={CONFIG.contactSellerForExchange as string}
-      buyerSellerAgreementTemplate={
-        CONFIG.buyerSellerAgreementTemplate as string
-      }
-      licenseTemplate={CONFIG.licenseTemplate as string}
-      defaultCurrencyTicker="USD"
-      defaultCurrencySymbol="$"
-      ipfsGateway={CONFIG.ipfsGateway as string}
-      ipfsProjectId={CONFIG.ipfsProjectId}
-      ipfsProjectSecret={CONFIG.ipfsProjectSecret}
-      children={<></>}
-      walletConnectProjectId={CONFIG.walletConnectProjectId as string}
-      fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
-      closeWidgetClick={() => {
-        if (
-          "close" in window.xprops &&
-          typeof window.xprops.close === "function"
-        ) {
-          window.xprops.close();
+    <>
+      <GlobalStyle $bodyOverflow={bodyOverflow} />
+      <CommitWidget
+        withExternalSigner={withExternalSigner === "true"}
+        configId={configId}
+        forcedAccount={account}
+        envName={CONFIG.envName}
+        metaTx={getMetaTxConfig(configId)}
+        productUuid={productUuid ?? ""}
+        bundleUuid={bundleUuid ?? ""}
+        sellerId={sellerId ?? ""}
+        offerId={offerId ?? ""}
+        lookAndFeel={lookAndFeel}
+        modalMargin={modalMargin}
+        dateFormat="YYYY/MM/DD"
+        shortDateFormat="MMM DD, YYYY"
+        minimumDisputePeriodInDays={CONFIG.minimumDisputePeriodInDays as number}
+        minimumDisputeResolutionPeriodDays={
+          CONFIG.minimumDisputeResolutionPeriodDays as number
         }
+        contactSellerForExchangeUrl={CONFIG.contactSellerForExchange as string}
+        buyerSellerAgreementTemplate={
+          CONFIG.buyerSellerAgreementTemplate as string
+        }
+        licenseTemplate={CONFIG.licenseTemplate as string}
+        defaultCurrencyTicker="USD"
+        defaultCurrencySymbol="$"
+        ipfsGateway={CONFIG.ipfsGateway as string}
+        ipfsProjectId={CONFIG.ipfsProjectId}
+        ipfsProjectSecret={CONFIG.ipfsProjectSecret}
+        children={<></>}
+        walletConnectProjectId={CONFIG.walletConnectProjectId as string}
+        fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
+        closeWidgetClick={() => {
+          if (
+            "close" in window.xprops &&
+            typeof window.xprops.close === "function"
+          ) {
+            window.xprops.close();
+          }
 
-        try {
-          window.parent.postMessage("boson-close-iframe", "*");
-        } catch (e) {
-          console.error(`Unable to post message ${e}`);
-        }
-      }}
-    ></CommitWidget>
+          try {
+            window.parent.postMessage("boson-close-iframe", "*");
+          } catch (e) {
+            console.error(`Unable to post message ${e}`);
+          }
+        }}
+      ></CommitWidget>
+    </>
   );
 }

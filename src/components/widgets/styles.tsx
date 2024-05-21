@@ -1,4 +1,8 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, {
+  createGlobalStyle,
+  css,
+  CSSProperties
+} from "styled-components";
 
 export const Pre = styled.pre`
   all: unset;
@@ -17,7 +21,9 @@ export const Widget = styled.div`
   flex-direction: column;
 `;
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{
+  $bodyOverflow?: CSSProperties["overflow"] | null | undefined;
+}>`
   html, body, #root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -28,13 +34,14 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     font-style: normal;
-
-    height: unset;
   }
-  #root{
-    display: flex;
+  body {
+    ${({ $bodyOverflow }) =>
+      $bodyOverflow &&
+      css`
+        overflow: ${$bodyOverflow};
+      `}
   }
-
 
   a,
   button,

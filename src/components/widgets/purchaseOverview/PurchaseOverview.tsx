@@ -30,7 +30,13 @@ export const PurchaseOverview = () => {
   }, [props]);
   return (
     <>
-      <GlobalStyle />
+      <GlobalStyle
+        $bodyOverflow={
+          typeof props.bodyOverflow === "string"
+            ? props.bodyOverflow
+            : undefined
+        }
+      />
       <PurchaseOverviewReactKit
         lookAndFeel="modal"
         modalMargin={validatedProps.modalMargin}
