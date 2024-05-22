@@ -19,31 +19,25 @@ export const PurchaseOverview = () => {
   const validatedProps = useMemo(() => {
     return yup
       .object({
-        close: yup.mixed<() => any>().test({
-          test: (value) => {
-            return value === undefined || typeof value === "function";
-          }
-        }),
-        modalMargin: yup.string().optional()
+        modalMargin: yup.string().optional(),
+        bodyOverflow: yup.string().optional().nullable(true)
       })
       .validateSync(props);
   }, [props]);
   return (
     <>
-      <GlobalStyle
-        $bodyOverflow={
-          typeof props.bodyOverflow === "string"
-            ? props.bodyOverflow
-            : undefined
-        }
-      />
+      <GlobalStyle $bodyOverflow={validatedProps.bodyOverflow} />
       <PurchaseOverviewReactKit
         lookAndFeel="modal"
         modalMargin={validatedProps.modalMargin}
-        hideModal={
-          validatedProps.close ||
-          (() => console.log("close purchase overview modal"))
-        }
+        hideModal={() => {
+          if (
+            "close" in window.xprops &&
+            typeof window.xprops.close === "function"
+          ) {
+            window.xprops.close();
+          }
+        }}
       />
     </>
   );

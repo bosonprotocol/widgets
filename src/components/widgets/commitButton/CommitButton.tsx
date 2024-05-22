@@ -108,6 +108,14 @@ export function CommitButton() {
           CommitWidgetModal({
             bodyOverflow,
             ...commitWidgetProps,
+            onClose: () => {
+              if (
+                typeof props.onCloseCommitButton === "function" &&
+                props.onCloseCommitButton
+              ) {
+                props.onCloseCommitButton();
+              }
+            },
             modalMargin
           }).renderTo(window.parent, renderToValue, validatedContext);
           if (
@@ -120,6 +128,14 @@ export function CommitButton() {
         onTaglineClick={() => {
           PurchaseOverviewModal({
             bodyOverflow,
+            onClose: () => {
+              if (
+                typeof props.onCloseTagline === "function" &&
+                props.onCloseTagline
+              ) {
+                props.onCloseTagline();
+              }
+            },
             modalMargin
           }).renderTo(window.parent, renderToValue, validatedContext);
           if (
