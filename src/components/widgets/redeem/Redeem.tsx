@@ -110,7 +110,8 @@ export function Redeem() {
   const signatures = signaturesStr ? signaturesStr.split(",") : undefined;
 
   const eventTag = searchParams.get("eventTag") as string;
-
+  const lookAndFeel =
+    (searchParams.get("lookAndFeel") as "regular" | "modal") || "regular";
   // In case the deliveryInfo shall be transferred between frontend windows, the targetOrigin
   //  the deliveryInfo message shall be posted to
   //  (see https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#targetorigin)
@@ -127,6 +128,7 @@ export function Redeem() {
       signatures={signatures}
       configId={configId}
       forcedAccount={account}
+      lookAndFeel={lookAndFeel}
       envName={CONFIG.envName}
       metaTx={getMetaTxConfig(configId)}
       dateFormat="YYYY/MM/DD"
