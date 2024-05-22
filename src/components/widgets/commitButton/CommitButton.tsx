@@ -94,12 +94,6 @@ export function CommitButton() {
   const bodyOverflow = useMemo(() => {
     return renderToValue === "body" ? "hidden" : undefined;
   }, [renderToValue]);
-  useEffect(() => {
-    window.xprops.onClose = (...args: any[]) => {
-      console.log({ ...args });
-    };
-  }, []);
-  console.log(window.xprops);
   return (
     <>
       <GlobalStyle />
