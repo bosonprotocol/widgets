@@ -96,6 +96,7 @@ export function Commit() {
         fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
         closeWidgetClick={() => {
           if (
+            window.xprops &&
             "close" in window.xprops &&
             typeof window.xprops.close === "function"
           ) {
