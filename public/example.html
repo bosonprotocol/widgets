@@ -2,14 +2,18 @@
 <html>
   <head>
     <title>Widget Integration Example</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap"
       rel="stylesheet"
     />
-    <script async type="text/javascript" src="./scripts/boson-widgets.js"></script>
+    <script
+      async
+      type="text/javascript"
+      src="./scripts/boson-widgets.js"
+    ></script>
     <style>
       div {
         margin: 1rem;
@@ -32,37 +36,68 @@
           <tr>
             <td>SellerId</td>
             <td>
-              <input type="number" min="1" id="input-commit-seller-id" onchange="updateCommitButton('data-seller-id', this.value)">
+              <input
+                type="number"
+                min="1"
+                id="input-commit-seller-id"
+                onchange="updateCommitButton('data-seller-id', this.value)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-commit-seller-id', '26')" >Example</button>
+              <button onclick="setValue('input-commit-seller-id', '26')">
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>ProductUuid</td>
             <td>
-              <input type="string" id="input-commit-product-uuid" onchange="updateCommitButton('data-product-uuid', this.value)">
+              <input
+                type="string"
+                id="input-commit-product-uuid"
+                onchange="updateCommitButton('data-product-uuid', this.value)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-commit-seller-id', '26'); setValue('input-commit-product-uuid', '2256bad-f146-04bd-2a66-6fda84bbe5a'); setValue('input-commit-bundle-uuid', '')" >Example</button>
+              <button
+                onclick="setValue('input-commit-seller-id', '26'); setValue('input-commit-product-uuid', '2256bad-f146-04bd-2a66-6fda84bbe5a'); setValue('input-commit-bundle-uuid', '')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>BundleUuid</td>
             <td>
-              <input type="string" id="input-commit-bundle-uuid" onchange="updateCommitButton('data-bundle-uuid', this.value)">
+              <input
+                type="string"
+                id="input-commit-bundle-uuid"
+                onchange="updateCommitButton('data-bundle-uuid', this.value)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-commit-seller-id', '138'); setValue('input-commit-bundle-uuid', '4d5262-28cf-d860-06f-6406bd65fa10'); setValue('input-commit-product-uuid', '')" >Example</button>
+              <button
+                onclick="setValue('input-commit-seller-id', '138'); setValue('input-commit-bundle-uuid', '4d5262-28cf-d860-06f-6406bd65fa10'); setValue('input-commit-product-uuid', '')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>LookAndFeel</td>
             <td>
-              <input type="string" id="input-commit-look-and-feel" onchange="updateCommitButton('data-look-and-feel', this.value)">
+              <input
+                type="string"
+                id="input-commit-look-and-feel"
+                onchange="updateCommitButton('data-look-and-feel', this.value)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-commit-look-and-feel', 'regular')" >Example</button>
+              <button
+                onclick="setValue('input-commit-look-and-feel', 'regular')"
+              >
+                Example
+              </button>
             </td>
           </tr>
         </tbody>
@@ -83,43 +118,80 @@
           <tr>
             <td>ExchangeId</td>
             <td>
-              <input type="number" min="1" id="input-redeem-exchange-id" onchange="updateRedeemButton('data-exchange-id', this.value)">
+              <input
+                type="number"
+                min="1"
+                id="input-redeem-exchange-id"
+                onchange="updateRedeemButton('data-exchange-id', this.value)"
+              />
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80')" >Example</button>
+              <button
+                onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>SellerIds</td>
             <td>
-              <input type="string" id="input-redeem-seller-ids" onchange="updateRedeemButton('data-seller-ids', this.value)">
+              <input
+                type="string"
+                id="input-redeem-seller-ids"
+                onchange="updateRedeemButton('data-seller-ids', this.value)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-redeem-seller-ids', '4'); setValue('input-target-origin', window.location.origin); setValue('input-redeem-signatures', '0x3ff5a843bd6207f8888f525a6d148920dc8cb297ed47dda75d7151b15d0b45e9377d658bf8406bda7bb5283adb590fdccc57106a78343d09994bbdf28f32b3c01b')" >Example</button>
+              <button
+                onclick="setValue('input-redeem-seller-ids', '4'); setValue('input-target-origin', window.location.origin); setValue('input-redeem-signatures', '0x3ff5a843bd6207f8888f525a6d148920dc8cb297ed47dda75d7151b15d0b45e9377d658bf8406bda7bb5283adb590fdccc57106a78343d09994bbdf28f32b3c01b')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>Signatures</td>
             <td>
-              <input type="string" id="input-redeem-signatures" onchange="updateRedeemButton('data-signatures', this.value)">
+              <input
+                type="string"
+                id="input-redeem-signatures"
+                onchange="updateRedeemButton('data-signatures', this.value)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-redeem-seller-ids', '4'); setValue('input-target-origin', window.location.origin); setValue('input-redeem-signatures', '0x3ff5a843bd6207f8888f525a6d148920dc8cb297ed47dda75d7151b15d0b45e9377d658bf8406bda7bb5283adb590fdccc57106a78343d09994bbdf28f32b3c01b')" >Example</button>
+              <button
+                onclick="setValue('input-redeem-seller-ids', '4'); setValue('input-target-origin', window.location.origin); setValue('input-redeem-signatures', '0x3ff5a843bd6207f8888f525a6d148920dc8cb297ed47dda75d7151b15d0b45e9377d658bf8406bda7bb5283adb590fdccc57106a78343d09994bbdf28f32b3c01b')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>Show Overview</td>
             <td>
-              <input type="checkbox" id="input-redeem-show-overview" checked onchange="updateRedeemButton('data-show-redemption-overview', this.checked)">
+              <input
+                type="checkbox"
+                id="input-redeem-show-overview"
+                checked
+                onchange="updateRedeemButton('data-show-redemption-overview', this.checked)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-redeem-show-overview', !getValue('input-redeem-show-overview', 'checked'), 'checked')" >Example</button>
+              <button
+                onclick="setValue('input-redeem-show-overview', !getValue('input-redeem-show-overview', 'checked'), 'checked')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>Exchange State</td>
             <td>
-              <select id="select-redeem-exchange-state" onchange="updateRedeemButton('data-exchange-state', this.value)">
+              <select
+                id="select-redeem-exchange-state"
+                onchange="updateRedeemButton('data-exchange-state', this.value)"
+              >
                 <option value="Committed">Committed</option>
                 <option value="Redeemed">Redeemed</option>
                 <option value="Disputed">Disputed</option>
@@ -127,13 +199,20 @@
               </select>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('select-redeem-exchange-state', 'Redeemed')" >Example</button>
+              <button
+                onclick="clearRedeemInputs(); setValue('select-redeem-exchange-state', 'Redeemed')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>Widget Action</td>
             <td>
-              <select id="select-redeem-widget-action" onchange="updateRedeemButton('data-widget-action', this.value)">
+              <select
+                id="select-redeem-widget-action"
+                onchange="updateRedeemButton('data-widget-action', this.value)"
+              >
                 <option value="SELECT_EXCHANGE">SELECT_EXCHANGE</option>
                 <option value="EXCHANGE_DETAILS">EXCHANGE_DETAILS</option>
                 <option value="REDEEM_FORM">REDEEM_FORM</option>
@@ -142,110 +221,211 @@
               </select>
             </td>
             <td>
-              <button onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80'); setValue('select-redeem-widget-action', 'CANCEL_FORM')" >Example</button>
+              <button
+                onclick="clearRedeemInputs(); setValue('input-redeem-exchange-id', '80'); setValue('select-redeem-widget-action', 'CANCEL_FORM')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>Send DeliveryInfo Through XMTP</td>
             <td>
-              <input type="checkbox" id="input-send-delivery-info-XMTP" checked onchange="updateRedeemButton('data-send-delivery-info-XMTP', this.checked)">
+              <input
+                type="checkbox"
+                id="input-send-delivery-info-XMTP"
+                checked
+                onchange="updateRedeemButton('data-send-delivery-info-XMTP', this.checked)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-send-delivery-info-XMTP', !getValue('input-send-delivery-info-XMTP', 'checked'), 'checked')" >Example</button>
+              <button
+                onclick="setValue('input-send-delivery-info-XMTP', !getValue('input-send-delivery-info-XMTP', 'checked'), 'checked')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>DeliveryInfo</td>
             <td>
-              <textarea id="input-delivery-info" onchange="updateRedeemButton('data-delivery-info', encodeURI(this.value))" rows="10" cols="30">
+              <textarea
+                id="input-delivery-info"
+                onchange="updateRedeemButton('data-delivery-info', encodeURI(this.value))"
+                rows="10"
+                cols="30"
+              >
               </textarea>
             </td>
             <td>
-              <button onclick="setValue('input-redeem-show-overview', false, 'checked'); setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-redeem-exchange-id', '133'); setValue('select-redeem-widget-action', 'CONFIRM_REDEEM'); setValue('input-delivery-info', fullDecodeUri('%7B%22name%22:%20%22TOTO%22,%20%22streetNameAndNumber%22:%20%221%20grand%20place%22,%20%22city%22:%20%22LILLE%22,%20%22state%22:%20%22NORD%22,%20%22zip%22:%20%2259000%22,%20%22country%22:%20%22FR%22,%20%22email%22:%20%22toto@mail.com%22,%20%22phone%22:%20%22%2B33123456789%22%7D'))" >Example</button>
+              <button
+                onclick="setValue('input-redeem-show-overview', false, 'checked'); setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-redeem-exchange-id', '133'); setValue('select-redeem-widget-action', 'CONFIRM_REDEEM'); setValue('input-delivery-info', fullDecodeUri('%7B%22name%22:%20%22TOTO%22,%20%22streetNameAndNumber%22:%20%221%20grand%20place%22,%20%22city%22:%20%22LILLE%22,%20%22state%22:%20%22NORD%22,%20%22zip%22:%20%2259000%22,%20%22country%22:%20%22FR%22,%20%22email%22:%20%22toto@mail.com%22,%20%22phone%22:%20%22%2B33123456789%22%7D'))"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>PostDeliveryInfoURL</td>
             <td>
-              <input type="url" id="input-post-delivery-info-url" onchange="updateRedeemButton('data-post-delivery-info-url', encodeURI(this.value))" size="30">
+              <input
+                type="url"
+                id="input-post-delivery-info-url"
+                onchange="updateRedeemButton('data-post-delivery-info-url', encodeURI(this.value))"
+                size="30"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo')" >Example</button>
+              <button
+                onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>PostDeliveryInfoHeader</td>
             <td>
-              <textarea id="input-post-delivery-info-header" onchange="updateRedeemButton('data-post-delivery-info-headers', encodeURI(this.value))" rows="10" cols="30">
+              <textarea
+                id="input-post-delivery-info-header"
+                onchange="updateRedeemButton('data-post-delivery-info-headers', encodeURI(this.value))"
+                rows="10"
+                cols="30"
+              >
               </textarea>
             </td>
             <td>
-              <button onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-post-delivery-info-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+              <button
+                onclick="setValue('input-post-delivery-info-url', 'http://localhost:3666/deliveryInfo'); setValue('input-post-delivery-info-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>TargetOrigin</td>
             <td>
-              <input type="url" id="input-target-origin" onchange="updateRedeemButton('data-target-origin', encodeURI(this.value))" size="30">
+              <input
+                type="url"
+                id="input-target-origin"
+                onchange="updateRedeemButton('data-target-origin', encodeURI(this.value))"
+                size="30"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-target-origin', window.location.origin)" >Example</button>
+              <button
+                onclick="setValue('input-target-origin', window.location.origin)"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>EventTag</td>
             <td>
-              <input type="url" id="input-event-tag" onchange="updateRedeemButton('data-event-tag', encodeURI(this.value))" size="30">
+              <input
+                type="url"
+                id="input-event-tag"
+                onchange="updateRedeemButton('data-event-tag', encodeURI(this.value))"
+                size="30"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-event-tag', 'bosonModal')" >Example</button>
+              <button onclick="setValue('input-event-tag', 'bosonModal')">
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>Should Wait For Response</td>
             <td>
-              <input type="checkbox" id="input-wait-for-response" autocomplete="off" onchange="updateRedeemButton('data-wait-for-response', this.checked)">
+              <input
+                type="checkbox"
+                id="input-wait-for-response"
+                autocomplete="off"
+                onchange="updateRedeemButton('data-wait-for-response', this.checked)"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-wait-for-response', !getValue('input-wait-for-response', 'checked'), 'checked')" >Example</button>
+              <button
+                onclick="setValue('input-wait-for-response', !getValue('input-wait-for-response', 'checked'), 'checked')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>PostRedemptionSubmittedURL</td>
             <td>
-              <input type="url" id="input-post-redemption-submitted-url" onchange="updateRedeemButton('data-post-redemption-submitted-url', encodeURI(this.value))" size="30">
+              <input
+                type="url"
+                id="input-post-redemption-submitted-url"
+                onchange="updateRedeemButton('data-post-redemption-submitted-url', encodeURI(this.value))"
+                size="30"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-post-redemption-submitted-url', 'http://localhost:3666/submitted')" >Example</button>
+              <button
+                onclick="setValue('input-post-redemption-submitted-url', 'http://localhost:3666/submitted')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>PostRedemptionSubmittedHeader</td>
             <td>
-              <textarea id="input-post-redemption-submitted-header" onchange="updateRedeemButton('data-post-redemption-submitted-headers', encodeURI(this.value))" rows="10" cols="30">
+              <textarea
+                id="input-post-redemption-submitted-header"
+                onchange="updateRedeemButton('data-post-redemption-submitted-headers', encodeURI(this.value))"
+                rows="10"
+                cols="30"
+              >
               </textarea>
             </td>
             <td>
-              <button onclick="setValue('input-post-redemption-submitted-url', 'http://localhost:3666/submitted'); setValue('input-post-redemption-submitted-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+              <button
+                onclick="setValue('input-post-redemption-submitted-url', 'http://localhost:3666/submitted'); setValue('input-post-redemption-submitted-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>PostRedemptionConfirmedURL</td>
             <td>
-              <input type="url" id="input-post-redemption-confirmed-url" onchange="updateRedeemButton('data-post-redemption-confirmed-url', encodeURI(this.value))" size="30">
+              <input
+                type="url"
+                id="input-post-redemption-confirmed-url"
+                onchange="updateRedeemButton('data-post-redemption-confirmed-url', encodeURI(this.value))"
+                size="30"
+              />
             </td>
             <td>
-              <button onclick="setValue('input-post-redemption-confirmed-url', 'http://localhost:3666/confirmed')" >Example</button>
+              <button
+                onclick="setValue('input-post-redemption-confirmed-url', 'http://localhost:3666/confirmed')"
+              >
+                Example
+              </button>
             </td>
           </tr>
           <tr>
             <td>PostRedemptionConfirmedHeader</td>
             <td>
-              <textarea id="input-post-redemption-confirmed-header" onchange="updateRedeemButton('data-post-redemption-confirmed-headers', encodeURI(this.value))" rows="10" cols="30">
+              <textarea
+                id="input-post-redemption-confirmed-header"
+                onchange="updateRedeemButton('data-post-redemption-confirmed-headers', encodeURI(this.value))"
+                rows="10"
+                cols="30"
+              >
               </textarea>
             </td>
             <td>
-              <button onclick="setValue('input-post-redemption-confirmed-url', 'http://localhost:3666/confirmed'); setValue('input-post-redemption-confirmed-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))" >Example</button>
+              <button
+                onclick="setValue('input-post-redemption-confirmed-url', 'http://localhost:3666/confirmed'); setValue('input-post-redemption-confirmed-header', fullDecodeUri('%7B%0A%20%20%22authorization%22:%20%22Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9%22,%0A%20%20%22another-header%22:%20%22*****%22%0A%7D'))"
+              >
+                Example
+              </button>
             </td>
           </tr>
         </tbody>
@@ -266,80 +446,112 @@
           <tr>
             <td>SellerId</td>
             <td>
-              <input type="number" min="1" id="input-finance-seller-id" onchange="updateFinanceButton('data-seller-id', this.value)">
+              <input
+                type="number"
+                min="1"
+                id="input-finance-seller-id"
+                onchange="updateFinanceButton('data-seller-id', this.value)"
+              />
             </td>
             <td>
-              <button onclick="clearFinanceInputs(); setValue('input-finance-seller-id', '26')" >Example</button>
+              <button
+                onclick="clearFinanceInputs(); setValue('input-finance-seller-id', '26')"
+              >
+                Example
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
-      <button type="button" id="boson-finance-button" class="bosonButton" disabled>Show Finance</button>
+      <button
+        type="button"
+        id="boson-finance-button"
+        class="bosonButton"
+        disabled
+      >
+        Show Finance
+      </button>
     </section>
     <script>
       const searchParams = new URLSearchParams(window.location.search);
-      const configId = searchParams.get('configId');
-      document.querySelectorAll('button').forEach(($button)=>{
-        $button.setAttribute('data-config-id',configId);
-      })
+      const configId = searchParams.get("configId")
+        ? searchParams.get("configId")
+        : window.location.origin === "https://widgets.bosonprotocol.io"
+        ? "production-137-0"
+        : "testing-80002-0";
+      document.querySelectorAll("button").forEach(($button) => {
+        $button.setAttribute("data-config-id", configId);
+      });
       function updateRedeemButton(attribute, value) {
-        document.getElementById('boson-redeem-button').setAttribute(attribute, value)
+        document
+          .getElementById("boson-redeem-button")
+          .setAttribute(attribute, value);
       }
       function updateCommitButton(attribute, value) {
-        document.getElementById('boson-commit-button').setAttribute(attribute, value)
+        document
+          .getElementById("boson-commit-button")
+          .setAttribute(attribute, value);
       }
       function updateFinanceButton(attribute, value) {
-        document.getElementById('boson-finance-button').setAttribute(attribute, value)
+        document
+          .getElementById("boson-finance-button")
+          .setAttribute(attribute, value);
         if (value) {
-          document.getElementById('boson-finance-button').removeAttribute('disabled')
+          document
+            .getElementById("boson-finance-button")
+            .removeAttribute("disabled");
         } else {
-          document.getElementById('boson-finance-button').setAttribute('disabled', true)
+          document
+            .getElementById("boson-finance-button")
+            .setAttribute("disabled", true);
         }
       }
       function setValue(elementId, value, attribute = "value") {
-        let element = document.getElementById(elementId)
-        element[attribute] = value
-        element.onchange()
+        let element = document.getElementById(elementId);
+        element[attribute] = value;
+        element.onchange();
       }
       function getValue(elementId, attribute = "value") {
-        let element = document.getElementById(elementId)
-        return element[attribute]
+        let element = document.getElementById(elementId);
+        return element[attribute];
       }
       function clearRedeemInputs() {
-        setValue('input-redeem-exchange-id', '')
-        setValue('input-redeem-seller-ids', '')
-        setValue('input-redeem-signatures', '')
-        setValue('select-redeem-widget-action', 'SELECT_EXCHANGE')
-        setValue('input-redeem-show-overview', true, 'checked')
-        setValue('select-redeem-exchange-state', 'Committed')
-        setValue('input-send-delivery-info-XMTP', true, 'checked')
-        setValue('input-target-origin', '')
-        setValue('input-wait-for-response', true, 'checked')
-        setValue('input-post-delivery-info-url', '')
-        setValue('input-post-delivery-info-header', '')
-        setValue('input-post-redemption-submitted-url', '')
-        setValue('input-post-redemption-submitted-header', '')
-        setValue('input-post-redemption-confirmed-url', '')
-        setValue('input-post-redemption-confirmed-header', '')
-        setValue('input-delivery-info', '')
+        setValue("input-redeem-exchange-id", "");
+        setValue("input-redeem-seller-ids", "");
+        setValue("input-redeem-signatures", "");
+        setValue("select-redeem-widget-action", "SELECT_EXCHANGE");
+        setValue("input-redeem-show-overview", true, "checked");
+        setValue("select-redeem-exchange-state", "Committed");
+        setValue("input-send-delivery-info-XMTP", true, "checked");
+        setValue("input-target-origin", "");
+        setValue("input-wait-for-response", true, "checked");
+        setValue("input-post-delivery-info-url", "");
+        setValue("input-post-delivery-info-header", "");
+        setValue("input-post-redemption-submitted-url", "");
+        setValue("input-post-redemption-submitted-header", "");
+        setValue("input-post-redemption-confirmed-url", "");
+        setValue("input-post-redemption-confirmed-header", "");
+        setValue("input-delivery-info", "");
       }
       function clearFinanceInputs() {
-        setValue('input-finance-seller-id', '')
-        updateFinanceButton('disabled', true)
+        setValue("input-finance-seller-id", "");
+        updateFinanceButton("disabled", true);
       }
       function fullDecodeUri(s) {
         const s2 = decodeURI(s);
         if (s2 !== s) {
-          return fullDecodeUri(s2)
+          return fullDecodeUri(s2);
         }
-        return s2
+        return s2;
       }
       window.addEventListener("message", (event) => {
         if (event.data.type === constants.deliveryInfoMessage) {
           console.log(
-            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data)}'`
+            `Received message '${event.data.type}' from '${
+              event.origin
+            }'. Content: '${JSON.stringify(event.data)}'`
           );
-          if (getValue('input-wait-for-response', 'checked')) {
+          if (getValue("input-wait-for-response", "checked")) {
             // wait for a bit and send a response to the iFrame (only relevant when )
             setTimeout(() => {
               const el = getIFrame();
@@ -368,16 +580,19 @@
         }
         if (event.data.type === constants.redemptionSubmittedMessage) {
           console.log(
-            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+            `Received message '${event.data.type}' from '${
+              event.origin
+            }'. Content: '${JSON.stringify(event.data.message)}'`
           );
         }
         if (event.data.type === constants.redemptionConfirmedMessage) {
           console.log(
-            `Received message '${event.data.type}' from '${event.origin}'. Content: '${JSON.stringify(event.data.message)}'`
+            `Received message '${event.data.type}' from '${
+              event.origin
+            }'. Content: '${JSON.stringify(event.data.message)}'`
           );
         }
       });
-
     </script>
   </body>
 </html>

@@ -32,6 +32,7 @@ export const PurchaseOverview = () => {
         modalMargin={validatedProps.modalMargin}
         hideModal={() => {
           if (
+            window.xprops &&
             "close" in window.xprops &&
             typeof window.xprops.close === "function"
           ) {
