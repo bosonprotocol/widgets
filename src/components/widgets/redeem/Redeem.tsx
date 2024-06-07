@@ -119,7 +119,7 @@ export function Redeem() {
 
   return (
     <RedemptionWidget
-      withReduxProvider={false}
+      withReduxProvider={true}
       withCustomReduxContext={false}
       withWeb3React={false}
       withExternalSigner={withExternalSigner === "true"}

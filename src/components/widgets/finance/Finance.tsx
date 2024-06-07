@@ -20,7 +20,7 @@ export function Finance() {
   }
   return (
     <FinanceWidget
-      withReduxProvider={false}
+      withReduxProvider={true}
       withCustomReduxContext={false}
       withWeb3React={false}
       sellerId={sellerId}
