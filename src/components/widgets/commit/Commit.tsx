@@ -64,6 +64,8 @@ export function Commit() {
     <>
       <GlobalStyle $bodyOverflow={bodyOverflow} />
       <CommitWidget
+        withCustomReduxContext={false}
+        withWeb3React={false}
         withExternalSigner={withExternalSigner === "true"}
         configId={configId}
         forcedAccount={account}

@@ -13,7 +13,7 @@ export function RedeemDisplay() {
   const redeemQP = new URLSearchParams(Object.entries(redeemQPobj)).toString();
   const title = "Redeem widget";
   const width = "100%";
-  const height = "400px";
+  const height = "800px";
   const iframeText = `<iframe width="${width}" height="${height}" src="${`/#${redeemPath}?${decodeURIComponent(
     redeemQP
   )}`}" title="${title}" />`;

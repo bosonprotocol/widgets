@@ -9,14 +9,14 @@ import { commitPath } from "./Commit";
 export function CommitDisplay() {
   const commitQPobj = {
     configId: getEnvConfigs(CONFIG.envName)[0].configId,
-    offerId: "100",
+    offerId: "8",
     lookAndFeel: "modal",
     modalMargin: "2%"
   };
   const commitQP = new URLSearchParams(Object.entries(commitQPobj)).toString();
   const title = "Commit widget";
   const width = "100%";
-  const height = "400px";
+  const height = "800px";
   const iframeText = `<iframe width="${width}" height="${height}" src="${`/#${commitPath}?${decodeURIComponent(
     commitQP
   )}`}" title="${title}" />`;
