@@ -20,6 +20,9 @@ export function Finance() {
   }
   return (
     <FinanceWidget
+      withReduxProvider={false}
+      withCustomReduxContext={false}
+      withWeb3React={false}
       sellerId={sellerId}
       withExternalSigner={withExternalSigner === "true"}
       configId={configId}

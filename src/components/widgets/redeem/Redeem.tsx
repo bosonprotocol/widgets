@@ -119,6 +119,9 @@ export function Redeem() {
 
   return (
     <RedemptionWidget
+      withReduxProvider={false}
+      withCustomReduxContext={false}
+      withWeb3React={false}
       withExternalSigner={withExternalSigner === "true"}
       showRedemptionOverview={showRedemptionOverview}
       sendDeliveryInfoThroughXMTP={sendDeliveryInfoThroughXMTP}
