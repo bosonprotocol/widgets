@@ -25,6 +25,26 @@ jobs:
       - run: echo "name=$(git describe --tags)" >> $GITHUB_OUTPUT
         id: name
 
+  call-reusable-workflow-PR:
+    uses: ./.github/workflows/ci_reusable.yaml
+    if: github.event_name == 'pull_request'
+    needs: prejob
+    with:
+      ENV_NAME: "staging"
+      REACT_APP_ENV_NAME: "staging"
+      DEPLOY_TO_FLEEK: false
+      REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
+      REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
+      REACT_APP_META_TX_API_KEY_MAP: ${{ vars.REACT_APP_META_TX_API_KEY_MAP }}
+      REACT_APP_META_TX_API_IDS_MAP: ${{ vars.REACT_APP_META_TX_API_IDS_MAP }}
+    secrets:
+      FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
+      REACT_APP_INFURA_IPFS_PROJECT_ID: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}
+      REACT_APP_INFURA_IPFS_PROJECT_SECRET: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}
+      REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID_STAGING }}
+      REACT_APP_MAGIC_API_KEY: ${{ secrets.REACT_APP_MAGIC_API_KEY_STAGING }}
+      REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY_STAGING }}
+
   call-reusable-workflow-staging:
     uses: ./.github/workflows/ci_reusable.yaml
     if: github.event_name == 'release' && github.event.action == 'created'
