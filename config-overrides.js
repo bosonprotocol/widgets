@@ -18,6 +18,13 @@ const devServerConfig = () => (config) => {
 module.exports = {
   // The Webpack config to use when compiling your react app for development or production.
   webpack: override(
+    (config) => {
+      config.ignoreWarnings = [
+        /Failed to parse source map/,
+        /Critical dependency: Accessing import\.meta directly is unsupported \(only property access or destructuring is supported\)/
+      ];
+      return config;
+    },
     addWebpackResolve({
       fallback: {
         crypto: require.resolve("crypto-browserify"),
