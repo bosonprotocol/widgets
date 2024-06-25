@@ -4,6 +4,7 @@
 import { CommitButtonView } from "@bosonprotocol/react-kit";
 import { ElementRef, useCallback, useEffect, useMemo, useRef } from "react";
 import { useState } from "react";
+import { createGlobalStyle, css, CSSProperties } from "styled-components";
 import * as yup from "yup";
 
 import { GlobalStyle } from "../styles";
@@ -22,11 +23,38 @@ const yupStringOrNumber = yup
         ? true
         : typeof value === "string" || typeof value === "number"
   );
+
+const CommitButtonGlobalStyle = createGlobalStyle<{
+  $alignItems?: CSSProperties["alignItems"];
+  $justifyContent?: CSSProperties["justifyContent"];
+}>`
+    html, body, #root{
+      height: 100%
+    }
+    #root {
+      display: flex;
+      ${({ $justifyContent }) =>
+        $justifyContent &&
+        css`
+          justify-content: ${$justifyContent};
+        `}
+        ${({ $alignItems }) =>
+          $alignItems &&
+          css`
+            align-items: ${$alignItems};
+          `}
+    }
+  `;
 export function CommitButton() {
   const ref = useRef<ElementRef<"div">>(null);
   const [props, setProps] = useState(window.xprops ?? {});
-  const { renderToSelector, buttonStyle, context, ...commitWidgetProps } =
-    props;
+  const {
+    renderToSelector,
+    buttonStyle,
+    containerStyle,
+    context,
+    ...commitWidgetProps
+  } = props;
   useEffect(() => {
     if ("xprops" in window && typeof window.xprops.onProps === "function") {
       window.xprops.onProps((newProps: typeof props) => {
@@ -70,7 +98,8 @@ export function CommitButton() {
         minWidth: yupStringOrNumber,
         minHeight: yupStringOrNumber,
         shape: yup.mixed().oneOf(["sharp", "rounded", "pill"]).optional(),
-        color: yup.mixed().oneOf(["green", "black", "white"]).optional()
+        color: yup.mixed().oneOf(["green", "black", "white"]).optional(),
+        layout: yup.mixed().oneOf(["vertical", "horizontal"]).optional()
       })
       .validateSync(buttonStyle);
     if (typeof buttonStyle === "object") {
@@ -78,6 +107,39 @@ export function CommitButton() {
     }
     return {} as typeof buttonStyleValidated;
   }, [buttonStyle]);
+  const containerStyleObj = useMemo(() => {
+    const containerStyleValidated = yup
+      .object({
+        justifyContent: yup
+          .mixed()
+          .oneOf([
+            "initial",
+            "flex-start",
+            "flex-end",
+            "center",
+            "space-between",
+            "space-around",
+            "space-evenly"
+          ])
+          .optional(),
+        alignItems: yup
+          .mixed()
+          .oneOf([
+            "initial",
+            "flex-start",
+            "flex-end",
+            "center",
+            "baseline",
+            "stretch"
+          ])
+          .optional()
+      })
+      .validateSync(containerStyle);
+    if (typeof containerStyle === "object") {
+      return containerStyleValidated;
+    }
+    return {} as typeof containerStyleValidated;
+  }, [containerStyle]);
   const validatedContext = useMemo(() => {
     if (!context) {
       return "iframe";
@@ -97,11 +159,16 @@ export function CommitButton() {
   return (
     <>
       <GlobalStyle />
+      <CommitButtonGlobalStyle
+        $justifyContent={containerStyleObj.justifyContent}
+        $alignItems={containerStyleObj.alignItems}
+      />
       <CommitButtonView
         minWidth={buttonStyleObj.minWidth}
         minHeight={buttonStyleObj.minHeight}
         shape={buttonStyleObj.shape}
         color={buttonStyleObj.color}
+        layout={buttonStyleObj.layout}
         ref={ref}
         disabled={"disabled" in props && !!props.disabled}
         onClick={() => {

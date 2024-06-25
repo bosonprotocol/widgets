@@ -24,6 +24,7 @@
   <script>
     let disabled = false;
     let context = "iframe";
+    let layout = "horizontal";
     const isProd =
       window.location.href.startsWith("https://widgets.bosonprotocol.io") ||
       window.location.href.startsWith("https://widgets-production.on.fleek.co");
@@ -38,6 +39,17 @@
       sellerId: "4",
       ...(isProd && prodData)
     };
+    const buttonStyle = {
+      minWidth: "100px",
+      minHeight: "200px",
+      shape: "rounded",
+      color: "white",
+      layout
+    };
+    let justifyContent = "flex-start";
+    const containerStyle = {
+      justifyContent
+    };
     const instance = CommitButton({
       ...argsThatDependOnEnv,
       context: "iframe",
@@ -45,12 +57,10 @@
       lookAndFeel: "modal",
       disabled,
       buttonStyle: {
-        minWidth: "100px",
-        minHeight: "200px",
-        border: "1px solid red", // ignored on purpose, we dont allow that
-        shape: "rounded",
-        color: "white"
+        ...buttonStyle,
+        border: "1px solid red" // ignored on purpose, we dont allow that
       },
+      containerStyle,
       onGetDimensions: function (dimensions) {
         const { offsetHeight, offsetWidth } = dimensions;
         document.querySelector("#container").style.height = `${offsetHeight}px`;
@@ -82,11 +92,46 @@
       context = context === "iframe" ? "popup" : "iframe";
       instance.updateProps({ context });
     }
+    function toggleLayoutState() {
+      layout = layout === "vertical" ? "horizontal" : "vertical";
+      instance.updateProps({ buttonStyle: { ...buttonStyle, layout } });
+    }
+    function toggleJustifyContentState() {
+      justifyContent =
+        justifyContent === "flex-start" ? "flex-end" : "flex-start";
+      instance.updateProps({
+        containerStyle: { ...containerStyle, justifyContent }
+      });
+    }
+    function responsiveLayout(...args) {
+      const [resizeObserverEntry] = args;
+      const {
+        borderBoxSize,
+        contentBoxSize,
+        contentRect,
+        devicePixelContentBoxSize,
+        target
+      } = resizeObserverEntry[0];
+      if (contentRect?.width < 400) {
+        layout = "vertical";
+        instance.updateProps({ buttonStyle: { ...buttonStyle, layout } });
+      }
+    }
+
+    new ResizeObserver(responsiveLayout).observe(
+      document.querySelector("#container")
+    );
   </script>
   <button onclick="toggleDisableState()" style="margin: 20px">
     toggle disable state
   </button>
   <button onclick="toggleContextState()" style="margin: 20px">
     toggle context state
+  </button>
+  <button onclick="toggleLayoutState()" style="margin: 20px">
+    toggle layout state
+  </button>
+  <button onclick="toggleJustifyContentState()" style="margin: 20px">
+    toggle justify content state
   </button>
 </body>
