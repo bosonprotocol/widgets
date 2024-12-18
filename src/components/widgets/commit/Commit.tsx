@@ -64,6 +64,8 @@ export function Commit() {
     <>
       <GlobalStyle $bodyOverflow={bodyOverflow} />
       <CommitWidget
+        backendOrigin=""
+        sendDeliveryInfoThroughXMTP={true}
         withCustomReduxContext={false}
         withWeb3React={false}
         withExternalSigner={withExternalSigner === "true"}
@@ -93,7 +95,6 @@ export function Commit() {
         ipfsGateway={CONFIG.ipfsGateway as string}
         ipfsProjectId={CONFIG.ipfsProjectId}
         ipfsProjectSecret={CONFIG.ipfsProjectSecret}
-        children={<></>}
         walletConnectProjectId={CONFIG.walletConnectProjectId as string}
         fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
         closeWidgetClick={() => {

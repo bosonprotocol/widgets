@@ -17,6 +17,7 @@ import {
   purchaseOverviewPath
 } from "./components/widgets/purchaseOverview/PurchaseOverview";
 import { Redeem, redeemPath } from "./components/widgets/redeem/Redeem";
+import { Roblox, robloxPath } from "./components/widgets/roblox/Roblox";
 import { GlobalStyle } from "./globalStyles";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             element={<PurchaseOverview />}
           ></Route>
           <Route path={redeemPath} element={<Redeem />}></Route>
+          <Route path={robloxPath} element={<Roblox />}></Route>
         </Routes>
       </HashRouter>
     </>

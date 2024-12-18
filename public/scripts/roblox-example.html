@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- <script src="./zoid/zoid.min.js"></script> -->
+  <script src="./zoid/zoid.js"></script>
+  <script src="../../scripts/roblox.js"></script>
+  <style>
+    html,
+    body {
+      min-height: 100vh;
+      overflow-y: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      min-height: 100vh;
+    }
+    #settings {
+      border-bottom: 1px solid grey;
+      padding: 1.25rem;
+      resize: vertical;
+      overflow: auto;
+    }
+    .button-container {
+      display: flex;
+      gap: 20px;
+    }
+    .button {
+      width: 198px;
+      height: 55px;
+      border: 2px solid #09182c;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .button:hover {
+      transform: scale(1.05);
+    }
+    .button p {
+      color: #09182c;
+      margin: 0;
+      font-size: 14px;
+      font-weight: normal;
+    }
+    .rounded-rect-1 {
+      border-radius: 4px;
+    }
+    .rounded-rect-2 {
+      border-radius: 8px;
+    }
+    .rounded-rect-3 {
+      border-radius: 18px;
+    }
+    .button {
+      width: 198px;
+      height: 55px;
+      border: 2px solid #09182c;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .button:hover {
+      transform: scale(1.05);
+    }
+    .button p {
+      color: #09182c;
+      margin: 0;
+      font-size: 14px;
+      font-weight: normal;
+    }
+    .rounded-rect-1 {
+      border-radius: 4px;
+    }
+    .rounded-rect-2 {
+      border-radius: 8px;
+    }
+    .rounded-rect-3 {
+      border-radius: 18px;
+    }
+    .button-1 {
+      background-color: #02f3a2;
+    }
+    .button-2 {
+      background-color: white;
+    }
+    .button-3 {
+      background-color: #1e1e1e;
+      color: white;
+    }
+    .button-3 p {
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="settings">
+    <p>roundness</p>
+    <div class="button-container">
+      <div class="button rounded-rect-1" data-key="roundness" data-value="min">
+        <p>min</p>
+      </div>
+      <div class="button rounded-rect-2" data-key="roundness" data-value="mid">
+        <p>mid</p>
+      </div>
+      <div class="button rounded-rect-3" data-key="roundness" data-value="high">
+        <p>high</p>
+      </div>
+    </div>
+    <p>products layout</p>
+    <div class="button-container">
+      <div class="button" data-key="layout" data-value="A">
+        <p>A</p>
+      </div>
+      <div class="button" data-key="layout" data-value="B">
+        <p>B</p>
+      </div>
+    </div>
+    <p>show products pre-login</p>
+    <div class="button-container">
+      <div class="button" data-key="showProductsPrelogin" data-value="no">
+        <p>no</p>
+      </div>
+      <div class="button" data-key="showProductsPrelogin" data-value="yes">
+        <p>yes</p>
+      </div>
+    </div>
+    <p>color</p>
+    <div class="button-container">
+      <div class="button button-1" data-key="color" data-value="green"></div>
+      <div class="button button-2" data-key="color" data-value="white"></div>
+      <div class="button button-3" data-key="color" data-value="black"></div>
+    </div>
+  </div>
+
+  <div id="container"></div>
+
+  <script>
+    const isProd =
+      window.location.href.startsWith("https://widgets.bosonprotocol.io") ||
+      window.location.href.startsWith("https://widgets-production.on.fleek.co");
+    const prodData = {
+      configId: "production-137-0",
+      sellerId: "2"
+    };
+    const argsThatDependOnEnv = {
+      configId: "testing-80002-0",
+      sellerId: "4",
+      ...(isProd && prodData)
+    };
+    const instance = RobloxWidget({
+      ...argsThatDependOnEnv,
+      roundness: "mid",
+      color: "black"
+    });
+
+    instance.render("#container");
+    const settingsDiv = document.querySelector("#settings");
+    const body = document.body;
+    console.log(settingsDiv);
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        instance.resize({
+          height: window.innerHeight - entry.contentRect.height
+        });
+      }
+    });
+    observer.observe(settingsDiv);
+    document.querySelectorAll(".button").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const property = button.getAttribute("data-key");
+        const value = button.getAttribute("data-value");
+        console.log(`Clicked ${button.id} ${property} ${value}`);
+
+        // Optional: Add a click animation
+        button.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          button.style.transform = "scale(1)";
+        }, 100);
+
+        instance.updateProps({
+          [property]: value
+        });
+      });
+    });
+  </script>
+</body>

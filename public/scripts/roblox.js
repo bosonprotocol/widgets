@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
-const scriptOrigin = getScriptOrigin();
+const robloxScriptOrigin = getRobloxScriptOrigin();
 // const scriptOrigin = "http://localhost:3006/#";
-function getScriptOrigin() {
+function getRobloxScriptOrigin() {
   const scriptElCommitButton = document.querySelector(
-    'script[src$="/commit-button.js"]'
+    'script[src$="/roblox.js"]'
   );
   const src = scriptElCommitButton.getAttribute("src");
   if (src.startsWith(".")) {
@@ -13,23 +13,7 @@ function getScriptOrigin() {
   const url = new URL(src);
   return `${url.origin}/#`;
 }
-const EVENT = {
-  RENDER: "zoid-render",
-  RENDERED: "zoid-rendered",
-  PRERENDER: "zoid-prerender",
-  PRERENDERED: "zoid-prerendered",
-  DISPLAY: "zoid-display",
-  ERROR: "zoid-error",
-  CLOSE: "zoid-close",
-  DESTROY: "zoid-destroy",
-  PROPS: "zoid-props",
-  RESIZE: "zoid-resize",
-  FOCUS: "zoid-focus"
-};
-const CLASS = {
-  VISIBLE: "zoid-visible",
-  INVISIBLE: "zoid-invisible"
-};
+
 function destroyElement(element) {
   if (element && element.parentNode) {
     element.parentNode.removeChild(element);
@@ -39,6 +23,23 @@ function containerTemplate(
   { uid, frame, prerenderFrame, doc, props, event, dimensions },
   { uidStyles } = {}
 ) {
+  const EVENT = {
+    RENDER: "zoid-render",
+    RENDERED: "zoid-rendered",
+    PRERENDER: "zoid-prerender",
+    PRERENDERED: "zoid-prerendered",
+    DISPLAY: "zoid-display",
+    ERROR: "zoid-error",
+    CLOSE: "zoid-close",
+    DESTROY: "zoid-destroy",
+    PROPS: "zoid-props",
+    RESIZE: "zoid-resize",
+    FOCUS: "zoid-focus"
+  };
+  const CLASS = {
+    VISIBLE: "zoid-visible",
+    INVISIBLE: "zoid-invisible"
+  };
   const { width, height } = dimensions;
 
   if (!frame || !prerenderFrame) {
@@ -127,10 +128,10 @@ function containerTemplate(
   return div;
 }
 
-var CommitButton = zoid.create({
-  tag: "boson-commit-button",
-  url: `${scriptOrigin}/commit-button`,
-  dimensions: { width: "100%", height: "40px" },
+var RobloxWidget = zoid.create({
+  tag: "boson-roblox-widget",
+  url: `${robloxScriptOrigin}/roblox`,
+  dimensions: { width: "100%", height: "500px" },
   containerTemplate: function (args) {
     return containerTemplate(
       {
@@ -146,11 +147,4 @@ var CommitButton = zoid.create({
       { uidStyles: `position: relative;min-height: 100%;` }
     );
   }
-});
-
-var CommitWidgetModal = zoid.create({
-  tag: "boson-commit-modal",
-  url: `${scriptOrigin}/commit?props=1`,
-  dimensions: { width: "100%", height: "100%" },
-  containerTemplate
 });

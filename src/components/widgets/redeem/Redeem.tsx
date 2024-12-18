@@ -150,7 +150,6 @@ export function Redeem() {
       ipfsGateway={CONFIG.ipfsGateway as string}
       ipfsProjectId={CONFIG.ipfsProjectId}
       ipfsProjectSecret={CONFIG.ipfsProjectSecret}
-      children={<></>}
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       raiseDisputeForExchangeUrl={CONFIG.raiseDisputeForExchange as string}

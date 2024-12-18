@@ -41,7 +41,6 @@ export function Finance() {
       licenseTemplate={CONFIG.licenseTemplate as string}
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
-      children={<></>}
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
     ></FinanceWidget>

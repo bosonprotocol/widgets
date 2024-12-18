@@ -1,7 +1,8 @@
 import styled, {
   createGlobalStyle,
   css,
-  CSSProperties
+  CSSProperties,
+  FlattenSimpleInterpolation
 } from "styled-components";
 
 export const Pre = styled.pre`
@@ -23,7 +24,16 @@ export const Widget = styled.div`
 
 export const GlobalStyle = createGlobalStyle<{
   $bodyOverflow?: CSSProperties["overflow"] | null | undefined;
+  $color?: CSSProperties["color"] | null | undefined;
+  $htmlBodyRootStyle?: FlattenSimpleInterpolation;
 }>`
+html {
+  ${({ $color }) =>
+    $color &&
+    css`
+      color: ${$color};
+    `}
+}
   html, body, #root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -34,6 +44,7 @@ export const GlobalStyle = createGlobalStyle<{
     margin: 0;
     padding: 0;
     font-style: normal;
+    ${({ $htmlBodyRootStyle }) => $htmlBodyRootStyle}
   }
   body {
     ${({ $bodyOverflow }) =>
@@ -62,6 +73,10 @@ export const GlobalStyle = createGlobalStyle<{
 
   input {
     user-select: text;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   * > small {
