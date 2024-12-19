@@ -44,7 +44,7 @@
     ]
   },
   "dependencies": {
-    "@bosonprotocol/react-kit": "^0.34.0",
+    "@bosonprotocol/react-kit": "^0.35.1-alpha.7",
     "@krakenjs/zoid": "^10.3.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -90,6 +90,7 @@
     "path-browserify": "^1.0.1",
     "prettier": "^2.8.8",
     "react-app-rewired": "^2.2.1",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "yup": "^1.5.0"
   }
 }

@@ -20,7 +20,7 @@ export const PurchaseOverview = () => {
     return yup
       .object({
         modalMargin: yup.string().optional(),
-        bodyOverflow: yup.string().optional().nullable(true)
+        bodyOverflow: yup.string().optional().nullable()
       })
       .validateSync(props);
   }, [props]);

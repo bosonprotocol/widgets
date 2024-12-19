@@ -48,7 +48,7 @@ on:
 jobs:
   build-test-deploy:
     name: Build, Test and Deploy the Hosted Widgets
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       REACT_APP_ENV_NAME: ${{ inputs.REACT_APP_ENV_NAME }}
       REACT_APP_RELEASE_TAG: ${{ inputs.REACT_APP_RELEASE_TAG }}
