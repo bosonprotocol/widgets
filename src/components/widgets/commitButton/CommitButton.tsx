@@ -80,26 +80,34 @@ export function CommitButton() {
     }
   }, [props]);
   useEffect(() => {
-    let resizeObserver: ResizeObserver;
     if (ref.current) {
       const resizeObserver = new ResizeObserver(() => {
         sendDimensions();
       });
 
       resizeObserver.observe(ref.current);
+      return () => {
+        resizeObserver?.disconnect();
+      };
     }
-    return () => {
-      resizeObserver?.disconnect();
-    };
   }, [sendDimensions]);
   const buttonStyleObj = useMemo(() => {
     const buttonStyleValidated = yup
       .object({
         minWidth: yupStringOrNumber,
         minHeight: yupStringOrNumber,
-        shape: yup.mixed().oneOf(["sharp", "rounded", "pill"]).optional(),
-        color: yup.mixed().oneOf(["green", "black", "white"]).optional(),
-        layout: yup.mixed().oneOf(["vertical", "horizontal"]).optional()
+        shape: yup
+          .mixed<"sharp" | "rounded" | "pill">()
+          .oneOf(["sharp", "rounded", "pill"])
+          .optional(),
+        color: yup
+          .mixed<"green" | "black" | "white">()
+          .oneOf(["green", "black", "white"])
+          .optional(),
+        layout: yup
+          .mixed<"vertical" | "horizontal">()
+          .oneOf(["vertical", "horizontal"])
+          .optional()
       })
       .validateSync(buttonStyle);
     if (typeof buttonStyle === "object") {
@@ -111,7 +119,15 @@ export function CommitButton() {
     const containerStyleValidated = yup
       .object({
         justifyContent: yup
-          .mixed()
+          .mixed<
+            | "initial"
+            | "flex-start"
+            | "flex-end"
+            | "center"
+            | "space-between"
+            | "space-around"
+            | "space-evenly"
+          >()
           .oneOf([
             "initial",
             "flex-start",
@@ -123,7 +139,14 @@ export function CommitButton() {
           ])
           .optional(),
         alignItems: yup
-          .mixed()
+          .mixed<
+            | "initial"
+            | "flex-start"
+            | "flex-end"
+            | "center"
+            | "baseline"
+            | "stretch"
+          >()
           .oneOf([
             "initial",
             "flex-start",
