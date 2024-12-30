@@ -64,6 +64,7 @@ export function Commit() {
     <>
       <GlobalStyle $bodyOverflow={bodyOverflow} />
       <CommitWidget
+        withGlobalStyle={false}
         backendOrigin=""
         sendDeliveryInfoThroughXMTP={true}
         withCustomReduxContext={false}
