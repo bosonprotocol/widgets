@@ -26,6 +26,9 @@ export const GlobalStyle = createGlobalStyle<{
   $bodyOverflow?: CSSProperties["overflow"] | null | undefined;
   $color?: CSSProperties["color"] | null | undefined;
   $htmlBodyRootStyle?: FlattenSimpleInterpolation;
+  $htmlStyle?: FlattenSimpleInterpolation;
+  $bodyStyle?: FlattenSimpleInterpolation;
+  $rootStyle?: FlattenSimpleInterpolation;
 }>`
 html {
   ${({ $color }) =>
@@ -33,6 +36,7 @@ html {
     css`
       color: ${$color};
     `}
+    ${({ $htmlStyle }) => $htmlStyle}
 }
   html, body, #root {
     -webkit-font-smoothing: antialiased;
@@ -46,12 +50,16 @@ html {
     font-style: normal;
     ${({ $htmlBodyRootStyle }) => $htmlBodyRootStyle}
   }
+  #root{
+    ${({ $rootStyle }) => $rootStyle}
+  }
   body {
     ${({ $bodyOverflow }) =>
       $bodyOverflow &&
       css`
         overflow: ${$bodyOverflow};
       `}
+      ${({ $bodyStyle }) => $bodyStyle}
   }
 
   a,

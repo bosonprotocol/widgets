@@ -28,6 +28,10 @@ export const RedirectToDocs: React.FC = () => {
   useEffect(() => {
     window.location.href = widgetsPage;
   }, []);
+  if (new URLSearchParams(window.location.search).get("close")) {
+    window.close();
+    return null;
+  }
   return (
     <div
       style={{

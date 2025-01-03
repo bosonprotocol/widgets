@@ -1,4 +1,4 @@
-import { RobloxWidget, RobloxWidgetProps } from "@bosonprotocol/react-kit";
+import { RobloxWidget } from "@bosonprotocol/react-kit";
 import { useMemo } from "react";
 import { css } from "styled-components";
 import * as yup from "yup";
@@ -20,10 +20,16 @@ const colorObj = {
   black: "black"
 } as const;
 const colorValues = Object.values(colorObj);
+const showProductsPreloginObj = {
+  true: "true",
+  false: "false"
+} as const;
+const showProductsPreloginValues = Object.values(showProductsPreloginObj);
 
 export function Roblox() {
   const { props } = useProps();
-  const { roundness, color, configProps } = props;
+  console.log("props", props);
+  const { roundness, color, configProps, showProductsPrelogin } = props;
   const validatedRoundness = useMemo(() => {
     const validatedRoundness = yup
       .mixed<(typeof roundnessValues)[number]>()
@@ -42,36 +48,47 @@ export function Roblox() {
       .oneOf(colorValues)
       .validateSync(color);
     if (!validatedColor) {
-      throw new Error(`color should be one of ${JSON.stringify(colorValues)}`);
+      throw new Error(
+        `color should be one of ${JSON.stringify(
+          colorValues
+        )}. Received: ${color}`
+      );
     }
     return validatedColor;
   }, [color]);
-  const productsGridProps = useMemo(() => {
-    return {
-      theme: {
-        commitButton: {
-          color: validatedColor === "green" ? "green" : "white",
-          layout: "horizontal",
-          shape:
-            validatedRoundness === "min"
-              ? "sharp"
-              : validatedRoundness === "mid"
-              ? "rounded"
-              : "pill"
-        }
-      }
-    } satisfies RobloxWidgetProps["productsGridProps"];
-  }, [validatedRoundness, validatedColor]);
+  const validatedShowProductsPrelogin = useMemo(() => {
+    const validatedShowProductsPrelogin = yup
+      .mixed<(typeof showProductsPreloginValues)[number]>()
+      .oneOf(showProductsPreloginValues)
+      .validateSync(showProductsPrelogin);
+    if (!validatedShowProductsPrelogin) {
+      throw new Error(
+        `showProductsPrelogin should be one of ${JSON.stringify(
+          showProductsPreloginValues
+        )}. Received: ${showProductsPrelogin}`
+      );
+    }
+    return validatedShowProductsPrelogin;
+  }, [showProductsPrelogin]);
   return (
     <>
       <GlobalStyle
-        $htmlBodyRootStyle={css`
+        $htmlStyle={css`
+          display: flex;
           height: 100%;
+        `}
+        $bodyStyle={css`
+          display: flex;
+          flex: 1;
+        `}
+        $rootStyle={css`
+          display: flex;
+          flex: 1;
         `}
       />
       <RobloxWidget
-        productsGridProps={productsGridProps}
         configProps={{
+          // ...configProps,
           configId: "testing-80002-0",
           envName: "testing",
           sellerId: "6",
@@ -83,9 +100,15 @@ export function Roblox() {
           ipfsProjectSecret: process.env.STORYBOOK_DATA_IPFS_PROJECT_SECRET,
           sendDeliveryInfoThroughXMTP: true,
           raiseDisputeForExchangeUrl:
-            "https://drcenter-staging.on.fleek.co/#/exchange/{id}/raise-dispute",
-          showProductsPreLogin: true,
-          withGlobalStyle: true
+            "https://drcenter-staging.on-fleek.app/#/exchange/{id}/raise-dispute",
+          showProductsPreLogin: validatedShowProductsPrelogin === "true",
+          roundness: validatedRoundness,
+          theme:
+            validatedColor === "green"
+              ? "light"
+              : validatedColor === "white"
+              ? "blackAndWhite"
+              : "dark"
         }}
         connectProps={{ brand: "GYMSHARK" }}
       />

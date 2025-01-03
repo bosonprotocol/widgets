@@ -126,10 +126,10 @@
     </div>
     <p>show products pre-login</p>
     <div class="button-container">
-      <div class="button" data-key="showProductsPrelogin" data-value="no">
+      <div class="button" data-key="showProductsPrelogin" data-value="false">
         <p>no</p>
       </div>
-      <div class="button" data-key="showProductsPrelogin" data-value="yes">
+      <div class="button" data-key="showProductsPrelogin" data-value="true">
         <p>yes</p>
       </div>
     </div>
@@ -146,7 +146,12 @@
   <script>
     const isProd =
       window.location.href.startsWith("https://widgets.bosonprotocol.io") ||
-      window.location.href.startsWith("https://widgets-production.on.fleek.co");
+      window.location.href.startsWith(
+        "https://widgets-production.on.fleek.co"
+      ) ||
+      window.location.href.startsWith(
+        "https://widgets-production.on-fleek.app"
+      );
     const prodData = {
       configId: "production-137-0",
       sellerId: "2"
@@ -159,7 +164,8 @@
     const instance = RobloxWidget({
       ...argsThatDependOnEnv,
       roundness: "mid",
-      color: "black"
+      color: "black",
+      showProductsPrelogin: "true"
     });
 
     instance.render("#container");
