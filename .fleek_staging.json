@@ -1,14 +1,9 @@
 {
-  "site": {
-    "id": "fd6f14bd-0da9-4c7b-b1f2-56480be80ae8",
-    "team": "3fb24a6e-7168-438e-848a-8b706e8bb76a",
-    "platform": "ipfs",
-    "source": "ipfs",
-    "name": "widgets-staging"
-  },
-  "build": {
-    "baseDir": "",
-    "publicDir": "build",
-    "command": "npm run build"
-  }
+  "sites": [
+    {
+      "slug": "widgets-staging",
+      "distDir": "build",
+      "buildCommand": "npm run build"
+    }
+  ]
 }

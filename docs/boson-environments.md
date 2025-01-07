@@ -45,13 +45,13 @@ The following table recaps all configurations, per environment
 </table>
 <table>
 <tr><th>dApps</th><th></th></tr>
-<tr><td>Marketplace</td><td>https://interface-staging.on.fleek.co</td></tr>
-<tr><td>Dispute Resolution Center</td><td>https://drcenter-staging.on.fleek.co/</td></tr>
+<tr><td>Marketplace</td><td>https://interface-staging.on-fleek.app</td></tr>
+<tr><td>Dispute Resolution Center</td><td>https://drcenter-staging.on-fleek.app/</td></tr>
 </table>
 <table>
 <tr><th>Widgets</th><th></th></tr>
-<tr><td>Redemption</td><td>https://widgets-staging.on.fleek.co/#/redeem</td></tr>
-<tr><td>Finance</td><td>https://widgets-staging.on.fleek.co/#/finance</td></tr></table>
+<tr><td>Redemption</td><td>https://widgets-staging.on-fleek.app/#/redeem</td></tr>
+<tr><td>Finance</td><td>https://widgets-staging.on-fleek.app/#/finance</td></tr></table>
 </td></tr>
 <tr><td>testing</td><td>
 <table>
@@ -61,13 +61,13 @@ The following table recaps all configurations, per environment
 </table>
 <table>
 <tr><th>dApps</th><th></th></tr>
-<tr><td>Marketplace</td><td>https://interface-test.on.fleek.co</td></tr>
-<tr><td>Dispute Resolution Center</td><td>https://drcenter-test.on.fleek.co/</td></tr>
+<tr><td>Marketplace</td><td>https://interface-test.on-fleek.app</td></tr>
+<tr><td>Dispute Resolution Center</td><td>https://drcenter-test.on-fleek.app/</td></tr>
 </table>
 <table>
 <tr><th>Widgets</th><th></th></tr>
-<tr><td>Redemption</td><td>https://widgets-test.on.fleek.co/#/redeem</td></tr>
-<tr><td>Finance</td><td>https://widgets-test.on.fleek.co/#/finance</td></tr></table>
+<tr><td>Redemption</td><td>https://widgets-test.on-fleek.app/#/redeem</td></tr>
+<tr><td>Finance</td><td>https://widgets-test.on-fleek.app/#/finance</td></tr></table>
 </td></tr>
 <tr><td>local</td><td>
 <table>
