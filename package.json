@@ -67,7 +67,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@fleekhq/fleek-cli": "^0.1.8",
+    "@fleek-platform/cli": "^3.8.2",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",

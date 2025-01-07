@@ -37,6 +37,10 @@ on:
         required: true
       REACT_APP_INFURA_KEY:
         required: true
+      FLEEK_TOKEN:
+        required: false
+      FLEEK_PROJECT_ID:
+        required: false
     outputs:
       JOB_LINT:
         value: ${{ jobs.build-test-deploy.outputs.jobLint }}
@@ -60,11 +64,11 @@ jobs:
       REACT_APP_META_TX_API_IDS_MAP: ${{ inputs.REACT_APP_META_TX_API_IDS_MAP }}
       REACT_APP_DEFAULT_DISPUTE_PERIOD_DAYS: "30"
       REACT_APP_DEFAULT_RESOLUTION_PERIOD_DAYS: "15"
-      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_TESTING: "https://interface-test.on.fleek.co/#/chat/{id}"
-      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_STAGING: "https://interface-staging.on.fleek.co/#/chat/{id}"
+      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_TESTING: "https://interface-test.on-fleek.app/#/chat/{id}"
+      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_STAGING: "https://interface-staging.on-fleek.app/#/chat/{id}"
       REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_PRODUCTION: "https://bosonapp.io/#/chat/{id}"
-      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_TESTING: "https://drcenter-test.on.fleek.co/#/exchange/{id}/raise-dispute"
-      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_STAGING: "https://drcenter-staging.on.fleek.co/#/exchange/{id}/raise-dispute"
+      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_TESTING: "https://drcenter-test.on-fleek.app/#/exchange/{id}/raise-dispute"
+      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_STAGING: "https://drcenter-staging.on-fleek.app/#/exchange/{id}/raise-dispute"
       REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_PRODUCTION: "https://disputes.bosonprotocol.io/#/exchange/{id}/raise-dispute"
       REACT_APP_IPFS_GATEWAY: "https://bosonprotocol.infura-ipfs.io/ipfs"
       REACT_APP_BUYER_SELLER_AGREEMENT_TEMPLATE: "ipfs://QmaNj7vGuCEvaM5vyucp5z1S9VprMnZWmVxYGn6FHhgePF"
@@ -83,7 +87,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: "17"
+          node-version: "18"
           registry-url: "https://registry.npmjs.org"
           cache: "npm"
       - name: Cache dependencies
@@ -109,6 +113,7 @@ jobs:
       - name: Deploy via fleek
         if: ${{ inputs.DEPLOY_TO_FLEEK }}
         id: deploy
-        run: npx @fleekhq/fleek-cli site:deploy
+        run: npx @fleek-platform/cli sites deploy --config ./.fleek.json
         env:
-          FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
+          FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
+          FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
