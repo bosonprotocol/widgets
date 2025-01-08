@@ -20,6 +20,11 @@ const roundnessObj = {
   high: "high"
 } as const;
 const roundnessValues = Object.values(roundnessObj);
+const layoutObj = {
+  vertical: "vertical",
+  horizontal: "horizontal"
+} as const;
+const layoutValues = Object.values(layoutObj);
 const colorObj = {
   green: "green",
   white: "white",
@@ -35,6 +40,7 @@ type ConfigProps = Omit<
   RobloxWidgetProps["configProps"],
   | "roundness"
   | "theme"
+  | "layout"
   | "showProductsPreLogin"
   | "backendOrigin"
   | "walletConnectProjectId"
@@ -59,7 +65,8 @@ const getTestThatItsAFunction = (field: string) =>
   ] as const;
 export function Roblox() {
   const { props } = useProps();
-  const { roundness, color, configProps, showProductsPrelogin, step3 } = props;
+  const { roundness, color, configProps, showProductsPrelogin, step3, layout } =
+    props;
   const validatedConfigProps = useMemo(() => {
     const configPropsSchema: yup.ObjectSchema<ConfigProps> = yup.object({
       sellerId: yup.string().required(),
@@ -169,11 +176,27 @@ export function Roblox() {
       .validateSync(roundness);
     if (!validatedRoundness) {
       throw new Error(
-        `roundness should be one of ${JSON.stringify(roundnessValues)}`
+        `roundness should be one of ${JSON.stringify(
+          roundnessValues
+        )}. Received: ${roundness}`
       );
     }
     return validatedRoundness;
   }, [roundness]);
+  const validatedLayout = useMemo(() => {
+    const validatedLayout = yup
+      .mixed<(typeof layoutValues)[number]>()
+      .oneOf(layoutValues)
+      .validateSync(layout);
+    if (!validatedLayout) {
+      throw new Error(
+        `layout should be one of ${JSON.stringify(
+          layoutValues
+        )}. Received: ${layout}`
+      );
+    }
+    return validatedLayout;
+  }, [layout]);
   const validatedColor = useMemo(() => {
     const validatedColor = yup
       .mixed<(typeof colorValues)[number]>()
@@ -247,7 +270,8 @@ export function Roblox() {
               ? "light"
               : validatedColor === "white"
               ? "blackAndWhite"
-              : "dark"
+              : "dark",
+          layout: validatedLayout
         }}
         connectProps={validatedStep3}
       />
