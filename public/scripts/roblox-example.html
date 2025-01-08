@@ -154,24 +154,35 @@
       );
     const prodData = {
       configId: "production-137-0",
+      envName: "production",
       sellerId: "2"
     };
     const argsThatDependOnEnv = {
       configId: "testing-80002-0",
-      sellerId: "4",
+      envName: "testing",
+      sellerId: "6",
       ...(isProd && prodData)
     };
     const instance = RobloxWidget({
-      ...argsThatDependOnEnv,
+      configProps: {
+        ...argsThatDependOnEnv
+      },
       roundness: "mid",
       color: "black",
-      showProductsPrelogin: "true"
+      showProductsPrelogin: "true",
+      step3: {
+        title: "Get access to exclusives!!!!",
+        subtitle: `Now you can purchase GYMSHARK exclusives that are available to you.`,
+        buttonText: "Sign up",
+        callback: async () => {
+          console.log("step3 callback");
+        }
+      }
     });
 
     instance.render("#container");
     const settingsDiv = document.querySelector("#settings");
     const body = document.body;
-    console.log(settingsDiv);
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
         instance.resize({
