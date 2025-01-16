@@ -75,7 +75,7 @@ export function CommitButton() {
   useEffect(() => {
     let resizeObserver: ResizeObserver;
     if (ref.current) {
-      const resizeObserver = new ResizeObserver(() => {
+      resizeObserver = new ResizeObserver(() => {
         sendDimensions();
       });
 
