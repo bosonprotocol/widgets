@@ -106,7 +106,7 @@ export function Commit() {
         postRedemptionConfirmedUrl={postRedemptionConfirmedUrl}
         postRedemptionConfirmedHeaders={postRedemptionConfirmedHeadersDecoded}
         withCustomReduxContext={false}
-        withWeb3React={false}
+        withWeb3React={true}
         withExternalSigner={withExternalSigner === "true"}
         configId={configId}
         forcedAccount={account}
