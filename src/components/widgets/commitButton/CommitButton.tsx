@@ -73,17 +73,16 @@ export function CommitButton() {
     }
   }, [props]);
   useEffect(() => {
-    let resizeObserver: ResizeObserver;
     if (ref.current) {
-      resizeObserver = new ResizeObserver(() => {
+      const resizeObserver = new ResizeObserver(() => {
         sendDimensions();
       });
 
       resizeObserver.observe(ref.current);
+      return () => {
+        resizeObserver?.disconnect();
+      };
     }
-    return () => {
-      resizeObserver?.disconnect();
-    };
   }, [sendDimensions]);
   const buttonStyleObj = useMemo(() => {
     const buttonStyleValidated = yup

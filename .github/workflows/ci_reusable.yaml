@@ -37,6 +37,10 @@ on:
         required: true
       REACT_APP_INFURA_KEY:
         required: true
+      FLEEK_TOKEN:
+        required: false
+      FLEEK_PROJECT_ID:
+        required: false
     outputs:
       JOB_LINT:
         value: ${{ jobs.build-test-deploy.outputs.jobLint }}
@@ -48,7 +52,7 @@ on:
 jobs:
   build-test-deploy:
     name: Build, Test and Deploy the Hosted Widgets
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       REACT_APP_ENV_NAME: ${{ inputs.REACT_APP_ENV_NAME }}
       REACT_APP_RELEASE_TAG: ${{ inputs.REACT_APP_RELEASE_TAG }}
@@ -83,7 +87,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: "17"
+          node-version: "18"
           registry-url: "https://registry.npmjs.org"
           cache: "npm"
       - name: Cache dependencies
@@ -109,6 +113,7 @@ jobs:
       - name: Deploy via fleek
         if: ${{ inputs.DEPLOY_TO_FLEEK }}
         id: deploy
-        run: npx @fleekhq/fleek-cli site:deploy
+        run: npx @fleek-platform/cli sites deploy --config ./.fleek.json
         env:
-          FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
+          FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
+          FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}

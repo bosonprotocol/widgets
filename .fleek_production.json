@@ -1,14 +1,9 @@
 {
-  "site": {
-    "id": "706f8e2a-29fb-4e36-9a16-df7d9ea0a1b0",
-    "team": "3fb24a6e-7168-438e-848a-8b706e8bb76a",
-    "platform": "ipfs",
-    "source": "ipfs",
-    "name": "widgets-production"
-  },
-  "build": {
-    "baseDir": "",
-    "publicDir": "build",
-    "command": "npm run build"
-  }
+  "sites": [
+    {
+      "slug": "widgets-production",
+      "distDir": "build",
+      "buildCommand": "npm run build"
+    }
+  ]
 }
