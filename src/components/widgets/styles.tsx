@@ -50,8 +50,10 @@ html {
     font-style: normal;
     ${({ $htmlBodyRootStyle }) => $htmlBodyRootStyle}
   }
-  #root{
-    ${({ $rootStyle }) => $rootStyle}
+  #root {
+    ${({ $rootStyle }) => {
+      return $rootStyle;
+    }}
   }
   body {
     ${({ $bodyOverflow }) =>

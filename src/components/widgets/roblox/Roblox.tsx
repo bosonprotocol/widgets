@@ -154,6 +154,7 @@ export function Roblox() {
     const step3Schema: yup.ObjectSchema<RobloxWidgetProps["connectProps"]> =
       yup.object({
         step3: yup.object({
+          titleForMobile: yup.string().required(),
           title: yup.string().required(),
           subtitle: yup.string().required(),
           buttonText: yup.string().required(),
@@ -249,6 +250,9 @@ export function Roblox() {
         $rootStyle={css`
           display: flex;
           flex: 1;
+          &:not(:has(.steps-overview.hidden)) {
+            align-items: flex-start;
+          }
         `}
       />
       <RobloxWidget
