@@ -11,7 +11,6 @@ import { GlobalStyle } from "../styles";
 export const commitButtonPath = "/commit-button";
 
 declare const CommitWidgetModal: (props: Record<string, unknown>) => any;
-declare const PurchaseOverviewModal: (props: Record<string, unknown>) => any;
 
 const yupStringOrNumber = yup
   .mixed<string | number>()
@@ -213,26 +212,6 @@ export function CommitButton() {
             props.onClickCommitButton
           ) {
             props.onClickCommitButton();
-          }
-        }}
-        onTaglineClick={() => {
-          PurchaseOverviewModal({
-            bodyOverflow,
-            onClose: () => {
-              if (
-                typeof props.onCloseTagline === "function" &&
-                props.onCloseTagline
-              ) {
-                props.onCloseTagline();
-              }
-            },
-            modalMargin
-          }).renderTo(window.parent, renderToValue, validatedContext);
-          if (
-            typeof props.onClickTagline === "function" &&
-            props.onClickTagline
-          ) {
-            props.onClickTagline();
           }
         }}
       />
