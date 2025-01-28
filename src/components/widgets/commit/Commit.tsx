@@ -5,6 +5,12 @@ import { CSSProperties } from "styled-components";
 import * as yup from "yup";
 
 import { CONFIG, getMetaTxConfig } from "../../../config";
+import {
+  createDeliveryInfoHandler,
+  createRedemptionConfirmedHandler,
+  createRedemptionSubmittedHandler,
+  parseDeliveryInfoData
+} from "../../../utils/redeem";
 import { GlobalStyle } from "../styles";
 
 export const commitPath = "/commit";
@@ -60,12 +66,47 @@ export function Commit() {
   const account = getProp("account") as string;
   const withExternalSigner = getProp("withExternalSigner");
   const bodyOverflow = getProp("bodyOverflow");
+
+  const {
+    deliveryInfoDecoded,
+    sendDeliveryInfoThroughXMTP,
+    shouldWaitForResponse,
+    postDeliveryInfoHeadersDecoded,
+    postDeliveryInfoUrl,
+    postRedemptionConfirmedHeadersDecoded,
+    postRedemptionConfirmedUrl,
+    postRedemptionSubmittedHeadersDecoded,
+    postRedemptionSubmittedUrl,
+    targetOrigin,
+    eventTag
+  } = parseDeliveryInfoData(searchParams);
   return (
     <>
       <GlobalStyle $bodyOverflow={bodyOverflow} />
       <CommitWidget
+        withGlobalStyle={false}
+        roundness="min"
+        sendDeliveryInfoThroughXMTP={sendDeliveryInfoThroughXMTP}
+        deliveryInfoHandler={createDeliveryInfoHandler(
+          targetOrigin,
+          shouldWaitForResponse,
+          eventTag
+        )}
+        redemptionSubmittedHandler={createRedemptionSubmittedHandler(
+          targetOrigin
+        )}
+        redemptionConfirmedHandler={createRedemptionConfirmedHandler(
+          targetOrigin
+        )}
+        deliveryInfo={deliveryInfoDecoded}
+        postDeliveryInfoUrl={postDeliveryInfoUrl}
+        postDeliveryInfoHeaders={postDeliveryInfoHeadersDecoded}
+        postRedemptionSubmittedUrl={postRedemptionSubmittedUrl}
+        postRedemptionSubmittedHeaders={postRedemptionSubmittedHeadersDecoded}
+        postRedemptionConfirmedUrl={postRedemptionConfirmedUrl}
+        postRedemptionConfirmedHeaders={postRedemptionConfirmedHeadersDecoded}
         withCustomReduxContext={false}
-        withWeb3React={false}
+        withWeb3React={true}
         withExternalSigner={withExternalSigner === "true"}
         configId={configId}
         forcedAccount={account}
@@ -93,7 +134,6 @@ export function Commit() {
         ipfsGateway={CONFIG.ipfsGateway as string}
         ipfsProjectId={CONFIG.ipfsProjectId}
         ipfsProjectSecret={CONFIG.ipfsProjectSecret}
-        children={<></>}
         walletConnectProjectId={CONFIG.walletConnectProjectId as string}
         fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
         closeWidgetClick={() => {

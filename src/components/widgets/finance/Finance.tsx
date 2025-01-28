@@ -22,7 +22,7 @@ export function Finance() {
     <FinanceWidget
       withReduxProvider={true}
       withCustomReduxContext={false}
-      withWeb3React={false}
+      withWeb3React={true}
       sellerId={sellerId}
       withExternalSigner={withExternalSigner === "true"}
       configId={configId}
@@ -41,7 +41,6 @@ export function Finance() {
       licenseTemplate={CONFIG.licenseTemplate as string}
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
-      children={<></>}
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
     ></FinanceWidget>
