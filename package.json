@@ -44,7 +44,7 @@
     ]
   },
   "dependencies": {
-    "@bosonprotocol/react-kit": "^0.36.0-alpha.15",
+    "@bosonprotocol/react-kit": "^0.36.0-alpha.16",
     "@krakenjs/zoid": "^10.3.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.16.5",
