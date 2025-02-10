@@ -23,6 +23,7 @@ export function Finance() {
       withReduxProvider={true}
       withCustomReduxContext={false}
       withWeb3React={true}
+      withGlobalStyle={true}
       sellerId={sellerId}
       withExternalSigner={withExternalSigner === "true"}
       configId={configId}
