@@ -3,10 +3,10 @@
 
 import { CommitButtonView } from "@bosonprotocol/react-kit";
 import { ElementRef, useCallback, useEffect, useMemo, useRef } from "react";
-import { useState } from "react";
 import { createGlobalStyle, css, CSSProperties } from "styled-components";
 import * as yup from "yup";
 
+import { useProps } from "../../../hooks/useProps";
 import { GlobalStyle } from "../styles";
 export const commitButtonPath = "/commit-button";
 
@@ -46,7 +46,7 @@ const CommitButtonGlobalStyle = createGlobalStyle<{
   `;
 export function CommitButton() {
   const ref = useRef<ElementRef<"div">>(null);
-  const [props, setProps] = useState(window.xprops ?? {});
+  const { props } = useProps();
   const {
     renderToSelector,
     buttonStyle,
@@ -54,13 +54,7 @@ export function CommitButton() {
     context,
     ...commitWidgetProps
   } = props;
-  useEffect(() => {
-    if ("xprops" in window && typeof window.xprops.onProps === "function") {
-      window.xprops.onProps((newProps: typeof props) => {
-        setProps({ ...newProps });
-      });
-    }
-  }, []);
+
   const modalMargin = props.modalMargin || "2%";
   const sendDimensions = useCallback(() => {
     if (
@@ -167,7 +161,12 @@ export function CommitButton() {
       return "iframe";
     }
 
-    if (yup.mixed().oneOf(["iframe", "popup"]).isValidSync(context)) {
+    if (
+      yup
+        .mixed<"iframe" | "popup">()
+        .oneOf(["iframe", "popup"])
+        .isValidSync(context)
+    ) {
       return context;
     }
     throw new Error(

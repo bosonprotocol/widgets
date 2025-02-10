@@ -13,6 +13,7 @@ import {
 import { Finance, financePath } from "./components/widgets/finance/Finance";
 import { indexPath } from "./components/widgets/path";
 import { Redeem, redeemPath } from "./components/widgets/redeem/Redeem";
+import { Roblox, robloxPath } from "./components/widgets/roblox/Roblox";
 import { GlobalStyle } from "./globalStyles";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path={commitPath} element={<Commit />}></Route>
           <Route path={commitButtonPath} element={<CommitButton />}></Route>
           <Route path={redeemPath} element={<Redeem />}></Route>
+          <Route path={robloxPath} element={<Roblox />}></Route>
         </Routes>
       </HashRouter>
     </>

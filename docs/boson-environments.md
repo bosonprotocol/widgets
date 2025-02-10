@@ -5,15 +5,16 @@
 ## Boson Protocol Environment
 
 Boson Protocol is deployed onto 3 public **environments**, to be used in different contexts, for different reasons and probably by different users:
- - ***testing*** is a development environment, very unstable by nature. Unless you're developing on Boson Protocol Components, you shouldn't use this environment.
- - ***staging*** is a validation environment, on testnet blockchain, specifically designed to test and discover the Boson Protocol Components without being on a real blockchain.
- - ***production*** is the production environment. Everything processed on this environment is **FOR REAL**.
 
-In addition, it's possible to deploy your own environment on your local machine. We call it the ***local*** environment.
+- **_testing_** is a development environment, very unstable by nature. Unless you're developing on Boson Protocol Components, you shouldn't use this environment.
+- **_staging_** is a validation environment, on testnet blockchain, specifically designed to test and discover the Boson Protocol Components without being on a real blockchain.
+- **_production_** is the production environment. Everything processed on this environment is **FOR REAL**.
+
+In addition, it's possible to deploy your own environment on your local machine. We call it the **_local_** environment.
 
 ## Boson Protocol Configurations
 
-Each environment (except ***local***) is currently deployed on several configurations, corresponding to different blockchains.
+Each environment (except **_local_**) is currently deployed on several configurations, corresponding to different blockchains.
 
 The dApps (Marketplace and Dispute Resolution Center) and widgets are able to switch between configurations of the same environment.
 

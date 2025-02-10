@@ -59,12 +59,14 @@
     "react": "^18.2.0",
     "react-codecopy": "^5.0.1",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^5.0.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.9",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.6.0"
   },
   "devDependencies": {
     "@fleek-platform/cli": "^3.8.2",
