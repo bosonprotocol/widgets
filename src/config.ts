@@ -186,7 +186,7 @@ export function getMetaTxConfig(configId: ConfigId): {
       (apiIdsPerConfigId as MetaTxApiIdsLong)[configId] ||
       (apiIdsPerConfigId as MetaTxApiIdsShort)[chainId];
     if (apiIdsObj["apiId"]) {
-      // short format --> build the long format corresmondance
+      // short format --> build the long format correspondence
       const apiIdsShort = apiIdsObj as unknown as MetaTxApiIdsShort[number];
       let tokens = {};
       apiIdsShort.tokens?.map((token) => {
