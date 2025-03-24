@@ -1,4 +1,8 @@
-import { EnvironmentType } from "@bosonprotocol/react-kit";
+import {
+  ConfigId,
+  EnvironmentType,
+  getEnvConfigById
+} from "@bosonprotocol/react-kit";
 import { Buffer } from "buffer";
 
 const envName = process.env.REACT_APP_ENV_NAME as EnvironmentType;
@@ -136,27 +140,68 @@ function getIpfsMetadataStorageHeaders(
   };
 }
 
-export function getMetaTxConfig(configId: string): {
+type ApiId = string;
+type ApiKey = string;
+type TokenName = string;
+type ChainId = number;
+
+type PartialRecord<K extends ConfigId | EnvironmentType, T> = {
+  [P in K]?: T;
+};
+type MetaTxApiKeyLong = PartialRecord<ConfigId, ApiKey>;
+type MetaTxApiKeyShort = PartialRecord<EnvironmentType, ApiKey>;
+
+type MetaTxApiIdsLong = PartialRecord<
+  ConfigId,
+  Record<TokenName | "protocol", ApiId>
+>;
+type MetaTxApiIdsShort = Record<
+  ChainId,
+  { apiId: ApiId; tokens?: Array<TokenName> }
+>;
+
+export function getMetaTxConfig(configId: ConfigId): {
   apiKey: string;
   apiIds: string;
 } {
   let apiKey = "";
   let apiIds = "";
+  const { chainId } = getEnvConfigById(envName, configId);
   try {
     const apiKeysPerConfigId = JSON.parse(
       (CONFIG.metaTxApiKeyMap as string) || "{}"
-    );
-    apiKey = apiKeysPerConfigId[configId];
+    ) as MetaTxApiKeyLong | MetaTxApiKeyShort;
+    apiKey =
+      (apiKeysPerConfigId as MetaTxApiKeyLong)[configId] ||
+      (apiKeysPerConfigId as MetaTxApiKeyShort)[envName] ||
+      "";
   } catch (error) {
     console.error(error);
   }
   try {
     const apiIdsPerConfigId = JSON.parse(
       (CONFIG.metaTxApiIdsMap as string) || "{}"
-    );
-    apiIds = apiIdsPerConfigId[configId];
-    if (typeof apiIds === "object") {
-      apiIds = JSON.stringify(apiIds);
+    ) as MetaTxApiIdsLong | MetaTxApiIdsShort;
+    const apiIdsObj =
+      (apiIdsPerConfigId as MetaTxApiIdsLong)[configId] ||
+      (apiIdsPerConfigId as MetaTxApiIdsShort)[chainId];
+    if (apiIdsObj["apiId"]) {
+      // short format --> build the long format correspondence
+      const apiIdsShort = apiIdsObj as unknown as MetaTxApiIdsShort[number];
+      let tokens = {};
+      apiIdsShort.tokens?.map((token) => {
+        tokens = {
+          ...tokens,
+          [token]: apiIdsShort.apiId
+        };
+      });
+      const longFormat: MetaTxApiIdsLong[ConfigId] = {
+        protocol: apiIdsShort.apiId,
+        ...tokens
+      };
+      apiIds = JSON.stringify(longFormat) || "";
+    } else {
+      apiIds = JSON.stringify(apiIdsObj) || "";
     }
   } catch (error) {
     console.error(error);
