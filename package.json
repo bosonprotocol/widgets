@@ -44,7 +44,7 @@
     ]
   },
   "dependencies": {
-    "@bosonprotocol/react-kit": "^0.39.0-alpha.5",
+    "@bosonprotocol/react-kit": "^0.39.1-alpha.1",
     "@krakenjs/zoid": "^10.3.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -62,7 +62,7 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "stream-browserify": "^3.0.0",
-    "styled-components": "^5.3.9",
+    "styled-components": "6.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -92,5 +92,13 @@
     "react-app-rewired": "^2.2.1",
     "shx": "^0.3.4",
     "yup": "^1.5.0"
+  },
+  "overrides": {
+    "react-phone-number-input": {
+      "libphonenumber-js": "1.11.18"
+    },
+    "crypto-browserify": {
+      "asn1.js": "5.4.1"
+    }
   }
 }
