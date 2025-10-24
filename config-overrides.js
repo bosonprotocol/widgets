@@ -21,7 +21,8 @@ module.exports = {
     (config) => {
       config.ignoreWarnings = [
         /Failed to parse source map/,
-        /Critical dependency: Accessing import\.meta directly is unsupported \(only property access or destructuring is supported\)/
+        /Critical dependency: Accessing import\.meta directly is unsupported \(only property access or destructuring is supported\)/,
+        /Critical dependency: 'import\.meta' cannot be used as a standalone expression\./
       ];
       return config;
     },
@@ -33,7 +34,8 @@ module.exports = {
         constants: require.resolve("constants-browserify"),
         fs: require.resolve("browserify-fs"),
         assert: require.resolve("assert"),
-        buffer: require.resolve("buffer")
+        buffer: require.resolve("buffer"),
+        vm: require.resolve("vm-browserify")
       }
     }),
     // Work around for Buffer is undefined:

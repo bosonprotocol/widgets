@@ -44,7 +44,7 @@
     ]
   },
   "dependencies": {
-    "@bosonprotocol/react-kit": "^0.41.0-alpha.4",
+    "@bosonprotocol/react-kit": "^0.41.0-alpha.5",
     "@krakenjs/zoid": "^10.3.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -63,21 +63,21 @@
     "react-scripts": "5.0.1",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.9",
-    "typescript": "^4.9.5",
+    "typescript": "5.1.6",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "@fleek-platform/cli": "^3.8.2",
     "@types/styled-components": "^5.1.26",
-    "@typescript-eslint/eslint-plugin": "^5.55.0",
-    "@typescript-eslint/parser": "^5.55.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "assert": "^2.0.0",
     "browserify-fs": "^1.0.0",
-    "buffer": "5.7.1",
+    "buffer": "^6.0.3",
     "constants-browserify": "^1.0.0",
     "customize-cra": "^1.0.0",
     "eslint-config-prettier": "^8.7.0",
-    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-prettier": "^4.2.1",
@@ -86,15 +86,19 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
+    "lint-staged": "^13.3.0",
     "path-browserify": "^1.0.1",
     "prettier": "^2.8.8",
     "react-app-rewired": "^2.2.1",
     "shx": "^0.3.4",
+    "vm-browserify": "^1.1.2",
     "yup": "^1.5.0"
   },
   "volta": {
     "node": "22.14.0",
     "npm": "11.2.0"
+  },
+  "overrides": {
+    "typescript": "5.1.6"
   }
 }
