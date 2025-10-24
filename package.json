@@ -86,7 +86,7 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
+    "lint-staged": "^13.3.0",
     "path-browserify": "^1.0.1",
     "prettier": "^2.8.8",
     "react-app-rewired": "^2.2.1",
