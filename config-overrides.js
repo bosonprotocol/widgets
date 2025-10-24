@@ -21,7 +21,8 @@ module.exports = {
     (config) => {
       config.ignoreWarnings = [
         /Failed to parse source map/,
-        /Critical dependency: Accessing import\.meta directly is unsupported \(only property access or destructuring is supported\)/
+        /Critical dependency: Accessing import\.meta directly is unsupported \(only property access or destructuring is supported\)/,
+        /Critical dependency: 'import\.meta' cannot be used as a standalone expression\./
       ];
       return config;
     },
