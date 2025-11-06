@@ -7,7 +7,10 @@ import { Buffer } from "buffer";
 
 const envName = process.env.REACT_APP_ENV_NAME as EnvironmentType;
 
-if (!envName || ["testing", "staging", "production"].indexOf(envName) < 0) {
+if (
+  !envName ||
+  ["local", "testing", "staging", "production"].indexOf(envName) < 0
+) {
   throw `REACT_APP_ENV_NAME env variable is missing or invalid ('${envName}')`;
 }
 
@@ -28,7 +31,7 @@ const envSuffixes: Record<EnvironmentType, string | undefined> = {
   testing: "_TESTING",
   staging: "_STAGING",
   production: "_PRODUCTION",
-  local: undefined
+  local: "_LOCAL"
 };
 
 const EnvVariables: Array<{
