@@ -188,7 +188,7 @@ export function getMetaTxConfig(configId: ConfigId): {
     const apiIdsObj =
       (apiIdsPerConfigId as MetaTxApiIdsLong)[configId] ||
       (apiIdsPerConfigId as MetaTxApiIdsShort)[chainId];
-    if (apiIdsObj["apiId"]) {
+    if (apiIdsObj?.["apiId"]) {
       // short format --> build the long format correspondence
       const apiIdsShort = apiIdsObj as unknown as MetaTxApiIdsShort[number];
       let tokens = {};
@@ -204,7 +204,7 @@ export function getMetaTxConfig(configId: ConfigId): {
       };
       apiIds = JSON.stringify(longFormat) || "";
     } else {
-      apiIds = JSON.stringify(apiIdsObj) || "";
+      apiIds = apiIdsObj ? JSON.stringify(apiIdsObj) : "";
     }
   } catch (error) {
     console.error(error);
