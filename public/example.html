@@ -477,8 +477,8 @@
       const configId = searchParams.get("configId")
         ? searchParams.get("configId")
         : window.location.origin === "https://widgets.bosonprotocol.io"
-        ? "production-137-0"
-        : "testing-80002-0";
+        ? "production-8453-0"
+        : "testing-84532-0";
       document.querySelectorAll("button").forEach(($button) => {
         $button.setAttribute("data-config-id", configId);
       });

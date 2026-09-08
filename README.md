@@ -19,9 +19,9 @@ are not used.
 
 | Env        | Networks          | Cloudflare project      | URL                                       |
 | ---------- | ----------------- | ----------------------- | ----------------------------------------- |
-| testing    | amoy, sepolia     | `boson-widgets-testing` | https://boson-widgets-testing.pages.dev/  |
-| staging    | amoy, sepolia     | `boson-widgets-staging` | https://boson-widgets-staging.pages.dev/  |
-| production | polygon, ethereum | `boson-widgets`         | https://widgets.bosonprotocol.io/         |
+| testing    | base sepolia, sepolia     | `boson-widgets-testing` | https://boson-widgets-testing.pages.dev/  |
+| staging    | base sepolia, sepolia     | `boson-widgets-staging` | https://boson-widgets-staging.pages.dev/  |
+| production | base, ethereum | `boson-widgets`         | https://widgets.bosonprotocol.io/         |
 
 Deployments are triggered as follows:
 

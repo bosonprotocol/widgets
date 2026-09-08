@@ -21,11 +21,11 @@ To integrate the Boson Commit Widget, all a seller needs to do is:
 
  2. The Seller then needs to create a button with the fragment identifier *id="boson-commit"*. When clicked, the commit modal will popup on the Seller's website.
 ``` 
-<button type="button" id="boson-commit" data-config-id="production-137-0" data-seller-id="2" data-product-uuid="2540b-1cf7-26e7-ddaf-4de1dcf7ebc">Show Commit</button>
+<button type="button" id="boson-commit" data-config-id="production-8453-0" data-seller-id="2" data-product-uuid="2540b-1cf7-26e7-ddaf-4de1dcf7ebc">Show Commit</button>
 ```
 
 The button shall be parameterized with the following arguments:
-- ```data-config-id```: specifies the Boson Configuration addressed by the widget (here ***production-137-0*** is the production configuration deployed on the Polygon blockchain). See [Boson Environment](./boson-environments.md) to get more details.
+- ```data-config-id```: specifies the Boson Configuration addressed by the widget (here ***production-8453-0*** is the production configuration deployed on the Base blockchain). See [Boson Environment](./boson-environments.md) to get more details.
 - ```data-seller-id```: specifies the Boson Seller ID that publishes the Product being offered with the plugin
 - ```data-product-uuid```: specifies the ProductUUID of the Product being offered with the plugin
 
@@ -67,7 +67,7 @@ In which case the page:
 - does not need to include any specific line (like the ```<script>``` tag for ```boson-widgets.js```)
 - shall manage itself the logic to show and hide the iFrame, and the parameters to pass to its URL.
 - the expected parameters are:
-- ```configId```: specifies the Boson Configuration addressed by the widget (here ***production-137-0*** is the production configuration deployed on the Polygon blockchain). See [Boson Environment](./boson-environments.md) to get more details.
+- ```configId```: specifies the Boson Configuration addressed by the widget (here ***production-8453-0*** is the production configuration deployed on the Base blockchain). See [Boson Environment](./boson-environments.md) to get more details.
 - ```sellerId```: specifies the Boson Seller ID that publishes the Product being offered with the plugin
 - ```productUuid```: specifies the ProductUUID of the Product being offered with the plugin
 

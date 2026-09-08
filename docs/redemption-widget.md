@@ -27,7 +27,7 @@ To integrate the Boson Redemption Widget, all a seller needs to do is:
 <button type="button" id="boson-redeem" data-config-id="production-137-0">Show Redeem</button>
 ```
 
-The ```data-config-id``` parameter specifies the Boson Configuration addressed by the widget (here ***production-137-0*** is the production configuration deployed on the Polygon blockchain). See [Boson Environment](./boson-environments.md) to get more details.
+The ```data-config-id``` parameter specifies the Boson Configuration addressed by the widget (here ***production-8453-0*** is the production configuration deployed on the Base blockchain). See [Boson Environment](./boson-environments.md) to get more details.
 
 ![Redemption Widget Items View](./assets/redemption-widget/redemption_widget_2.png)
 
