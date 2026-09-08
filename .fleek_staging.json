@@ -1,9 +1,0 @@
-{
-  "sites": [
-    {
-      "slug": "widgets-staging",
-      "distDir": "build",
-      "buildCommand": "npm run build"
-    }
-  ]
-}
