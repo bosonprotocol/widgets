@@ -1,0 +1,53 @@
+name: Deploy PR preview
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy:
+    # This is also the security boundary for the secrets below: a fork PR never reaches this
+    # job, so only code from a branch in this repository is ever built with the Cloudflare
+    # token on the runner. Fork PRs cannot read environment secrets anyway, so they would fail
+    # the required-configuration check rather than deploy.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    uses: ./.github/workflows/deploy_reusable.yaml
+    with:
+      environment: testing
+      # Anything other than the project's production branch makes this a Preview deployment,
+      # published at https://pr-<n>.<project>.pages.dev.
+      cf_branch: pr-${{ github.event.number }}
+      is_preview: true
+    # `inherit`, not an explicit allow-list: the REACT_APP_* values are scoped to the `testing`
+    # GitHub Environment and are resolved by the called job's `environment:`. Naming them here
+    # would pass this workflow's own repository-scope values instead, which for an
+    # environment-scoped secret is the empty string - a green deploy of a bundle with no Magic
+    # key and no WalletConnect id.
+    secrets: inherit
+
+  comment:
+    needs: deploy
+    # deployment_url comes from the deploy job's output. It should always be set, but if it
+    # ever is not, post nothing rather than a comment whose links are bare relative paths.
+    if: ${{ needs.deploy.outputs.deployment_url != '' }}
+    runs-on: ubuntu-22.04
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Comment preview URL
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: cf-preview
+          message: |
+            ### Preview deployment
+
+            | Widget | URL |
+            | ---- | --- |
+            | Dev playground | ${{ needs.deploy.outputs.deployment_url }}/#/dev |
+            | Redemption | ${{ needs.deploy.outputs.deployment_url }}/#/redeem |
+            | Finance | ${{ needs.deploy.outputs.deployment_url }}/#/finance |
+            | Embedding example | ${{ needs.deploy.outputs.deployment_url }}/example.html |
+
+            Built from ${{ github.event.pull_request.head.sha }} against the `testing` environment.

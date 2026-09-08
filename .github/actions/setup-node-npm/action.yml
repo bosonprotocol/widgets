@@ -1,0 +1,17 @@
+name: "Setup Node and npm"
+description: >-
+  Installs Node at the version in .nvmrc with the npm cache restored. Requires the repository
+  to be checked out. Note that the `npm ci` performed by callers runs this package's
+  postinstall (`copy-zoid`), which generates the git-ignored public/scripts/zoid directory
+  the build needs - so install must always precede build.
+
+runs:
+  using: composite
+  steps:
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ".nvmrc"
+        registry-url: "https://registry.npmjs.org"
+        cache: "npm"
+        cache-dependency-path: "./package-lock.json"

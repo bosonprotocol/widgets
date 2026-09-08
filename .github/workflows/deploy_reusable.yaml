@@ -1,0 +1,296 @@
+name: Build and deploy to Cloudflare Pages - Reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "GitHub Environment supplying the scoped vars/secrets (testing|staging|production)"
+        required: true
+        type: string
+      ref:
+        description: "Git ref to build. Leave empty to use the ref that triggered the run."
+        required: false
+        type: string
+        default: ""
+      cf_branch:
+        description: "Cloudflare deployment branch label. Must equal the project's production branch to publish a Production deployment."
+        required: false
+        type: string
+        default: "main"
+      release_tag:
+        description: "Release tag stamped into the bundle and onto the Cloudflare deployment."
+        required: false
+        type: string
+        default: ""
+      is_preview:
+        description: "Preview build: a superseded run may be cancelled mid-flight."
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      deployment_url:
+        description: "URL of the deployment."
+        value: ${{ jobs.build-deploy.outputs.deployment_url }}
+
+jobs:
+  build-deploy:
+    name: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+    outputs:
+      deployment_url: ${{ steps.deploy.outputs.deployment-url }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}-${{ inputs.cf_branch }}
+      # Supersede stale preview builds, but never kill an environment deploy mid-upload.
+      cancel-in-progress: ${{ inputs.is_preview }}
+    env:
+      # The GitHub Environment name and the value src/config.ts expects are the same three
+      # strings, so there is nothing to configure here.
+      REACT_APP_ENV_NAME: ${{ inputs.environment }}
+
+      # Committed, non-secret build configuration. These are deliberately kept in the
+      # workflow rather than in GitHub variables: here they are diffable and reviewed with
+      # the code that consumes them.
+      REACT_APP_DEFAULT_DISPUTE_PERIOD_DAYS: "30"
+      REACT_APP_DEFAULT_RESOLUTION_PERIOD_DAYS: "15"
+      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_TESTING: "https://interface-a9d.pages.dev/#/chat/{id}"
+      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_STAGING: "https://boson-dapp-staging.pages.dev/#/chat/{id}"
+      REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_PRODUCTION: "https://bosonapp.io/#/chat/{id}"
+      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_TESTING: "https://boson-dr-center-testing.pages.dev/#/exchange/{id}/raise-dispute"
+      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_STAGING: "https://boson-dr-center-staging.pages.dev/#/exchange/{id}/raise-dispute"
+      REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_PRODUCTION: "https://disputes.bosonprotocol.io/#/exchange/{id}/raise-dispute"
+      REACT_APP_BUYER_SELLER_AGREEMENT_TEMPLATE: "ipfs://QmaNj7vGuCEvaM5vyucp5z1S9VprMnZWmVxYGn6FHhgePF"
+      REACT_APP_RNFT_LICENSE_TEMPLATE: "ipfs://QmdN6tCBkiGiCyr7xEfsEysoYrdkacdU3P2mEdVC5y4nF2"
+      REACT_APP_FAIR_EXCHANGE_POLICY_RULES: "ipfs://QmbVmAspK2wi6Xrm6yB75TLqgfv9PAVv3kWxdsyQpEm79D"
+
+      # Repository-scoped: both maps already hold every environment's entries in one JSON,
+      # keyed <env>-<chainId>-<version>, so there is nothing to scope per environment.
+      REACT_APP_META_TX_API_KEY_MAP: ${{ vars.REACT_APP_META_TX_API_KEY_MAP }}
+      REACT_APP_META_TX_API_IDS_MAP: ${{ vars.REACT_APP_META_TX_API_IDS_MAP }}
+      REACT_APP_IPFS_GATEWAY: ${{ vars.REACT_APP_IPFS_GATEWAY }}
+
+      # Repository-scoped secrets, shared by every environment.
+      REACT_APP_IPFS_JWT: ${{ secrets.REACT_APP_IPFS_JWT }}
+
+      # Environment-scoped secrets. Identical names across environments: GitHub resolves the
+      # environment's value and falls back to the repository-level one when unset, which is
+      # what removes the old _STAGING/_PRODUCTION name suffixes.
+      #
+      # REACT_APP_MAGIC_API_KEY and REACT_APP_INFURA_KEY are read by @bosonprotocol/react-kit
+      # rather than by src/, but CRA's DefinePlugin substitutes process.env across every
+      # webpack-parsed module including node_modules, so they are inlined at this build.
+      REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID }}
+      REACT_APP_MAGIC_API_KEY: ${{ secrets.REACT_APP_MAGIC_API_KEY }}
+      REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Empty ref means "the ref that triggered this run": the pushed commit, or the PR
+          # merge commit. Staging/production pass an explicit tag instead.
+          ref: ${{ inputs.ref }}
+          # Full history so `git describe --tags` can name untagged testing builds.
+          fetch-depth: 0
+
+      # Resolved from the checked-out tree, not from the ref this workflow came from, so a
+      # tag cut before this action existed cannot be deployed by re-running the workflow.
+      # Roll back from the Cloudflare dashboard instead, which redeploys a build that has
+      # already been uploaded.
+      - uses: ./.github/actions/setup-node-npm
+
+      - name: Resolve deployment identity
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          INPUT_RELEASE_TAG: ${{ inputs.release_tag }}
+          CF_BRANCH: ${{ inputs.cf_branch }}
+          CF_PROJECT_INPUT: ${{ vars.CF_PROJECT }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$CF_PROJECT_INPUT" ]; then
+            echo "::error::CF_PROJECT is not set on the '${ENVIRONMENT}' environment." \
+                 "Set it to the exact Cloudflare project name from 'wrangler pages project list'."
+            exit 1
+          fi
+
+          # RELEASE_TAG names the release a build belongs to; RELEASE_NAME names the build
+          # itself. Keep them distinct: a tag that moved with every commit would be a poor
+          # deployment label, and RELEASE_NAME is what shows up in the Cloudflare deployment
+          # list as the commit message.
+          if [ -n "$INPUT_RELEASE_TAG" ]; then
+            release_tag="$INPUT_RELEASE_TAG"
+            release_name="$INPUT_RELEASE_TAG"
+          else
+            release_tag="$(git describe --tags --abbrev=0 2>/dev/null || git rev-parse --short HEAD)"
+            release_name="$(git describe --tags --always)"
+          fi
+
+          # The commit that was actually built. github.sha is the ref that triggered the run,
+          # which for a tag dispatch is the tip of the branch the workflow was launched from -
+          # not the tag being deployed.
+          commit_sha="${PR_HEAD_SHA:-$(git rev-parse HEAD)}"
+
+          # These get spliced into the wrangler command line below, which is split into
+          # arguments before wrangler sees it. A space, quote or shell metacharacter would
+          # silently change what runs, and the release tag is free-form text typed into a
+          # workflow_dispatch form.
+          require_safe() {
+            case "$2" in
+              "" | *[!A-Za-z0-9._/+-]*)
+                echo "::error::$1 is '$2'; it must be non-empty and use only A-Z a-z 0-9 . _ / + -"
+                exit 1
+                ;;
+            esac
+          }
+          require_safe "Cloudflare project name" "$CF_PROJECT_INPUT"
+          require_safe "Cloudflare branch" "$CF_BRANCH"
+          require_safe "Release name" "$release_name"
+
+          {
+            echo "CF_PROJECT=$CF_PROJECT_INPUT"
+            echo "COMMIT_SHA=$commit_sha"
+            echo "RELEASE_NAME=$release_name"
+            echo "REACT_APP_RELEASE_TAG=$release_tag"
+            echo "REACT_APP_RELEASE_NAME=$release_name"
+          } >> "$GITHUB_ENV"
+
+      - name: Check the build configuration is complete
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          # `npm run build` only compiles src/config.ts, it never executes it - so a missing
+          # value is not a build failure. Every REACT_APP_* is inlined at build time, an unset
+          # one becomes an empty string, and src/config.ts then throws at module load *in the
+          # browser*: the deploy is green and the page is blank. This step is the only thing
+          # between a missing secret and a dead deployment.
+          #
+          # The list is not a copy of any single source - it is what a *deployment* cannot
+          # work without, which is four different things:
+          #
+          #   1. REACT_APP_ENV_NAME and the non-optional entries of the EnvVariables array in
+          #      src/config.ts. These throw at module load, so an empty one is a blank page.
+          #   2. The two REACT_APP_META_TX_* maps. src/config.ts marks them `optional: true`,
+          #      so they do not throw - getMetaTxConfig() just returns empty strings and
+          #      gasless transactions are silently dead. Required here because shipping a
+          #      deployment without them is not an outcome anyone wants by default.
+          #   3. REACT_APP_MAGIC_API_KEY and REACT_APP_INFURA_KEY. These appear nowhere in
+          #      src/; @bosonprotocol/react-kit reads them and CRA's DefinePlugin inlines
+          #      them at this build. Empty means email login and RPC access are dead, again
+          #      without anything throwing.
+          #   4. CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, which are not app config at
+          #      all - checked here so a missing credential fails the run in seconds instead
+          #      of after a full build.
+          #
+          # So: adding a non-optional entry to EnvVariables means adding it here, but the
+          # reverse does not hold, and category 2-4 entries have to be judged on whether the
+          # deployed app is usable without them.
+          env_suffix="$(printf '%s' "$REACT_APP_ENV_NAME" | tr '[:lower:]' '[:upper:]')"
+          missing=""
+          for name in \
+            REACT_APP_ENV_NAME \
+            "REACT_APP_CONTACT_SELLER_FOR_EXCHANGE_${env_suffix}" \
+            "REACT_APP_RAISE_DISPUTE_FOR_EXCHANGE_${env_suffix}" \
+            REACT_APP_DEFAULT_DISPUTE_PERIOD_DAYS \
+            REACT_APP_DEFAULT_RESOLUTION_PERIOD_DAYS \
+            REACT_APP_BUYER_SELLER_AGREEMENT_TEMPLATE \
+            REACT_APP_RNFT_LICENSE_TEMPLATE \
+            REACT_APP_FAIR_EXCHANGE_POLICY_RULES \
+            REACT_APP_WALLET_CONNECT_PROJECT_ID \
+            REACT_APP_IPFS_GATEWAY \
+            REACT_APP_META_TX_API_KEY_MAP \
+            REACT_APP_META_TX_API_IDS_MAP \
+            REACT_APP_MAGIC_API_KEY \
+            REACT_APP_INFURA_KEY \
+            CLOUDFLARE_API_TOKEN \
+            CLOUDFLARE_ACCOUNT_ID; do
+            if [ -z "${!name:-}" ]; then
+              missing="$missing $name"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required build configuration for environment '${ENVIRONMENT}':$missing"
+            exit 1
+          fi
+
+          # A value src/config.ts does not recognise is as fatal as an empty one, and the
+          # emptiness check above does not catch it. 'local' is accepted by config.ts but is
+          # never a deploy target.
+          case "$REACT_APP_ENV_NAME" in
+            testing | staging | production) ;;
+            *)
+              echo "::error::REACT_APP_ENV_NAME is '${REACT_APP_ENV_NAME}' on the '${ENVIRONMENT}' environment;" \
+                   "a deployment must be testing, staging or production."
+              exit 1
+              ;;
+          esac
+
+      - run: npm ci
+
+      - name: Build
+        env:
+          # Cloudflare Pages rejects any file over 25 MiB. Nothing reads the maps - the
+          # deployments this workflow replaces were already built without them - and
+          # generating them would only publish the full source alongside the bundle.
+          GENERATE_SOURCEMAP: "false"
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.129.0"
+          # cf_branch must equal the project's production branch to publish a Production
+          # deployment; anything else (pr-123) lands as a Preview. Every value interpolated
+          # into this command line is validated in "Resolve deployment identity" above.
+          command: >-
+            pages deploy build
+            --project-name=${{ env.CF_PROJECT }}
+            --branch=${{ inputs.cf_branch }}
+            --commit-hash=${{ env.COMMIT_SHA }}
+            --commit-message=${{ env.RELEASE_NAME }}
+
+      - name: Smoke check the deployment
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          set -euo pipefail
+          # This runs against a deployment that is already serving traffic, and what it fetches
+          # is an SPA shell: a build that throws in config.ts still returns 200 with a
+          # non-empty body, because the crash happens in the browser. So it catches a failed or
+          # empty upload, not a broken build - keeping a broken build from shipping is what the
+          # configuration check before `npm run build` is for.
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "::error::wrangler returned no deployment URL."
+            exit 1
+          fi
+          body="$(curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors "$DEPLOY_URL")"
+          if [ -z "$body" ]; then
+            echo "::error::$DEPLOY_URL served an empty response."
+            exit 1
+          fi
+
+      - name: Job summary
+        if: ${{ always() && steps.deploy.outcome == 'success' }}
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          CF_BRANCH: ${{ inputs.cf_branch }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          {
+            echo "| Field | Value |"
+            echo "| ---- | ---- |"
+            echo "| Environment | ${ENVIRONMENT} |"
+            echo "| CF project | ${CF_PROJECT} |"
+            echo "| CF branch | \`${CF_BRANCH}\` |"
+            echo "| Release | ${RELEASE_NAME} |"
+            echo "| Commit | ${COMMIT_SHA} |"
+            echo "| URL | ${DEPLOY_URL} |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,151 +1,45 @@
-name: Call reusable workflow - Widgets
+name: CI - Widgets
 
+# On pushes to main this is invoked by deploy-testing.yaml via workflow_call, so that the
+# deploy is gated on it rather than racing it.
 on:
-  release:
-    types: [created]
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  prejob:
-    name: Get Latest Tag
+  checks:
+    name: Format, lint, types and build
     runs-on: ubuntu-22.04
-    outputs:
-      releaseTag: ${{ steps.tag.outputs.tag }}
-      releaseName: ${{ steps.name.outputs.name }}
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-      - uses: "WyriHaximus/github-action-get-previous-tag@v1"
-        id: tag
-      - run: echo "name=$(git describe --tags)" >> $GITHUB_OUTPUT
-        id: name
+      - uses: actions/checkout@v4
 
-  call-reusable-workflow-PR:
-    uses: ./.github/workflows/ci_reusable.yaml
-    if: github.event_name == 'pull_request'
-    needs: prejob
-    with:
-      ENV_NAME: "staging"
-      REACT_APP_ENV_NAME: "staging"
-      DEPLOY_TO_FLEEK: false
-      REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
-      REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
-      REACT_APP_META_TX_API_KEY_MAP: ${{ vars.REACT_APP_META_TX_API_KEY_MAP }}
-      REACT_APP_META_TX_API_IDS_MAP: ${{ vars.REACT_APP_META_TX_API_IDS_MAP }}
-    secrets:
-      FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
-      REACT_APP_INFURA_IPFS_PROJECT_ID: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}
-      REACT_APP_INFURA_IPFS_PROJECT_SECRET: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}
-      REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID_STAGING }}
-      REACT_APP_MAGIC_API_KEY: ${{ secrets.REACT_APP_MAGIC_API_KEY_STAGING }}
-      REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY_STAGING }}
+      - uses: ./.github/actions/setup-node-npm
 
-  call-reusable-workflow-staging:
-    uses: ./.github/workflows/ci_reusable.yaml
-    if: github.event_name == 'release' && github.event.action == 'created'
-    needs: prejob
-    with:
-      ENV_NAME: "staging"
-      REACT_APP_ENV_NAME: "staging"
-      DEPLOY_TO_FLEEK: true
-      REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
-      REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
-      REACT_APP_META_TX_API_KEY_MAP: ${{ vars.REACT_APP_META_TX_API_KEY_MAP }}
-      REACT_APP_META_TX_API_IDS_MAP: ${{ vars.REACT_APP_META_TX_API_IDS_MAP }}
-    secrets:
-      FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
-      REACT_APP_INFURA_IPFS_PROJECT_ID: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}
-      REACT_APP_INFURA_IPFS_PROJECT_SECRET: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}
-      REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID_STAGING }}
-      REACT_APP_MAGIC_API_KEY: ${{ secrets.REACT_APP_MAGIC_API_KEY_STAGING }}
-      REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY_STAGING }}
-      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
-      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
+      - run: npm ci
 
-  call-reusable-workflow-production:
-    uses: ./.github/workflows/ci_reusable.yaml
-    if: github.event_name == 'workflow_dispatch'
-    needs: prejob
-    with:
-      ENV_NAME: "production"
-      REACT_APP_ENV_NAME: "production"
-      DEPLOY_TO_FLEEK: true
-      REACT_APP_RELEASE_TAG: ${{ needs.prejob.outputs.releaseTag }}
-      REACT_APP_RELEASE_NAME: ${{ needs.prejob.outputs.releaseName }}
-      REACT_APP_META_TX_API_KEY_MAP: ${{ vars.REACT_APP_META_TX_API_KEY_MAP }}
-      REACT_APP_META_TX_API_IDS_MAP: ${{ vars.REACT_APP_META_TX_API_IDS_MAP }}
-    secrets:
-      FLEEK_API_KEY: ${{ secrets.FLEEK_API_KEY }}
-      REACT_APP_INFURA_IPFS_PROJECT_ID: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}
-      REACT_APP_INFURA_IPFS_PROJECT_SECRET: ${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}
-      REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID_PRODUCTION }}
-      REACT_APP_MAGIC_API_KEY: ${{ secrets.REACT_APP_MAGIC_API_KEY_PRODUCTION }}
-      REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY_PRODUCTION }}
-      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
-      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
+      # Non-mutating checks: `npm run prettier` and `npm run lint` rewrite files, which would
+      # make them pass unconditionally and would leave the build compiling something other
+      # than the committed code.
+      - run: npm run prettier:check
+      - run: npm run lint:check
+      - run: npm run tsc
 
-  job-summary:
-    name: Create Job Summary
-    runs-on: ubuntu-22.04
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-    needs:
-      [
-        call-reusable-workflow-staging,
-        call-reusable-workflow-production
-      ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install JQ
-        uses: r26d/jq-action@master
-        with:
-          cmd: jq -n env
-      - name: Get job outputs
+      # Every other path already builds this commit against the real environment values -
+      # deploy-preview.yaml for a PR, deploy-testing.yaml for a push to main - and a deploy
+      # that fails to build publishes nothing. Repeating it here would spend a second full
+      # build on the same tree. Fork PRs get no preview deployment (see the `if:` in
+      # deploy-preview.yaml), so they are built here. No env vars are needed: CRA compiles
+      # src/config.ts without executing it.
+      - name: Build (fork PRs only)
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
         env:
-          OUTPUTS: ${{ toJSON(needs) }}
-        run: |
-          succeededJobOutput="$(
-            echo '${{ env.OUTPUTS }}' | jq '.[] | select(.result | startswith("success")) | .outputs'
-          )"
-          echo 'JOB_OUTPUT='$succeededJobOutput >> $GITHUB_ENV
-      - name: Get job vars
-        run: |
-          jobLint="$(
-            echo '${{ env.JOB_OUTPUT }}' |
-            jq '.JOB_LINT'
-          )"
-          echo 'JOB_LINT='$jobLint >> $GITHUB_ENV
-
-          jobBuild="$(
-            echo '${{ env.JOB_OUTPUT }}' |
-            jq '.JOB_BUILD'
-          )"
-          echo 'JOB_BUILD='$jobBuild >> $GITHUB_ENV
-
-          deployUrl="$(
-            echo '${{ env.JOB_OUTPUT }}' |
-            jq '.DEPLOY_URL'
-          )"
-          echo 'DEPLOY_URL='$deployUrl >> $GITHUB_ENV
-
-      - name: Adding Job Summary
-        run: |
-          echo "| Command | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "| ---- | ---- |" >> $GITHUB_STEP_SUMMARY
-          if [ ${{ env.JOB_LINT }} == success ]; then
-            echo "| Lint | ✅ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Lint | ❌ |" >> $GITHUB_STEP_SUMMARY
-          fi
-          if [ ${{ env.JOB_BUILD }} == success ]; then
-            echo "| Build | ✅ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Build | ❌ |" >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Adding Job Summary Deploy Url
-        if: ${{ env.DEPLOY_URL }}
-        run: echo "| URL | ${{ env.DEPLOY_URL }} |" >> $GITHUB_STEP_SUMMARY
+          GENERATE_SOURCEMAP: "false"
+        run: npm run build

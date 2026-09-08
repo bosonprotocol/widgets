@@ -1,9 +1,9 @@
 import {
   ConfigId,
   EnvironmentType,
-  getEnvConfigById
+  getEnvConfigById,
+  hooks
 } from "@bosonprotocol/react-kit";
-import { Buffer } from "buffer";
 
 const envName = process.env.REACT_APP_ENV_NAME as EnvironmentType;
 
@@ -25,7 +25,9 @@ type ConfigFields =
   | "metaTxApiKeyMap"
   | "metaTxApiIdsMap"
   | "raiseDisputeForExchange"
-  | "ipfsGateway";
+  | "ipfsGateway"
+  | "ipfsJwt"
+  | "ipfsGatewayToken";
 
 const envSuffixes: Record<EnvironmentType, string | undefined> = {
   testing: "_TESTING",
@@ -90,6 +92,15 @@ const EnvVariables: Array<{
   {
     envVar: "REACT_APP_IPFS_GATEWAY",
     configField: "ipfsGateway"
+  },
+  {
+    envVar: "REACT_APP_IPFS_JWT",
+    configField: "ipfsJwt"
+  },
+  {
+    envVar: "REACT_APP_IPFS_GATEWAY_TOKEN",
+    optional: true,
+    configField: "ipfsGatewayToken"
   }
 ];
 
@@ -119,29 +130,11 @@ if (!_CONFIG) {
 
 export const CONFIG = {
   envName,
-  ipfsMetadataStorageHeaders: getIpfsMetadataStorageHeaders(
-    process.env.REACT_APP_INFURA_IPFS_PROJECT_ID,
-    process.env.REACT_APP_INFURA_IPFS_PROJECT_SECRET
-  ),
-  ipfsProjectId: process.env.REACT_APP_INFURA_IPFS_PROJECT_ID,
-  ipfsProjectSecret: process.env.REACT_APP_INFURA_IPFS_PROJECT_SECRET,
+  ipfsMetadataStorageHeaders: hooks.getIpfsHeaders({
+    ipfsJwt: _CONFIG.ipfsJwt?.toString()
+  }),
   ..._CONFIG
 };
-
-function getIpfsMetadataStorageHeaders(
-  infuraProjectId?: string,
-  infuraProjectSecret?: string
-) {
-  if (!infuraProjectId && !infuraProjectSecret) {
-    return undefined;
-  }
-
-  return {
-    authorization: `Basic ${Buffer.from(
-      infuraProjectId + ":" + infuraProjectSecret
-    ).toString("base64")}`
-  };
-}
 
 type ApiId = string;
 type ApiKey = string;

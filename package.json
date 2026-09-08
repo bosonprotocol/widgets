@@ -8,8 +8,11 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
+    "tsc": "tsc --noEmit",
     "lint": "eslint --ignore-path ./.gitignore --ext .js,.ts,.tsx . --fix",
+    "lint:check": "eslint --ignore-path ./.gitignore --ext .js,.ts,.tsx .",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "link-cc": "node ./scripts/link-to-local-core-components.js",
     "prepare": "husky install",
     "postinstall": "npm run copy-zoid",
@@ -44,7 +47,7 @@
     ]
   },
   "dependencies": {
-    "@bosonprotocol/react-kit": "^0.42.1",
+    "@bosonprotocol/react-kit": "^0.43.0-alpha.1",
     "@krakenjs/zoid": "^10.3.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -67,7 +70,6 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@fleek-platform/cli": "^3.8.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@uniswap/token-lists": "1.0.0-beta.34",
@@ -93,10 +95,6 @@
     "shx": "^0.3.4",
     "vm-browserify": "^1.1.2",
     "yup": "^1.5.0"
-  },
-  "volta": {
-    "node": "22.14.0",
-    "npm": "11.2.0"
   },
   "overrides": {
     "typescript": "5.1.6"
