@@ -171,8 +171,26 @@ jobs:
           # browser*: the deploy is green and the page is blank. This step is the only thing
           # between a missing secret and a dead deployment.
           #
-          # The list mirrors the non-optional entries of the EnvVariables array in
-          # src/config.ts. Keep the two in sync when adding a variable the app depends on.
+          # The list is not a copy of any single source - it is what a *deployment* cannot
+          # work without, which is four different things:
+          #
+          #   1. REACT_APP_ENV_NAME and the non-optional entries of the EnvVariables array in
+          #      src/config.ts. These throw at module load, so an empty one is a blank page.
+          #   2. The two REACT_APP_META_TX_* maps. src/config.ts marks them `optional: true`,
+          #      so they do not throw - getMetaTxConfig() just returns empty strings and
+          #      gasless transactions are silently dead. Required here because shipping a
+          #      deployment without them is not an outcome anyone wants by default.
+          #   3. REACT_APP_MAGIC_API_KEY and REACT_APP_INFURA_KEY. These appear nowhere in
+          #      src/; @bosonprotocol/react-kit reads them and CRA's DefinePlugin inlines
+          #      them at this build. Empty means email login and RPC access are dead, again
+          #      without anything throwing.
+          #   4. CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, which are not app config at
+          #      all - checked here so a missing credential fails the run in seconds instead
+          #      of after a full build.
+          #
+          # So: adding a non-optional entry to EnvVariables means adding it here, but the
+          # reverse does not hold, and category 2-4 entries have to be judged on whether the
+          # deployed app is usable without them.
           env_suffix="$(printf '%s' "$REACT_APP_ENV_NAME" | tr '[:lower:]' '[:upper:]')"
           missing=""
           for name in \
