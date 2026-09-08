@@ -98,8 +98,7 @@ export function Redeem() {
       defaultCurrencyTicker="USD"
       defaultCurrencySymbol="$"
       ipfsGateway={CONFIG.ipfsGateway as string}
-      ipfsProjectId={CONFIG.ipfsProjectId}
-      ipfsProjectSecret={CONFIG.ipfsProjectSecret}
+      ipfsJwt={CONFIG.ipfsJwt as string}
       walletConnectProjectId={CONFIG.walletConnectProjectId as string}
       fairExchangePolicyRules={CONFIG.fairExchangePolicyRules as string}
       raiseDisputeForExchangeUrl={CONFIG.raiseDisputeForExchange as string}
